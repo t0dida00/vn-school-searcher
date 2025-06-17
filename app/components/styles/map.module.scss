@@ -1,0 +1,39 @@
+.left_container{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    border-radius: 8px;
+    width: 300px;
+    color:#000;
+    height: 60vh;
+     @media screen and (max-width: 768px) {
+        width: 200px;
+        
+    }
+    @media screen and (max-width: 576px) {
+        display: none;
+        
+    }
+}
+.mobile_left_container{
+     position: absolute;
+    top: 20px;
+    left: 50%;
+  transform: translateX(-50%); // ← this centers it horizontally
+    z-index: 1;
+  
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    border-radius: 8px;
+    width: 90%;
+    color:#000;
+   
+      @media screen and (min-width: 577px) {
+        display: none;
+        
+    }
+}

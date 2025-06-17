@@ -1,0 +1,28 @@
+{
+ 
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id":1,
+        "name": "Đại học Ngoại thương",
+        "city": "Hà Nội",
+        "code": "FTU",
+        "address": "quận Ba Đình",
+        "phone": "+842432595158",
+        "email": "sa21321321321321@gmail.com",
+        "webpage": "https://www.ftu.edu.vn",
+        "wiki": "https://en.wikipedia.org/wiki/Foreign_Trade_University",
+        "logo":"https://i.pravatar.cc/300",
+        "type": "university",
+        "type2":"Công lập",
+        "ranking": 20
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [105.8043, 21.0323]
+      }
+    }
+ 
+  ]
+}
