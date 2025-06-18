@@ -28,6 +28,7 @@ const HighSchoolDetail = () => {
     } = properties || {};
     const [isMobile, setIsMobile] = useState(false);
 
+    // Check screen width on mount and resize
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 576);

@@ -7,8 +7,9 @@ export function useZoomToPoint(map: mapboxgl.Map | null) {
     const setSelectedPoint  = useStore.getState().setSelectedPoint;
       const setIsOpen  = useStore.getState().setIsOpen;
     if (point.geometry.type === "Point") {
-       if ( setSelectedPoint) setSelectedPoint(point);
-      if ( setIsOpen) setIsOpen(true);
+        const isDesktop = window.innerWidth >= 576;
+       if (isDesktop && setSelectedPoint) setSelectedPoint(point);
+      if (isDesktop && setIsOpen) setIsOpen(true);
       const coords = point.geometry.coordinates as [number, number];
       map.flyTo({
         center: coords,

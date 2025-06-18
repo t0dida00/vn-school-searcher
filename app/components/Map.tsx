@@ -83,19 +83,28 @@ export default function Map() {
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (window.innerWidth >= 576) return;
-            if (
-                wrapperRef.current &&
-                !wrapperRef.current.contains(event.target as Node)
-            ) {
+
+            const target = event.target as Node;
+
+            const clickedOutsideWrapper =
+                wrapperRef.current && !wrapperRef.current.contains(target);
+
+            const drawerElement = document.getElementById('drawer');
+            const clickedOutsideDrawer =
+                !drawerElement || (drawerElement && !drawerElement.contains(target));
+
+            if (clickedOutsideWrapper && clickedOutsideDrawer) {
                 setSearchFocus(false);
                 setSelectedPoint(null);
             }
         };
+
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100vh", position: "relative" }}>
             <div className={styles.left_container}>
@@ -108,6 +117,7 @@ export default function Map() {
                 <Search onFocus={() => setSearchFocus(true)} />
                 {searchFocus && <MobileList map={map} />}
                 {renderMobileDetailComponent(selectedPoint)}
+                {/* <HighSchoolDrawer /> */}
             </div>
         </div>
     );
