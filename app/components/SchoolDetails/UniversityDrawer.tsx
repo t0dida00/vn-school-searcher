@@ -1,3 +1,5 @@
+
+//Can remove this file if not needed
 import React, { useEffect, useState } from 'react';
 import {
   Drawer,
@@ -28,8 +30,10 @@ import { capitalizeFirst } from '@/app/utils/common';
 // ✅ Rename your component here
 const UniversityDrawer: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const { selectedPoint } = useStore()
+  const { selectedPoint, setSelectedPoint } = useStore()
   const { properties } = selectedPoint || {};
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const {
     id,
     name,
@@ -60,11 +64,23 @@ const UniversityDrawer: React.FC = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
+  useEffect(() => {
+    if (selectedPoint) {
+      setIsDrawerOpen(true);
+    }
+  }, [selectedPoint]);
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+    setTimeout(() => {
+      setSelectedPoint(null); // clear data after animation
+    }, 200);
+  };
   if (!isMobile) return null;
 
   return (
-    <Drawer open={selectedPoint} >
+    <Drawer open={isDrawerOpen} onOpenChange={(open) => {
+      if (!open) handleDrawerClose(); // animate + cleanup
+    }}>
       <DrawerContent className="max-h-[50vh] h-full" id='drawer'>
         <div className={styles.drawer_container}>
           <DrawerHeader>

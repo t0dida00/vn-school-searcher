@@ -16,9 +16,12 @@ import HighSchoolDetail from "./SchoolDetails/HighSchoolDetail";
 import MobileList from "./MobileList";
 import UniversityDrawer from "./SchoolDetails/UniversityDrawer";
 import HighSchoolDrawer from "./SchoolDetails/HighSchoolDrawer";
+import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
+import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
+    const [query, setQuery] = useState("");
     const { data } = useDataStore();
     const { selectedPoint, setSelectedPoint } = useStore();
     const [searchFocus, setSearchFocus] = useState(false);
@@ -52,53 +55,17 @@ export default function Map() {
             }
         };
     }, [map]);
-    const renderDetailComponent = (point: any) => {
-        if (!point || !point.properties?.type) return null;
 
-        switch (point.properties.type) {
-            case "university":
-                return <UniversityDetail />;
-            case "highschool":
-                return <HighSchoolDetail />;
-            case "secondary":
-                return null;
-            default:
-                return null;
-        }
-    };
-    const renderMobileDetailComponent = (point: any) => {
-        if (!point || !point.properties?.type) return null;
-
-        switch (point.properties.type) {
-            case "university":
-                return <UniversityDrawer />;
-            case "highschool":
-                return <HighSchoolDrawer />;
-            case "secondary":
-                return null;
-            default:
-                return null;
-        }
-    };
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (window.innerWidth >= 576) return;
-
             const target = event.target as Node;
-
             const clickedOutsideWrapper =
                 wrapperRef.current && !wrapperRef.current.contains(target);
-
-            const drawerElement = document.getElementById('drawer');
-            const clickedOutsideDrawer =
-                !drawerElement || (drawerElement && !drawerElement.contains(target));
-
-            if (clickedOutsideWrapper && clickedOutsideDrawer) {
+            if (clickedOutsideWrapper) {
                 setSearchFocus(false);
-                setSelectedPoint(null);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
@@ -108,15 +75,17 @@ export default function Map() {
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100vh", position: "relative" }}>
             <div className={styles.left_container}>
-                <Search />
-                {renderDetailComponent(selectedPoint)}
-                <SchoolList map={map} />
+                <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
+                {/* {renderDetailComponent(selectedPoint)} */}
+                <SchoolDetailDialog />
+                <SchoolList map={map} setQuery={setQuery} />
 
             </div>
             <div ref={wrapperRef} className={styles.mobile_left_container}>
-                <Search onFocus={() => setSearchFocus(true)} />
-                {searchFocus && <MobileList map={map} />}
-                {renderMobileDetailComponent(selectedPoint)}
+                <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
+                {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
+                {/* {renderMobileDetailComponent(selectedPoint)} */}
+                <SchoolDrawer />
                 {/* <HighSchoolDrawer /> */}
             </div>
         </div>

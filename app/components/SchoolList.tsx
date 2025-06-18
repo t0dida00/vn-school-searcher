@@ -7,9 +7,10 @@ import { Loader2Icon } from "lucide-react";
 
 interface SchoolListProps {
     map: mapboxgl.Map | null; // hoặc kiểu tương ứng nếu không dùng Mapbox
+    setQuery: (query: string) => void; // Thêm prop này nếu cần
 }
 
-const SchoolList: React.FC<SchoolListProps> = ({ map }) => {
+const SchoolList: React.FC<SchoolListProps> = ({ map, setQuery }) => {
     const { points } = useStore();
     const { filteredData, loading, error } = useDataStore();
     const zoomToPoint = useZoomToPoint(map);
@@ -29,7 +30,12 @@ const SchoolList: React.FC<SchoolListProps> = ({ map }) => {
                         cursor: coords ? "pointer" : "default",
                         color: coords ? "#0077cc" : "#666",
                     }}
-                    onClick={() => coords && zoomToPoint(point)}
+                    onClick={() => {
+                        if (coords) {
+                            zoomToPoint(point);
+                            setQuery(name);
+                        }
+                    }}
                 >
                     <Button variant="link" className="cursor-pointer p-0 text-left font-[600] whitespace-normal h-fit">
                         {index + 1}. {`${name}${code ? ` (${code})` : ""}`}

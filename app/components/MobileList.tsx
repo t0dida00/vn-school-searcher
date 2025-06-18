@@ -4,12 +4,14 @@ import useStore from "../zustand/usePointStore";
 import { useZoomToPoint } from "../hooks/useZoomToPoint";
 import useDataStore from "../zustand/useDataStore";
 import { Loader2Icon } from "lucide-react";
+import styles from './styles/mobileList.module.scss';
 
 interface MobileListProps {
     map: mapboxgl.Map | null; // hoặc kiểu tương ứng nếu không dùng Mapbox
+    setQuery: (query: string) => void; // Thêm prop này nếu cần
+    setSearchFocus: (focus: boolean) => void; // Thêm prop này nếu cần
 }
-import styles from './styles/mobileList.module.scss';
-const MobileList: React.FC<MobileListProps> = ({ map }) => {
+const MobileList: React.FC<MobileListProps> = ({ map, setQuery, setSearchFocus }) => {
     const { points } = useStore();
     const { filteredData, loading, error } = useDataStore();
     const zoomToPoint = useZoomToPoint(map);
@@ -28,7 +30,13 @@ const MobileList: React.FC<MobileListProps> = ({ map }) => {
                         cursor: coords ? "pointer" : "default",
                         color: coords ? "#0077cc" : "#666",
                     }}
-                    onClick={() => coords && zoomToPoint(point)}
+                    onClick={() => {
+                        if (coords) {
+                            zoomToPoint(point);
+                            setQuery(name);
+                            setSearchFocus(false)
+                        }
+                    }}
                 >
                     <Button variant="link" className="cursor-pointer p-0 text-left font-[600] whitespace-normal h-fit">
                         {index + 1}. {`${name}${code ? ` (${code})` : ""}`}
@@ -45,9 +53,12 @@ const MobileList: React.FC<MobileListProps> = ({ map }) => {
     if (error) {
         return <div className="w-full h-full flex items-center justify-center text-red-500"> Error: {error}</div>;
     }
+    if (filteredData.length === 0) {
+        return null
+    }
     return (
         <div className={styles.container}>
-            <ul className="flex flex-col gap-y-3">{renderPoints(filteredData.length > 0 ? filteredData : points)}</ul>
+            <ul className="flex flex-col gap-y-3">{renderPoints(filteredData)}</ul>
         </div>
     )
 };
