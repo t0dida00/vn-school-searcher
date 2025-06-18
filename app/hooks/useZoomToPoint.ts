@@ -7,10 +7,8 @@ export function useZoomToPoint(map: mapboxgl.Map | null) {
     const setSelectedPoint  = useStore.getState().setSelectedPoint;
       const setIsOpen  = useStore.getState().setIsOpen;
     if (point.geometry.type === "Point") {
-       if (setSelectedPoint && setIsOpen) {
-         setSelectedPoint(point);
-           setIsOpen(true);
-       }
+       if ( setSelectedPoint) setSelectedPoint(point);
+      if ( setIsOpen) setIsOpen(true);
       const coords = point.geometry.coordinates as [number, number];
       map.flyTo({
         center: coords,
@@ -20,3 +18,7 @@ export function useZoomToPoint(map: mapboxgl.Map | null) {
     }
   }, [map]);
 }
+
+  //  const isDesktop = window.innerWidth >= 576;
+  //      if (setSelectedPoint) setSelectedPoint(feature);
+  // if (isDesktop && setIsOpen) setIsOpen(true);

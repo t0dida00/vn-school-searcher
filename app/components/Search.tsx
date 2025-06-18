@@ -5,9 +5,10 @@ import useDataStore from "../zustand/useDataStore";
 
 interface SearchProps {
     placeholder?: string;
+    onFocus?: () => void;
 }
 
-export default function Search({ placeholder = "Search..." }: SearchProps) {
+export default function Search({ placeholder = "Search...", onFocus }: SearchProps) {
     const [query, setQuery] = React.useState("");
     const { data, setFilteredData } = useDataStore();
     // Handle search logic here
@@ -36,6 +37,7 @@ export default function Search({ placeholder = "Search..." }: SearchProps) {
             type="search"
             placeholder={placeholder}
             value={query}
+            onFocus={onFocus}
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1"
         />

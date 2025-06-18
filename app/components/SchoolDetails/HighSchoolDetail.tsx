@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import useStore from '../../zustand/usePointStore';
@@ -26,6 +26,18 @@ const HighSchoolDetail = () => {
         majors,
         webpage,
     } = properties || {};
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 576);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    if (isMobile) return null;
     return (
         <Dialog open={isOpen} onOpenChange={() => { setIsOpen(false) }} key={id}>
             <DialogContent className={styles.dialog_content}>

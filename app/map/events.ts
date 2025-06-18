@@ -48,13 +48,13 @@ export function addMapEventListeners(map: Map) {
       const setSelectedPoint = useStore.getState().setSelectedPoint;
       const setIsOpen  = useStore.getState().setIsOpen;
       if (!feature) return;
-      const isDesktop = window.innerWidth >= 576;
-       if (setSelectedPoint) setSelectedPoint(feature);
-  if (isDesktop && setIsOpen) setIsOpen(true); // Only open dialog on desktop
-      // if (setSelectedPoint && setIsOpen) {
-      //   setSelectedPoint(feature);
-      //     setIsOpen(true);
-      // }
+  //     const isDesktop = window.innerWidth >= 576;
+  //      if (setSelectedPoint) setSelectedPoint(feature);
+  // if (isDesktop && setIsOpen) setIsOpen(true); // Only open dialog on desktop
+      if (setSelectedPoint && setIsOpen) {
+        setSelectedPoint(feature);
+          setIsOpen(true);
+      }
       const coordinates = (feature.geometry as any).coordinates as [number, number];
 
       map.flyTo({

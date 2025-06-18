@@ -13,12 +13,16 @@ import Search from "./Search";
 import styles from "./styles/map.module.scss";
 import useStore from "../zustand/usePointStore";
 import HighSchoolDetail from "./SchoolDetails/HighSchoolDetail";
+import MobileList from "./MobileList";
+import UniversityDrawer from "./SchoolDetails/UniversityDrawer";
+import HighSchoolDrawer from "./SchoolDetails/HighSchoolDrawer";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
     const { data } = useDataStore();
-    const { selectedPoint } = useStore();
-
+    const { selectedPoint, setSelectedPoint } = useStore();
+    const [searchFocus, setSearchFocus] = useState(false);
+    const wrapperRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (!map && mapContainerRef.current) {
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -62,16 +66,48 @@ export default function Map() {
                 return null;
         }
     };
+    const renderMobileDetailComponent = (point: any) => {
+        if (!point || !point.properties?.type) return null;
+
+        switch (point.properties.type) {
+            case "university":
+                return <UniversityDrawer />;
+            case "highschool":
+                return <HighSchoolDrawer />;
+            case "secondary":
+                return null;
+            default:
+                return null;
+        }
+    };
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (window.innerWidth >= 576) return;
+            if (
+                wrapperRef.current &&
+                !wrapperRef.current.contains(event.target as Node)
+            ) {
+                setSearchFocus(false);
+                setSelectedPoint(null);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100vh", position: "relative" }}>
             <div className={styles.left_container}>
                 <Search />
                 {renderDetailComponent(selectedPoint)}
                 <SchoolList map={map} />
-            </div>
-            <div className={styles.mobile_left_container}>
-                <Search />
 
+            </div>
+            <div ref={wrapperRef} className={styles.mobile_left_container}>
+                <Search onFocus={() => setSearchFocus(true)} />
+                {searchFocus && <MobileList map={map} />}
+                {renderMobileDetailComponent(selectedPoint)}
             </div>
         </div>
     );
