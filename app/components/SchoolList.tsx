@@ -12,7 +12,6 @@ interface SchoolListProps {
 const SchoolList: React.FC<SchoolListProps> = ({ map }) => {
     const { points } = useStore();
     const { filteredData, loading, error } = useDataStore();
-
     const zoomToPoint = useZoomToPoint(map);
     const renderPoints = (list: any[]) =>
         list.map((point, index) => {
@@ -44,6 +43,10 @@ const SchoolList: React.FC<SchoolListProps> = ({ map }) => {
         </div>
         )
     }
+    if (error) {
+        return <div className="w-full h-full flex items-center justify-center text-red-500"> Error: {error}</div>;
+    }
+
     return <ul className="flex flex-col gap-y-3 mt-3">{renderPoints(filteredData.length > 0 ? filteredData : points)}</ul>;
 };
 

@@ -4,11 +4,23 @@ import useDataStore from "../zustand/useDataStore";
 import { useEffect } from "react";
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
-export default function MapClientWrapper({ data }: { data: any[] }) {
+interface MapClientWrapperProps {
+    data: any[];
+    error: string | null;
+}
+
+export default function MapClientWrapper({ data, error }: MapClientWrapperProps) {
     const setData = useDataStore((state) => state.setData);
+    const setError = useDataStore((state) => state.setError);
 
     useEffect(() => {
-        setData(data);
+        if (data) {
+            setData(data);
+        }
     }, [data, setData]);
+    useEffect(() => {
+        setError(error);
+    }, [error, setError]);
+
     return <Map />;
 }

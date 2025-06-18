@@ -1,10 +1,21 @@
 import MapClientWrapper from "./HOC/MapWrapper";
+import axios from 'axios';
+
 export const revalidate = 60; // ISR or 0 for pure SSG
 
 export default async function HomePage() {
-  const res = await fetch('http://localhost:3000/api/universities');
-  if (!res.ok) throw new Error('Failed to fetch');
-  const data = await res.json();
+  let data = null;
+  let error = null;
+  try {
+    const res = await axios.get('http://localhost:3000/api/universities');
+    data = res.data;
+  } catch (err: any) {
+    if (axios.isAxiosError(err)) {
+      error = err.response?.data?.message || err.message || 'Axios error occurred';
+    } else {
+      error = 'An unexpected error occurred';
+    }
+  }
 
-  return <MapClientWrapper data={data} />;
+  return <MapClientWrapper data={data} error={error} />;
 }
