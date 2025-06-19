@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button } from "@/components/ui/button"; // Điều chỉnh lại nếu sai đường dẫn
-import useStore from "../zustand/usePointStore";
+import { Button } from "@/components/ui/button";
 import { useZoomToPoint } from "../hooks/useZoomToPoint";
 import useDataStore from "../zustand/useDataStore";
 import { Loader2Icon } from "lucide-react";
 import styles from './styles/mobileList.module.scss';
+import type { Feature, Point } from 'geojson';
+type UniversityPoint = Feature<Point, { name?: string; code?: string }>;
 
 interface MobileListProps {
     map: mapboxgl.Map | null; // hoặc kiểu tương ứng nếu không dùng Mapbox
@@ -12,10 +13,9 @@ interface MobileListProps {
     setSearchFocus: (focus: boolean) => void; // Thêm prop này nếu cần
 }
 const MobileList: React.FC<MobileListProps> = ({ map, setQuery, setSearchFocus }) => {
-    const { points } = useStore();
     const { filteredData, loading, error } = useDataStore();
     const zoomToPoint = useZoomToPoint(map);
-    const renderPoints = (list: any[]) =>
+    const renderPoints = (list: UniversityPoint[]) =>
         list.map((point, index) => {
             const name = point.properties?.name || `Point ${index + 1}`;
             const code = point.properties?.code;

@@ -13,8 +13,7 @@ import styles from "./styles/map.module.scss";
 import MobileList from "./MobileList";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
-import { Funnel, Notebook } from "lucide-react";
-import FilterSection from "./Filter";
+import { Notebook } from "lucide-react";
 import CustomTooltip from "./Tooltip";
 import { useRouter } from "next/navigation";
 import CustomFunnel from "./Funnel";
@@ -55,7 +54,7 @@ export default function Map() {
                 map.remove();
             }
         };
-    }, [map]);
+    }, [map, data]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

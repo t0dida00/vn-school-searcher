@@ -56,7 +56,7 @@ export default function UniversityListPage() {
         if (inView && visibleCount < mockUniversities.length) {
             setVisibleCount((prev) => prev + PAGE_SIZE);
         }
-    }, [inView]);
+    }, [inView, visibleCount]);
 
     const visibleItems = mockUniversities.slice(0, visibleCount);
 

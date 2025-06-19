@@ -21,6 +21,7 @@ export default function Search({ placeholder = "Search...", onFocus, query = "",
             }
             const lowerQuery = query.toLowerCase();
             const filtered = data.filter((item: any) => {
+
                 const { name, code, address, city } = item.properties || {};
                 return (
                     name?.toLowerCase().includes(lowerQuery) ||
@@ -32,7 +33,7 @@ export default function Search({ placeholder = "Search...", onFocus, query = "",
             setFilteredData(filtered); // Update the store with filtered results
         }, 500);
         return () => clearTimeout(handler); // cleanup on query/data change
-    }, [query, data]);
+    }, [query, data, setFilteredData]);
     return (
         <Input
             type="search"

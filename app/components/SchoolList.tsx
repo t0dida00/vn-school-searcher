@@ -9,12 +9,14 @@ interface SchoolListProps {
     map: mapboxgl.Map | null; // hoặc kiểu tương ứng nếu không dùng Mapbox
     setQuery: (query: string) => void; // Thêm prop này nếu cần
 }
+import type { Feature, Point } from 'geojson';
 
+type SchoolPoint = Feature<Point, { name?: string; code?: string }>;
 const SchoolList: React.FC<SchoolListProps> = ({ map, setQuery }) => {
     const { points } = useStore();
     const { filteredData, loading, error } = useDataStore();
     const zoomToPoint = useZoomToPoint(map);
-    const renderPoints = (list: any[]) =>
+    const renderPoints = (list: SchoolPoint[]) =>
         list.map((point, index) => {
             const name = point.properties?.name || `Point ${index + 1}`;
             const code = point.properties?.code;

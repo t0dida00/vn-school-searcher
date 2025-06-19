@@ -2,8 +2,6 @@ import type { Map } from "mapbox-gl";
 
 const FONT = ["DIN Offc Pro Medium", "Arial Unicode MS Bold"];
 const TEXT_SIZE = 12;
-const TEXT_HALO_COLOR = "#ffffff";
-const TEXT_HALO_WIDTH = 2;
 const CLUSTER_CIRCLE_COLOR = "#51bbd6";
 const CLUSTER_CIRCLE_STROKE_COLOR = "#fff";
 
