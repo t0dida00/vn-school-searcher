@@ -47,7 +47,7 @@ export default function FilterSection() {
                     <form onSubmit={handleSubmit} className={styles.filter_container}>
                         <div className="mb-4">
                             <Label className="mb-2 block">Dataset</Label>
-                            <RadioGroup value={dataset} onValueChange={setDataset} className="flex gap-4 flex-col md:flex-row">
+                            <RadioGroup value={dataset} onValueChange={setDataset} className="flex gap-4 flex-row md:flex-row">
                                 <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="university" id="university" />
                                     <Label htmlFor="university">University</Label>
@@ -68,7 +68,7 @@ export default function FilterSection() {
                         {/* Hệ */}
                         <div className="mb-4">
                             <Label className="mb-2 block">Hệ</Label>
-                            <RadioGroup value={system} onValueChange={setSystem} className="flex gap-4 flex-col md:flex-row">
+                            <RadioGroup value={system} onValueChange={setSystem} className="flex gap-4 flex-row md:flex-row">
                                 <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="all" id="all" />
                                     <Label htmlFor="all">All</Label>

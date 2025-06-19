@@ -6,26 +6,23 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { INITIAL_VIEWPORT, MAP_STYLE, MAPBOX_ACCESS_TOKEN } from "../map/mapboxConfig";
 import { addCountryHighlightLayer, addUniversityLayers } from "../map/layerConfig";
 import { addMapEventListeners } from "../map/events";
-import UniversityDetail from "./SchoolDetails/UniversityDetail";
 import useDataStore from "../zustand/useDataStore";
 import SchoolList from "./SchoolList";
 import Search from "./Search";
 import styles from "./styles/map.module.scss";
-import useStore from "../zustand/usePointStore";
-import HighSchoolDetail from "./SchoolDetails/HighSchoolDetail";
 import MobileList from "./MobileList";
-import UniversityDrawer from "./SchoolDetails/UniversityDrawer";
-import HighSchoolDrawer from "./SchoolDetails/HighSchoolDrawer";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
 import { Notebook } from "lucide-react";
 import FilterSection from "./Filter";
+import CustomTooltip from "./Tooltip";
+import { useRouter } from "next/navigation";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
     const [query, setQuery] = useState("");
     const { data } = useDataStore();
-    const { selectedPoint, setSelectedPoint } = useStore();
+    const router = useRouter()
     const [searchFocus, setSearchFocus] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -98,9 +95,13 @@ export default function Map() {
                 <SchoolDrawer />
                 {/* <HighSchoolDrawer /> */}
             </div>
-            <div className={` ${styles.list_icon_container}`}>
-                <Notebook size={30} stroke="#000" fill="#fff" />
-            </div>
+            <button className="fixed bottom-8 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
+                <CustomTooltip
+                    name={<Notebook size={30} className="w-6 h-6" />}
+                    title="Danh sách trường học"
+                />
+
+            </button>
         </div>
     );
 }
