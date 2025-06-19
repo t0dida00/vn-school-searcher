@@ -18,6 +18,8 @@ import UniversityDrawer from "./SchoolDetails/UniversityDrawer";
 import HighSchoolDrawer from "./SchoolDetails/HighSchoolDrawer";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
+import { Notebook } from "lucide-react";
+import FilterSection from "./Filter";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
@@ -75,10 +77,18 @@ export default function Map() {
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100vh", position: "relative" }}>
             <div className={styles.left_container}>
-                <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
-                {/* {renderDetailComponent(selectedPoint)} */}
-                <SchoolDetailDialog />
-                <SchoolList map={map} setQuery={setQuery} />
+                <div className={styles.filter_container}>
+                    <FilterSection />
+                </div>
+                <div className={styles.search_container}>
+
+                    <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
+                    {/* {renderDetailComponent(selectedPoint)} */}
+                    <SchoolDetailDialog />
+                    <SchoolList map={map} setQuery={setQuery} />
+                </div>
+
+
 
             </div>
             <div ref={wrapperRef} className={styles.mobile_left_container}>
@@ -87,6 +97,9 @@ export default function Map() {
                 {/* {renderMobileDetailComponent(selectedPoint)} */}
                 <SchoolDrawer />
                 {/* <HighSchoolDrawer /> */}
+            </div>
+            <div className={` ${styles.list_icon_container}`}>
+                <Notebook size={30} stroke="#000" fill="#fff" />
             </div>
         </div>
     );
