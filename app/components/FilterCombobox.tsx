@@ -28,6 +28,7 @@ interface FilterComboboxProps {
     placeholder: string;
     value: string;
     onChange: (value: string) => void;
+    className?: string; // ✅ add this
 }
 
 export const FilterCombobox: React.FC<FilterComboboxProps> = ({
@@ -35,6 +36,7 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
     placeholder,
     value,
     onChange,
+    className = "",
 }) => {
     const [open, setOpen] = React.useState(false);
 
@@ -47,7 +49,7 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
                 <Button
                     variant="outline"
                     role="combobox"
-                    className="flex-1 justify-between"
+                    className={cn("flex-1 justify-between", className)}
                 >
                     {selectedLabel}
                     <ChevronDown className="ml-2 h-4 w-4 opacity-50" />

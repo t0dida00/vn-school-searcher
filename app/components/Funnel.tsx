@@ -25,7 +25,7 @@ export default function CustomFunnel() {
                 />
             </button>
             <Sheet open={open} onOpenChange={setOpen}>
-                <SheetContent className="w-300px">
+                <SheetContent className="w-[300px]">
                     <SheetHeader>
                         <SheetTitle>Bộ lọc trường học</SheetTitle>
                         {/* <SheetDescription>
