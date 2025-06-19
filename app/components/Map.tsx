@@ -13,10 +13,11 @@ import styles from "./styles/map.module.scss";
 import MobileList from "./MobileList";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
-import { Notebook } from "lucide-react";
+import { Funnel, Notebook } from "lucide-react";
 import FilterSection from "./Filter";
 import CustomTooltip from "./Tooltip";
 import { useRouter } from "next/navigation";
+import CustomFunnel from "./Funnel";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
@@ -24,6 +25,8 @@ export default function Map() {
     const { data } = useDataStore();
     const router = useRouter()
     const [searchFocus, setSearchFocus] = useState(false);
+    const [open, setOpen] = useState(false);
+
     const wrapperRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (!map && mapContainerRef.current) {
@@ -74,9 +77,9 @@ export default function Map() {
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100vh", position: "relative" }}>
             <div className={styles.left_container}>
-                <div className={styles.filter_container}>
+                {/* <div className={styles.filter_container}>
                     <FilterSection />
-                </div>
+                </div> */}
                 <div className={styles.search_container}>
 
                     <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
@@ -91,11 +94,11 @@ export default function Map() {
             <div ref={wrapperRef} className={styles.mobile_left_container}>
                 <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
                 {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
-                {/* {renderMobileDetailComponent(selectedPoint)} */}
                 <SchoolDrawer />
-                {/* <HighSchoolDrawer /> */}
             </div>
-            <button className="fixed bottom-8 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
+
+            <CustomFunnel />
+            <button className="fixed bottom-6 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
                 <CustomTooltip
                     name={<Notebook size={30} className="w-6 h-6" />}
                     title="Danh sách trường học"

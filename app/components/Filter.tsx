@@ -33,74 +33,126 @@ export default function FilterSection() {
             field
         });
     };
+    return (<form onSubmit={handleSubmit} className={styles.filter_container}>
+        <div className="mb-4">
+            <Label className="mb-2 block">Dataset</Label>
+            <RadioGroup value={dataset} onValueChange={setDataset} className="flex gap-4 flex-row md:flex-row">
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="university" id="university" />
+                    <Label htmlFor="university">University</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="highschool" id="highschool" />
+                    <Label htmlFor="highschool">High School</Label>
+                </div>
+            </RadioGroup>
+        </div>
 
-    return (
-        <Accordion
-            type="single"
-            collapsible
-            className="w-full"
-            defaultValue="item-1"
-        >
-            <AccordionItem value="item-1">
-                <AccordionTrigger className=" text-lg font-semibold text-center">Filter</AccordionTrigger>
-                <AccordionContent >
-                    <form onSubmit={handleSubmit} className={styles.filter_container}>
-                        <div className="mb-4">
-                            <Label className="mb-2 block">Dataset</Label>
-                            <RadioGroup value={dataset} onValueChange={setDataset} className="flex gap-4 flex-row md:flex-row">
-                                <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="university" id="university" />
-                                    <Label htmlFor="university">University</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="highschool" id="highschool" />
-                                    <Label htmlFor="highschool">High School</Label>
-                                </div>
-                            </RadioGroup>
-                        </div>
+        {/* City select */}
+        <CityList value={city} onChange={setCity} />
 
-                        {/* City select */}
-                        <CityList value={city} onChange={setCity} />
+        {/* Field select (stubbed) */}
+        <FieldList value={field} onChange={setField} />
 
-                        {/* Field select (stubbed) */}
-                        <FieldList value={field} onChange={setField} />
+        {/* Hệ */}
+        <div className="mb-4">
+            <Label className="mb-2 block">Hệ</Label>
+            <RadioGroup value={system} onValueChange={setSystem} className="flex gap-4 flex-row md:flex-row">
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="all" id="all" />
+                    <Label htmlFor="all">All</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="cong-lap" id="cong-lap" />
+                    <Label htmlFor="cong-lap">Công lập</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="tu-thuc" id="tu-thuc" />
+                    <Label htmlFor="tu-thuc">Tư thục</Label>
+                </div>
+            </RadioGroup>
+        </div>
 
-                        {/* Hệ */}
-                        <div className="mb-4">
-                            <Label className="mb-2 block">Hệ</Label>
-                            <RadioGroup value={system} onValueChange={setSystem} className="flex gap-4 flex-row md:flex-row">
-                                <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="all" id="all" />
-                                    <Label htmlFor="all">All</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="cong-lap" id="cong-lap" />
-                                    <Label htmlFor="cong-lap">Công lập</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="tu-thuc" id="tu-thuc" />
-                                    <Label htmlFor="tu-thuc">Tư thục</Label>
-                                </div>
-                            </RadioGroup>
-                        </div>
+        {/* Checkbox */}
+        <div className="mb-4 flex items-center space-x-2">
+            <Checkbox
+                id="cao-dang"
+                checked={dataset === "university" && includeCollege}
+                disabled={dataset !== "university"}
+                onCheckedChange={(checked) => setIncludeCollege(!!checked)}
+            />
+            <Label htmlFor="cao-dang">Gồm Cao Đẳng</Label>
+        </div>
 
-                        {/* Checkbox */}
-                        <div className="mb-4 flex items-center space-x-2">
-                            <Checkbox
-                                id="cao-dang"
-                                checked={dataset === "university" && includeCollege}
-                                disabled={dataset !== "university"}
-                                onCheckedChange={(checked) => setIncludeCollege(!!checked)}
-                            />
-                            <Label htmlFor="cao-dang">Gồm Cao Đẳng</Label>
-                        </div>
+        <Button type="submit" className="w-full">Filter</Button>
+    </form>)
+    // return (
+    //     <Accordion
+    //         type="single"
+    //         collapsible
+    //         className="w-full"
+    //         defaultValue="item-1"
+    //     >
+    //         <AccordionItem value="item-1">
+    //             <AccordionTrigger className=" text-lg font-semibold text-center">Filter</AccordionTrigger>
+    //             <AccordionContent >
+    //                 <form onSubmit={handleSubmit} className={styles.filter_container}>
+    //                     <div className="mb-4">
+    //                         <Label className="mb-2 block">Dataset</Label>
+    //                         <RadioGroup value={dataset} onValueChange={setDataset} className="flex gap-4 flex-row md:flex-row">
+    //                             <div className="flex items-center space-x-2">
+    //                                 <RadioGroupItem value="university" id="university" />
+    //                                 <Label htmlFor="university">University</Label>
+    //                             </div>
+    //                             <div className="flex items-center space-x-2">
+    //                                 <RadioGroupItem value="highschool" id="highschool" />
+    //                                 <Label htmlFor="highschool">High School</Label>
+    //                             </div>
+    //                         </RadioGroup>
+    //                     </div>
 
-                        <Button type="submit" className="w-full">Filter</Button>
-                    </form>
-                </AccordionContent>
-            </AccordionItem>
+    //                     {/* City select */}
+    //                     <CityList value={city} onChange={setCity} />
 
-        </Accordion>
+    //                     {/* Field select (stubbed) */}
+    //                     <FieldList value={field} onChange={setField} />
 
-    );
+    //                     {/* Hệ */}
+    //                     <div className="mb-4">
+    //                         <Label className="mb-2 block">Hệ</Label>
+    //                         <RadioGroup value={system} onValueChange={setSystem} className="flex gap-4 flex-row md:flex-row">
+    //                             <div className="flex items-center space-x-2">
+    //                                 <RadioGroupItem value="all" id="all" />
+    //                                 <Label htmlFor="all">All</Label>
+    //                             </div>
+    //                             <div className="flex items-center space-x-2">
+    //                                 <RadioGroupItem value="cong-lap" id="cong-lap" />
+    //                                 <Label htmlFor="cong-lap">Công lập</Label>
+    //                             </div>
+    //                             <div className="flex items-center space-x-2">
+    //                                 <RadioGroupItem value="tu-thuc" id="tu-thuc" />
+    //                                 <Label htmlFor="tu-thuc">Tư thục</Label>
+    //                             </div>
+    //                         </RadioGroup>
+    //                     </div>
+
+    //                     {/* Checkbox */}
+    //                     <div className="mb-4 flex items-center space-x-2">
+    //                         <Checkbox
+    //                             id="cao-dang"
+    //                             checked={dataset === "university" && includeCollege}
+    //                             disabled={dataset !== "university"}
+    //                             onCheckedChange={(checked) => setIncludeCollege(!!checked)}
+    //                         />
+    //                         <Label htmlFor="cao-dang">Gồm Cao Đẳng</Label>
+    //                     </div>
+
+    //                     <Button type="submit" className="w-full">Filter</Button>
+    //                 </form>
+    //             </AccordionContent>
+    //         </AccordionItem>
+
+    //     </Accordion>
+
+    // );
 }

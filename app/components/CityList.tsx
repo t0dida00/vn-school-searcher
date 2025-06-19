@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/popover";
 
 const frameworks = [
+    { value: "all", label: "Thành phố" },
     { value: "hanoi", label: "Hà Nội" },
     { value: "hcm", label: "TP. HCM" },
     { value: "danang", label: "Đà Nẵng" },

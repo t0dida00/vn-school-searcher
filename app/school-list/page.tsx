@@ -139,6 +139,17 @@ export default function UniversityListPage() {
                 </div>
             )}
             <button
+                onClick={() => router.push("/map")}
+                className="fixed bottom-18 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer"
+                aria-label="Go to map mode"
+            >
+                <CustomTooltip
+                    name={<Globe className="w-6 h-6" />}
+                    title="Chế độ bản đồ"
+                />
+
+            </button>
+            <button
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 className="fixed bottom-6 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50  cursor-pointer"
                 aria-label="Scroll to top"
@@ -149,17 +160,7 @@ export default function UniversityListPage() {
                 />
 
             </button>
-            <button
-                onClick={() => router.push("/map")}
-                className="fixed bottom-16 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer"
-                aria-label="Go to map mode"
-            >
-                <CustomTooltip
-                    name={<Globe className="w-6 h-6" />}
-                    title="Chế độ bản đồ"
-                />
 
-            </button>
 
         </main>
     );
