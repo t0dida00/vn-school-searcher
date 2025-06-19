@@ -1,13 +1,13 @@
 // lib/mongodb.ts
 import { MongoClient } from "mongodb";
 
-const uri = process.env.NEXT_PUBLIC_MONGO_URI as string;
+const uri = process.env.MONGO_URI as string;
 const options = {};
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-if (!process.env.NEXT_PUBLIC_MONGO_URI) {
+if (!process.env.MONGO_URI) {
   throw new Error("⚠️ Please define the MONGODB_URI environment variable in .env.local");
 }
 
