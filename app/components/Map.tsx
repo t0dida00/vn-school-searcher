@@ -25,7 +25,6 @@ export default function Map() {
     const { data } = useDataStore();
     const router = useRouter()
     const [searchFocus, setSearchFocus] = useState(false);
-    const [open, setOpen] = useState(false);
 
     const wrapperRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -77,13 +76,10 @@ export default function Map() {
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100vh", position: "relative" }}>
             <div className={styles.left_container}>
-                {/* <div className={styles.filter_container}>
-                    <FilterSection />
-                </div> */}
+
                 <div className={styles.search_container}>
 
                     <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
-                    {/* {renderDetailComponent(selectedPoint)} */}
                     <SchoolDetailDialog />
                     <SchoolList map={map} setQuery={setQuery} />
                 </div>

@@ -1,5 +1,3 @@
-import MapClientWrapper from "./HOC/MapWrapper";
-import axios from 'axios';
 
 export const revalidate = 60; // ISR or 0 for pure SSG
 
