@@ -56,8 +56,8 @@ export default function Search({
                         "!text-[16px]",
                         "rounded-full bg-white",
                         "shadow-[0_2px_6px_rgba(0,0,0,0.3)]",
-                        "border-none outline-none",
-                        "focus:ring-0 focus-visible:ring-0"
+                        "border border-gray-300",
+                        "focus-visible:ring-0"
                     )}
                 />
             </div>
