@@ -55,7 +55,7 @@ const SchoolList: React.FC<SchoolListProps> = ({ map, setQuery }) => {
         return <div className="w-full h-full flex items-center justify-center text-red-500"> Error: {error}</div>;
     }
 
-    return <ul className="flex flex-col gap-y-3 mt-3">{renderPoints(filteredData.length > 0 ? filteredData : points)}</ul>;
+    return <ul className="flex flex-col gap-y-3 p-2 empty:hidden">{renderPoints(filteredData.length > 0 ? filteredData : points)}</ul>;
 };
 
 export default SchoolList;

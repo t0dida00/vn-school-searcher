@@ -71,7 +71,7 @@ export default function UniversityListPage() {
                     placeholder="Tìm kiếm trường đại học..."
                     className="flex-1 px-4 py-2 rounded-md focus:outline-none w-full"
                 />
-                <div className="flex gap-2 flex-wrap flex-col sm:flex-row">
+                <div className=" gap-2 flex-wrap flex-col hidden sm:flex sm:flex-row">
                     <FilterCombobox
                         options={levelOptions}
                         placeholder="Cấp"
@@ -98,6 +98,40 @@ export default function UniversityListPage() {
                         onChange={setType}
                     />
                 </div>
+                <Accordion type="single" collapsible className="sm:hidden">
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger className="p-0 text-[16px]">Bộ lọc nâng cao</AccordionTrigger>
+                        <AccordionContent className="pb-0">
+                            <div className="flex gap-2 flex-wrap flex-col sm:flex-row pt-2">
+                                <FilterCombobox
+                                    options={levelOptions}
+                                    placeholder="Cấp"
+                                    value={level}
+                                    onChange={setLevel}
+                                />
+                                <FilterCombobox
+                                    options={majorOptions}
+                                    placeholder="Ngành học"
+                                    value={major}
+                                    onChange={setMajor}
+                                    disabled={level !== "university"} // Chỉ cho phép chọn ngành khi đã chọn cấp
+                                />
+                                <FilterCombobox
+                                    options={cityOptions}
+                                    placeholder="Thành phố"
+                                    value={city}
+                                    onChange={setCity}
+                                />
+                                <FilterCombobox
+                                    options={typeOptions}
+                                    placeholder="Loại trường"
+                                    value={type}
+                                    onChange={setType}
+                                />
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
                 <p className=" text-sm text-gray-400">
                     Hiển thị {visibleItems.length} / {mockUniversities.length} kết quả
                 </p>

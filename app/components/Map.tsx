@@ -75,9 +75,7 @@ export default function Map() {
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100dvh", position: "relative" }}>
             <div className={styles.left_container}>
-
                 <div className={styles.search_container}>
-
                     <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
                     <SchoolDetailDialog />
                     <SchoolList map={map} setQuery={setQuery} />

@@ -1,7 +1,9 @@
 "use client";
 import * as React from "react";
 import { Input } from "@/components/ui/input";
+import { Search as SearchIcon } from "lucide-react";
 import useDataStore from "../zustand/useDataStore";
+import { cn } from "@/lib/utils";
 
 interface SearchProps {
     placeholder?: string;
@@ -10,18 +12,22 @@ interface SearchProps {
     setQuery?: (val: string) => void;
 }
 
-export default function Search({ placeholder = "Search...", onFocus, query = "", setQuery }: SearchProps) {
+export default function Search({
+    placeholder = "Search...",
+    onFocus,
+    query = "",
+    setQuery,
+}: SearchProps) {
     const { data, setFilteredData } = useDataStore();
-    // Handle search logic here
+
     React.useEffect(() => {
         const handler = setTimeout(() => {
             if (query.trim() === "") {
-                setFilteredData([])
+                setFilteredData([]);
                 return;
             }
             const lowerQuery = query.toLowerCase();
             const filtered = data.filter((item: any) => {
-
                 const { name, code, address, city } = item.properties || {};
                 return (
                     name?.toLowerCase().includes(lowerQuery) ||
@@ -30,18 +36,30 @@ export default function Search({ placeholder = "Search...", onFocus, query = "",
                     city?.toLowerCase().includes(lowerQuery)
                 );
             });
-            setFilteredData(filtered); // Update the store with filtered results
+            setFilteredData(filtered);
         }, 500);
-        return () => clearTimeout(handler); // cleanup on query/data change
+        return () => clearTimeout(handler);
     }, [query, data, setFilteredData]);
+
     return (
-        <Input
-            type="search"
-            placeholder={placeholder}
-            value={query}
-            onFocus={onFocus}
-            onChange={(e) => setQuery?.(e.target.value)}
-            className="flex-1"
-        />
+        <div className="relative w-full max-w-xl rounded-full z-10">
+            <div className="relative">
+                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
+                <Input
+                    type="search"
+                    placeholder={placeholder}
+                    value={query}
+                    onFocus={onFocus}
+                    onChange={(e) => setQuery?.(e.target.value)}
+                    className={cn(
+                        "pl-12 pr-4 py-4",
+                        "rounded-full bg-white text-sm",
+                        "shadow-[0_2px_6px_rgba(0,0,0,0.3)]",
+                        "border-none outline-none",
+                        "focus:ring-0 focus-visible:ring-0"
+                    )}
+                />
+            </div>
+        </div>
     );
 }
