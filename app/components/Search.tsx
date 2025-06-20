@@ -53,7 +53,7 @@ export default function Search({
                     onChange={(e) => setQuery?.(e.target.value)}
                     className={cn(
                         "pl-12 pr-4 py-4",
-                        "text-base",
+                        "!text-[16px]",
                         "rounded-full bg-white text-sm",
                         "shadow-[0_2px_6px_rgba(0,0,0,0.3)]",
                         "border-none outline-none",
