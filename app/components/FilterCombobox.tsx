@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import styles from "./styles/filterCombobox.module.scss"; // ✅ import styles
 type Option = {
     label: string;
     value: string;
@@ -63,9 +63,11 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
             </PopoverTrigger>
             <PopoverContent className="max-w-full p-0">
                 <Command>
-                    <CommandInput placeholder={`Tìm ${placeholder.toLowerCase()}...`} className="!text-[16px]" />
+                    <CommandInput placeholder={`Tìm ${placeholder.toLowerCase()}...`} className="!text-[16px]" ref={(el) => {
+                        if (el) setTimeout(() => el.blur(), 0); // forcibly blur to cancel autofocus
+                    }} />
                     <CommandEmpty>Không có kết quả.</CommandEmpty>
-                    <CommandGroup className=" max-h-[40dvh] overflow-y-auto">
+                    <CommandGroup className={`${styles.input} max-h-[40dvh] overflow-y-auto`}>
                         {options.map((option) => (
                             <CommandItem
                                 key={option.value}
