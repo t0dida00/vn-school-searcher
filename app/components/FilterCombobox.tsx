@@ -54,7 +54,7 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
                 <Button
                     variant="outline"
                     role="combobox"
-                    className={cn("flex-1 justify-between cursor-pointer", className)}
+                    className={cn("flex-1 justify-between cursor-pointer !text-[16px] ", className)}
                     disabled={disabled}
                 >
                     {selectedLabel}
@@ -63,7 +63,7 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
             </PopoverTrigger>
             <PopoverContent className="max-w-full p-0">
                 <Command>
-                    <CommandInput placeholder={`Tìm ${placeholder.toLowerCase()}...`} />
+                    <CommandInput placeholder={`Tìm ${placeholder.toLowerCase()}...`} className="!text-[16px]" />
                     <CommandEmpty>Không có kết quả.</CommandEmpty>
                     <CommandGroup className=" max-h-[40dvh] overflow-y-auto">
                         {options.map((option) => (

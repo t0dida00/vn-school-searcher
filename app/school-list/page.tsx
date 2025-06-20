@@ -102,7 +102,7 @@ export default function UniversityListPage() {
                     <AccordionItem value="item-1">
                         <AccordionTrigger className="p-0 text-[16px]">Bộ lọc nâng cao</AccordionTrigger>
                         <AccordionContent className="pb-0">
-                            <div className="flex gap-2 flex-wrap flex-col sm:flex-row pt-2">
+                            <div className="flex gap-2 flex-wrap flex-col sm:flex-row pt-2 text-[16px] ">
                                 <FilterCombobox
                                     options={levelOptions}
                                     placeholder="Cấp"
@@ -132,7 +132,7 @@ export default function UniversityListPage() {
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>
-                <p className=" text-sm text-gray-400">
+                <p className=" text-sm text-gray-400 text-[14px]">
                     Hiển thị {visibleItems.length} / {mockUniversities.length} kết quả
                 </p>
             </div>

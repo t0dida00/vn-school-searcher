@@ -51,19 +51,19 @@ export default function FilterSection() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className={styles.filter_container}>
+        <form onSubmit={handleSubmit} className={`${styles.filter_container} `}>
             {/* Dataset */}
             <div className="mb-4">
-                <Label className="mb-2 block">Dataset</Label>
+                <Label className="mb-2 block !text-[16px]">Dataset</Label>
                 <RadioGroup
                     value={dataset}
                     onValueChange={setDataset}
-                    className="flex gap-4 flex-row md:flex-row"
+                    className="flex gap-4 flex-row md:flex-row "
                 >
                     {datasetOptions.map((option) => (
-                        <div key={option.value} className="flex items-center space-x-2 cursor-pointer">
+                        <div key={option.value} className="flex items-center space-x-2 cursor-pointer ">
                             <RadioGroupItem value={option.value} id={option.value} className=" cursor-pointer" />
-                            <Label htmlFor={option.value} className="cursor-pointer">{option.label}</Label>
+                            <Label htmlFor={option.value} className="cursor-pointer !text-[16px]">{option.label}</Label>
                         </div>
                     ))}
                 </RadioGroup>
@@ -94,7 +94,7 @@ export default function FilterSection() {
 
             {/* System */}
             <div className="mb-4">
-                <Label className="mb-2 block">Hệ</Label>
+                <Label className="mb-2 block !text-[16px]">Hệ</Label>
                 <RadioGroup
                     value={system}
                     onValueChange={setSystem}
@@ -103,7 +103,7 @@ export default function FilterSection() {
                     {systemOptions.map((option) => (
                         <div key={option.value} className="flex items-center space-x-2 cursor-pointer">
                             <RadioGroupItem value={option.value} id={option.value} className="cursor-pointer" />
-                            <Label htmlFor={option.value} className="cursor-pointer">{option.label}</Label>
+                            <Label htmlFor={option.value} className="cursor-pointer !text-[16px]">{option.label}</Label>
                         </div>
                     ))}
                 </RadioGroup>
@@ -118,10 +118,10 @@ export default function FilterSection() {
                     onCheckedChange={(checked) => setIncludeCollege(!!checked)}
                     className="cursor-pointer"
                 />
-                <Label htmlFor="cao-dang" className="cursor-pointer">Gồm Cao Đẳng</Label>
+                <Label htmlFor="cao-dang" className="cursor-pointer !text-[16px]">Gồm Cao Đẳng</Label>
             </div>
 
-            <Button type="submit" className="w-full cursor-pointer">Filter</Button>
+            <Button type="submit" className="w-full cursor-pointer !text-[16px]">Filter</Button>
         </form>
     );
 }
