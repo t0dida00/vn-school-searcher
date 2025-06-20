@@ -123,7 +123,7 @@
 
 .mapboxgl-ctrl-top-right {
   @media screen and (max-width: 768px) {
-  bottom: calc(env(safe-area-inset-bottom) + 20px) !important;
+  bottom: calc(env(safe-area-inset-bottom) + 40px) !important;
   top: auto !important;
   /* bottom: 20px; */
   right: auto !important;

@@ -17,14 +17,17 @@ import { Notebook } from "lucide-react";
 import CustomTooltip from "./Tooltip";
 import { useRouter } from "next/navigation";
 import CustomFunnel from "./Funnel";
+import { Badge } from "@/components/ui/badge";
+import useStore from "../zustand/usePointStore";
+import SchoolLogo from "./Avatar";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
     const [query, setQuery] = useState("");
     const { data } = useDataStore();
+    const { points } = useStore();
     const router = useRouter()
     const [searchFocus, setSearchFocus] = useState(false);
-
     const wrapperRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (!map && mapContainerRef.current) {
@@ -88,8 +91,24 @@ export default function Map() {
                 <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
                 {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
                 <SchoolDrawer />
+                <div className="absolute flex flex-row overflow-auto gap-[10px] translate-y-3 left-0 w-full ">
+                    {points.map((point, index) => {
+                        const { properties } = point;
+                        const { logo, name } = properties || {};
+
+                        return (
+                            <div key={index} >
+                                <SchoolLogo src={logo} alt={name || `School ${index + 1}`} customStyle={{ height: '45px', width: "45px" }} />
+
+                            </div>
+                        );
+                    })}
+
+
+                </div>
+
             </div>
-            <button className="fixed bottom-18 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
+            <button className="fixed bottom-24 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
                 <CustomTooltip
                     name={<Notebook size={30} className="w-6 h-6" />}
                     title="Danh sách trường học"

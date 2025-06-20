@@ -5,10 +5,11 @@ interface SchoolLogoProps {
     src?: string;
     alt?: string;
     href?: string;
+    customStyle?: React.CSSProperties;
 }
-const SchoolLogo = ({ src, alt, href }: SchoolLogoProps) => {
+const SchoolLogo = ({ src, alt, href, customStyle = {} }: SchoolLogoProps) => {
     const avatarContent = (
-        <Avatar className={styles.container}>
+        <Avatar className={styles.container} style={customStyle}>
             <AvatarImage src={src} alt={alt} />
             <AvatarFallback>{alt?.charAt(0).toUpperCase() || "?"}</AvatarFallback>
         </Avatar>
