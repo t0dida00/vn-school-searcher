@@ -10,8 +10,8 @@ export default async function HomePage() {
     const host = process.env.VERCEL_URL || 'http://localhost:3000';
 
     try {
-        const res = await axios.get(`${host}/api/universities`);
-        data = res.data;
+        const res = await fetch(`${host}/api/universities`);
+        data = await res.json();
     } catch (err: any) {
         if (axios.isAxiosError(err)) {
             console.log(err)
