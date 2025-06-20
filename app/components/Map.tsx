@@ -73,7 +73,7 @@ export default function Map() {
     }, []);
 
     return (
-        <div ref={mapContainerRef} style={{ width: "100%", height: "100vh", position: "relative" }}>
+        <div ref={mapContainerRef} style={{ width: "100%", height: "100dvh", position: "relative" }}>
             <div className={styles.left_container}>
 
                 <div className={styles.search_container}>
