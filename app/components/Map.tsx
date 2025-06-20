@@ -20,6 +20,7 @@ import CustomFunnel from "./Funnel";
 import { Badge } from "@/components/ui/badge";
 import useStore from "../zustand/usePointStore";
 import SchoolLogo from "./Avatar";
+import { useZoomToPoint } from "../hooks/useZoomToPoint";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
@@ -29,6 +30,8 @@ export default function Map() {
     const router = useRouter()
     const [searchFocus, setSearchFocus] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const zoomToPoint = useZoomToPoint(map);
+
     useEffect(() => {
         if (!map && mapContainerRef.current) {
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -97,7 +100,7 @@ export default function Map() {
                         const { logo, name } = properties || {};
 
                         return (
-                            <div key={index} >
+                            <div key={index} onClick={() => zoomToPoint(point)} >
                                 <SchoolLogo src={logo} alt={name || `School ${index + 1}`} customStyle={{ height: '45px', width: "45px" }} />
 
                             </div>
