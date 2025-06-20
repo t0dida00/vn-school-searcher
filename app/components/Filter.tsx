@@ -61,9 +61,9 @@ export default function FilterSection() {
                     className="flex gap-4 flex-row md:flex-row"
                 >
                     {datasetOptions.map((option) => (
-                        <div key={option.value} className="flex items-center space-x-2">
+                        <div key={option.value} className="flex items-center space-x-2 cursor-pointer">
                             <RadioGroupItem value={option.value} id={option.value} />
-                            <Label htmlFor={option.value}>{option.label}</Label>
+                            <Label htmlFor={option.value} className="cursor-pointer">{option.label}</Label>
                         </div>
                     ))}
                 </RadioGroup>
@@ -101,9 +101,9 @@ export default function FilterSection() {
                     className="flex gap-4 flex-row md:flex-row"
                 >
                     {systemOptions.map((option) => (
-                        <div key={option.value} className="flex items-center space-x-2">
-                            <RadioGroupItem value={option.value} id={option.value} />
-                            <Label htmlFor={option.value}>{option.label}</Label>
+                        <div key={option.value} className="flex items-center space-x-2 cursor-pointer">
+                            <RadioGroupItem value={option.value} id={option.value} className="cursor-pointer" />
+                            <Label htmlFor={option.value} className="cursor-pointer">{option.label}</Label>
                         </div>
                     ))}
                 </RadioGroup>
@@ -116,11 +116,12 @@ export default function FilterSection() {
                     checked={dataset === "university" && includeCollege}
                     disabled={dataset !== "university"}
                     onCheckedChange={(checked) => setIncludeCollege(!!checked)}
+                    className="cursor-pointer"
                 />
-                <Label htmlFor="cao-dang">Gồm Cao Đẳng</Label>
+                <Label htmlFor="cao-dang" className="cursor-pointer">Gồm Cao Đẳng</Label>
             </div>
 
-            <Button type="submit" className="w-full">Filter</Button>
+            <Button type="submit" className="w-full cursor-pointer">Filter</Button>
         </form>
     );
 }
