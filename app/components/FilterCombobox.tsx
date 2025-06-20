@@ -42,21 +42,13 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
 }) => {
     const [open, setOpen] = React.useState(false);
 
-    const [renderInput, setRenderInput] = React.useState(false);
 
     React.useEffect(() => {
         if (disabled) {
             onChange("");
         }
     }, [disabled]);
-    React.useEffect(() => {
-        if (open) {
-            const timer = setTimeout(() => setRenderInput(true), 50); // Delay prevents auto-focus
-            return () => clearTimeout(timer);
-        } else {
-            setRenderInput(false); // Reset when popover closes
-        }
-    }, [open]);
+
     const selectedLabel =
         options.find((option) => option.value === value)?.label || placeholder;
     return (
@@ -74,12 +66,11 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
             </PopoverTrigger>
             <PopoverContent className="max-w-full p-0">
                 <Command>
-                    {renderInput && (
-                        <CommandInput
-                            placeholder={`Tìm ${placeholder.toLowerCase()}...`}
-                            className="!text-[16px]"
-                        />
-                    )}
+
+                    <CommandInput
+                        placeholder={`Tìm ${placeholder.toLowerCase()}...`}
+                        className="!text-[16px]"
+                    />
                     <CommandEmpty>Không có kết quả.</CommandEmpty>
                     <CommandGroup className={`${styles.input} max-h-[40dvh] overflow-y-auto`}>
                         {options.map((option) => (
