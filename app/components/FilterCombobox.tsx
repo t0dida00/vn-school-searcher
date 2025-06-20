@@ -64,9 +64,8 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
                     <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="max-w-full p-0">
+            <PopoverContent className="max-w-full p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
                 <Command>
-
                     <CommandInput
                         placeholder={`Tìm ${placeholder.toLowerCase()}...`}
                         className="!text-[16px]"
