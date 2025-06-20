@@ -17,7 +17,7 @@ export default function CustomFunnel() {
     return (
         <main className="flex items-center justify-center bg-gray-50">
             {/* Custom trigger */}
-            <button className="fixed bottom-18 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => setOpen(true)} >
+            <button className="fixed bottom-6 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => setOpen(true)} >
                 <CustomTooltip
                     name={<Funnel size={30} className="w-6 h-6" />}
                     title="Bộ lọc trường học"

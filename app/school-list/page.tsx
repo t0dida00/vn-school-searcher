@@ -18,34 +18,31 @@ const PAGE_SIZE = 20;
 export default function UniversityListPage() {
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const router = useRouter();
-
-    const [level, setLevel] = useState("daihoc");
+    const [level, setLevel] = useState("");
     const [major, setMajor] = useState("");
     const [city, setCity] = useState("");
     const [type, setType] = useState("");
+    const [levelOptions, setLevelOptions] = useState([]);
+    const [majorOptions, setMajorOptions] = useState([]);
+    const [cityOptions, setCityOptions] = useState([]);
+    const [typeOptions, setTypeOptions] = useState([]);
 
-    const levelOptions = [
-        { label: "Đại học", value: "daihoc" },
-        { label: "Cao đẳng", value: "caodang" },
-    ];
-
-    const majorOptions = [
-        { label: "Tất cả ngành", value: "" },
-        { label: "Khoa học máy tính", value: "cs" },
-        { label: "Kinh tế", value: "business" },
-    ];
-
-    const cityOptions = [
-        { label: "Tất cả thành phố", value: "" },
-        { label: "Hà Nội", value: "hanoi" },
-        { label: "TP.HCM", value: "hcm" },
-    ];
-
-    const typeOptions = [
-        { label: "Tất cả loại", value: "" },
-        { label: "Công lập", value: "cong-lap" },
-        { label: "Tư thục", value: "tu-thuc" },
-    ];
+    React.useEffect(() => {
+        const loadOptions = async () => {
+            try {
+                const res = await fetch("/filter-options.json");
+                const data = await res.json();
+                setLevelOptions(data.datasets); // "Đại học", "THPT"
+                setMajorOptions(data.fields);   // majors
+                setCityOptions(data.cities);    // cities
+                setTypeOptions(data.systems);   // Công lập / Tư thục
+                setLevel(data.datasets[0].value);
+            } catch (error) {
+                console.error("Failed to load filter options", error);
+            }
+        };
+        loadOptions();
+    }, []);
     const { ref, inView } = useInView({
         threshold: 1,
         triggerOnce: false,
@@ -86,6 +83,7 @@ export default function UniversityListPage() {
                         placeholder="Ngành học"
                         value={major}
                         onChange={setMajor}
+                        disabled={level !== "university"} // Chỉ cho phép chọn ngành khi đã chọn cấp
                     />
                     <FilterCombobox
                         options={cityOptions}

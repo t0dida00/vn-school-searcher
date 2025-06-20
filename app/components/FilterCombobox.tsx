@@ -29,6 +29,7 @@ interface FilterComboboxProps {
     value: string;
     onChange: (value: string) => void;
     className?: string; // ✅ add this
+    disabled?: boolean; // ✅ add this
 }
 
 export const FilterCombobox: React.FC<FilterComboboxProps> = ({
@@ -37,12 +38,16 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
     value,
     onChange,
     className = "",
+    disabled = false,
 }) => {
     const [open, setOpen] = React.useState(false);
-
+    React.useEffect(() => {
+        if (disabled) {
+            onChange("");
+        }
+    }, [disabled]);
     const selectedLabel =
         options.find((option) => option.value === value)?.label || placeholder;
-
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -50,6 +55,7 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
                     variant="outline"
                     role="combobox"
                     className={cn("flex-1 justify-between", className)}
+                    disabled={disabled}
                 >
                     {selectedLabel}
                     <ChevronDown className="ml-2 h-4 w-4 opacity-50" />

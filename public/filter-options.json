@@ -1,0 +1,23 @@
+{
+  "cities": [
+    { "label": "Tất cả thành phố", "value": "" },
+    { "label": "Hà Nội", "value": "hanoi" },
+    { "label": "TP.HCM", "value": "hcm" },
+    { "label": "Đà Nẵng", "value": "danang" }
+  ],
+  "fields": [
+    { "label": "Tất cả ngành", "value": "" },
+    { "label": "Khoa học máy tính", "value": "cs" },
+    { "label": "Kinh tế", "value": "business" },
+    { "label": "Y dược", "value": "medicine" }
+  ],
+  "systems": [
+    { "label": "Tất cả", "value": "all" },
+    { "label": "Công lập", "value": "public" },
+    { "label": "Tư thục", "value": "private" }
+  ],
+  "datasets": [
+    { "label": "Đại học", "value": "university" },
+    { "label": "THPT", "value": "highschool" }
+  ]
+}

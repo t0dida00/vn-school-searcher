@@ -91,15 +91,15 @@ export default function Map() {
                 {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
                 <SchoolDrawer />
             </div>
-
-            <CustomFunnel />
-            <button className="fixed bottom-6 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
+            <button className="fixed bottom-18 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
                 <CustomTooltip
                     name={<Notebook size={30} className="w-6 h-6" />}
                     title="Danh sách trường học"
                 />
 
             </button>
+            <CustomFunnel />
+
         </div>
     );
 }
