@@ -6,14 +6,17 @@ export const revalidate = 60; // ISR or 0 for pure SSG
 export default async function HomePage() {
     let data = null;
     let error = null;
-    const host = process.env.VERCEL_URL || 'localhost:3000';
+
+    const host = process.env.VERCEL_URL || 'http://localhost:3000';
     try {
         const res = await axios.get(`${host}/api/universities`);
         data = res.data;
     } catch (err: any) {
         if (axios.isAxiosError(err)) {
+            console.log(err)
             error = err.response?.data?.message || err.message || 'Axios error occurred';
         } else {
+            console.log(error)
             error = 'An unexpected error occurred';
         }
     }
