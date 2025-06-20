@@ -17,7 +17,6 @@ import { Notebook } from "lucide-react";
 import CustomTooltip from "./Tooltip";
 import { useRouter } from "next/navigation";
 import CustomFunnel from "./Funnel";
-import { Badge } from "@/components/ui/badge";
 import useStore from "../zustand/usePointStore";
 import SchoolLogo from "./Avatar";
 import { useZoomToPoint } from "../hooks/useZoomToPoint";
