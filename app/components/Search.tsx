@@ -54,7 +54,7 @@ export default function Search({
                     className={cn(
                         "pl-12 pr-4 py-4",
                         "!text-[16px]",
-                        "rounded-full bg-white text-sm",
+                        "rounded-full bg-white",
                         "shadow-[0_2px_6px_rgba(0,0,0,0.3)]",
                         "border-none outline-none",
                         "focus:ring-0 focus-visible:ring-0"
