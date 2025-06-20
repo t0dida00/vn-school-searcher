@@ -62,7 +62,7 @@ export default function FilterSection() {
                 >
                     {datasetOptions.map((option) => (
                         <div key={option.value} className="flex items-center space-x-2 cursor-pointer">
-                            <RadioGroupItem value={option.value} id={option.value} />
+                            <RadioGroupItem value={option.value} id={option.value} className=" cursor-pointer" />
                             <Label htmlFor={option.value} className="cursor-pointer">{option.label}</Label>
                         </div>
                     ))}
