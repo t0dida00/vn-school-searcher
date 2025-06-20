@@ -22,7 +22,8 @@ export default function Search({
 
     React.useEffect(() => {
         const handler = setTimeout(() => {
-            if (query.trim() === "") {
+            const trimmed = query.trim();
+            if (trimmed.length < 3) {
                 setFilteredData([]);
                 return;
             }
