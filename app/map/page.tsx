@@ -9,7 +9,7 @@ export default async function HomePage() {
 
     const host = process.env.VERCEL_URL || 'http://localhost:3000';
     try {
-        const res = await axios.get(`${host}/api/universities`);
+        const res = await axios.get(`https://vn-school-searcher.vercel.app/api/universities`);
         data = res.data;
     } catch (err: any) {
         if (axios.isAxiosError(err)) {
