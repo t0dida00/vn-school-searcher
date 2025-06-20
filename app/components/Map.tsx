@@ -24,13 +24,13 @@ export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
     const [query, setQuery] = useState("");
-    const { data } = useDataStore();
+    const { data, filteredData } = useDataStore();
     const { points } = useStore();
     const router = useRouter()
     const [searchFocus, setSearchFocus] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const zoomToPoint = useZoomToPoint(map);
-
+    console.log(filteredData.length, "filteredData length");
     useEffect(() => {
         if (!map && mapContainerRef.current) {
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -94,7 +94,7 @@ export default function Map() {
                 {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
                 <SchoolDrawer />
                 <div className="absolute flex flex-row overflow-auto gap-[10px] translate-y-3 left-0 w-full ">
-                    {points.map((point, index) => {
+                    {filteredData.length == 0 && points.map((point, index) => {
                         const { properties } = point;
                         const { logo, name } = properties || {};
 
