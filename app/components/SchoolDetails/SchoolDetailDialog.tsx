@@ -64,7 +64,7 @@ const SchoolDetailDialog = () => {
                     <DialogTitle style={{ fontSize: 24 }} title='Tên trường'>
                         <a href={webpage} target="_blank" rel="noopener noreferrer" className={styles.link}>
                             {name || 'N/A'} {code && `(${code})`}
-                            {ranking && (
+                            {ranking || ranking != 0 && (
                                 <Badge title='Ranking' style={{ fontSize: "16px" }} className="ml-4 bg-black text-white">
                                     {ranking}
                                 </Badge>
@@ -74,9 +74,10 @@ const SchoolDetailDialog = () => {
 
                     <div className={styles.container}>
                         <div className={styles.wrapper}>
-                            <div className={styles.left_container}>
+                            {logo && (<div className={styles.left_container}>
                                 <SchoolLogo src={logo} alt={name || code} href={webpage} />
-                            </div>
+                            </div>)}
+
                             <div className={styles.middle_container}>
                                 <CustomLink url={webpage} shortUrl="Thông tin tuyển sinh" />
                                 {wiki && <CustomLink url={wiki} shortUrl="Đề án tuyển sinh" />}

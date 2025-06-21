@@ -14,7 +14,7 @@ export function addMapEventListeners(map: Map) {
       if (feature.geometry.type !== "Point") return false;
       const [lng, lat] = feature.geometry.coordinates;
       return bounds && bounds.contains([lng, lat]);
-    }).slice(0, 10);;
+    }).slice(0, 20);;
     setPoints(visiblePoints);
 
   };

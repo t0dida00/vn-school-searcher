@@ -83,14 +83,15 @@ const SchoolDrawer: React.FC = () => {
                         <DrawerTitle style={{ fontSize: 24 }} title='Tên trường'>
                             <a href={webpage} target="_blank" rel="noopener noreferrer" className={styles.link}>
                                 {name || 'N/A'} {code && `(${code})`}
-                                {ranking && <Badge className="ml-4 bg-black text-white text-[16px]"> {ranking}</Badge>}
+                                {ranking || ranking != 0 && <Badge className="ml-4 bg-black text-white text-[16px]"> {ranking}</Badge>}
                             </a>
                         </DrawerTitle>
                         <div className={`${styles.container} ${styles.mobile_drawer_container}`}>
                             <div className={styles.wrapper}>
-                                <div className={styles.left_container}>
+                                {logo && <div className={styles.left_container}>
                                     <SchoolLogo src={logo} alt={name || code} href={webpage} />
-                                </div>
+                                </div>}
+
                                 <div className={styles.middle_container}>
                                     <CustomLink url={webpage} shortUrl="Thông tin tuyển sinh" />
                                     {wiki && <CustomLink url={wiki} shortUrl="Wikipedia" />}

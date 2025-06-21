@@ -97,7 +97,7 @@ export default function Map() {
                     {filteredData.length == 0 && points.map((point, index) => {
                         const { properties } = point;
                         const { logo, name } = properties || {};
-
+                        if (!logo) return null; // Skip if no logo
                         return (
                             <div key={index} onClick={() => zoomToPoint(point)} >
                                 <SchoolLogo src={logo} alt={name || `School ${index + 1}`} customStyle={{ height: '45px', width: "45px" }} />
