@@ -29,12 +29,11 @@ export default function UniversityListPage() {
     const [majorOptions, setMajorOptions] = useState([]);
     const [cityOptions, setCityOptions] = useState([]);
     const [typeOptions, setTypeOptions] = useState([]);
-    const { data, setData, setError } = useDataStore()
-    const [openItem, setOpenItem] = useState("nested-item-overview");
+    const { data, setData, setError, setFilteredData, filteredData } = useDataStore()
+    const source = filteredData ? filteredData : data;
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log('calling fetchData');
                 const res = await fetch(`${baseUrl}/api/universities`);
                 const data = await res.json();
                 setData(data);
@@ -46,7 +45,24 @@ export default function UniversityListPage() {
 
         fetchData();
     }, []);
+    useEffect(() => {
 
+        let filteredData = data;
+        if (city === "" && major === "" && type === "all") {
+            setFilteredData(null)
+            return
+        }
+        const filters = { city, major, type };
+        localStorage.setItem("university-filters-list", JSON.stringify(filters));
+        filteredData = filteredData.filter(item => {
+            const { properties } = item
+            const cityMatch = properties.city.toLowerCase().includes(city.toLowerCase());
+            const systemMatch = type === "all" || properties.type === type;
+            const fieldMatch = !major || stringToArray(properties.fieldOptions).map(f => f.toLowerCase()).includes(major.toLowerCase());;
+            return cityMatch && fieldMatch && systemMatch;
+        });
+        setFilteredData(filteredData);
+    }, [major, city, type]);
     React.useEffect(() => {
         const loadOptions = async () => {
             try {
@@ -68,14 +84,17 @@ export default function UniversityListPage() {
         triggerOnce: false,
     });
 
-    // Tự động tăng số lượng khi cuộn xuống
     React.useEffect(() => {
-        if (inView && visibleCount < data?.length) {
+        const source = filteredData?.length ? filteredData : data;
+        if (inView && visibleCount < source?.length) {
             setVisibleCount((prev) => prev + PAGE_SIZE);
         }
-    }, [inView, visibleCount]);
+    }, [inView, visibleCount, filteredData, data]);
 
-    const visibleItems = data?.slice(0, visibleCount);
+    const visibleItems = React.useMemo(() => {
+        const source = filteredData ? filteredData : data;
+        return source?.slice(0, visibleCount);
+    }, [filteredData, data, visibleCount]);
     return (
         <main className="mx-auto max-w-[768px] px-4 min-h-screen relative">
             <h1 className="text-3xl font-bold text-center mb-2">FinUnies</h1>
@@ -162,7 +181,6 @@ export default function UniversityListPage() {
                         const { properties } = uni
                         const { city, fieldOptions, type, logo, overview, tuition, scholarship } = properties || {};
                         const formattedfieldOptions = stringToArray(fieldOptions);
-                        console.log(city, 'city from uni');
                         return (
                             <React.Fragment key={uni._id}>
                                 <AccordionItem className="p-0" value={uni._id}>
@@ -220,9 +238,14 @@ export default function UniversityListPage() {
             </div>
 
             {/* Sentinel element để trigger load thêm */}
-            {visibleItems.length < data.length && (
+            {visibleItems.length < source.length && (
                 <div ref={ref} className="text-center py-6 text-gray-400">
-                    Đang tải thêm...
+                    Loading...
+                </div>
+            )}
+            {source.length == 0 && (
+                <div className="text-center py-6 text-gray-400">
+                    Result not found
                 </div>
             )}
             <button
@@ -253,11 +276,3 @@ export default function UniversityListPage() {
     );
 }
 
-// Giả lập 300 trường
-const mockUniversities = Array.from({ length: 50 }).map((_, index) => ({
-    id: index + 1,
-    name: `Đại học số ${index + 1}`,
-    type: index % 2 === 0 ? "Công lập" : "Tư thục",
-    city: index % 3 === 0 ? "Hà Nội" : "TP.HCM",
-    field: "Khoa học máy tính",
-}));

@@ -64,7 +64,6 @@ export default function FilterSection() {
 
         filteredData = filteredData.filter(item => {
             const { properties } = item
-            console.log(properties.type)
             const cityMatch = properties.city.toLowerCase().includes(city.toLowerCase());
             const systemMatch = system === "all" || properties.type === system;
             const fieldMatch = !field || stringToArray(properties.fieldOptions).map(f => f.toLowerCase()).includes(field.toLowerCase());;
