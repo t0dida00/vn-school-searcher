@@ -70,7 +70,6 @@ export default function FilterSection() {
             const fieldMatch = !field || stringToArray(properties.fieldOptions).map(f => f.toLowerCase()).includes(field.toLowerCase());;
             return cityMatch && fieldMatch && systemMatch;
         });
-        console.log(filteredData, 'filteredData')
         setFilteredData(filteredData);
     };
 

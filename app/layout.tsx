@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Danh sách trường học Việt Nam",
-  description: "Tìm kiếm và khám phá các trường học tại Việt Nam",
+  title: "Danh sách trường học Phần Lan",
+  description: "Tìm kiếm và khám phá các trường học tại Phần Lan",
 };
 export const viewport: Viewport = {
   width: "device-width",

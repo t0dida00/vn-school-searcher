@@ -67,7 +67,7 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
             <PopoverContent className="max-w-full p-0" >
                 <Command>
                     <CommandInput
-                        placeholder={`Tìm ${placeholder.toLowerCase()}...`}
+                        placeholder={`Find ${placeholder.toLowerCase()}...`}
                         className="!text-[16px]"
                     />
                     <CommandEmpty>No result.</CommandEmpty>
