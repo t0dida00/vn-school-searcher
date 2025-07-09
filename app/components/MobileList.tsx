@@ -44,7 +44,6 @@ const MobileList: React.FC<MobileListProps> = ({ map, setQuery, setSearchFocus }
                 </li>
             );
         });
-    console.log(filteredData, "filteredData in MobileList component");
     if (loading) {
         return (<div className="w-full h-full flex items-center justify-center">
             <Loader2Icon className="animate-spin " />
