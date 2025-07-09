@@ -47,7 +47,7 @@ export default function Map() {
                 addUniversityLayers(newMap, {
                     type: "FeatureCollection",
                     features: Array.isArray(data) ? data : [],
-                });
+                } as GeoJSON.FeatureCollection);
                 addMapEventListeners(newMap);
             });
             newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -58,8 +58,18 @@ export default function Map() {
                 map.remove();
             }
         };
-    }, [map, data]);
+    }, []);
+    useEffect(() => {
+        if (map && map.getSource("universities")) {
+            const geojson: GeoJSON.FeatureCollection = {
+                type: "FeatureCollection",
+                features: filteredData && filteredData.length > 0 ? filteredData : Array.isArray(data) ? data : [],
+            };
 
+            // 👇 Just update the existing source's data
+            (map.getSource("universities") as mapboxgl.GeoJSONSource).setData(geojson);
+        }
+    }, [filteredData, data, map]);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (window.innerWidth >= 576) return;
@@ -93,7 +103,7 @@ export default function Map() {
                 {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
                 <SchoolDrawer />
                 <div className="absolute flex flex-row overflow-auto gap-[10px] translate-y-3 left-0 w-full ">
-                    {filteredData.length == 0 && points.map((point, index) => {
+                    {filteredData && filteredData.length == 0 && points.map((point, index) => {
                         const { properties } = point;
                         const { logo, name } = properties || {};
                         if (!logo) return null; // Skip if no logo

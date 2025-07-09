@@ -59,7 +59,7 @@ export default function UniversityListPage() {
 
     return (
         <main className="mx-auto max-w-[768px] px-4 min-h-screen relative">
-            <h1 className="text-3xl font-bold text-center mb-2">Danh sách đại học</h1>
+            <h1 className="text-3xl font-bold text-center mb-2">FinUnies</h1>
             <p className="text-center text-gray-400 mb-6">
                 Tìm thông tin trường đại học Việt Nam dễ dàng
             </p>
@@ -80,7 +80,7 @@ export default function UniversityListPage() {
                     /> */}
                     <FilterCombobox
                         options={majorOptions}
-                        placeholder="Ngành học"
+                        placeholder="Field of study"
                         value={major}
                         onChange={setMajor}
                     // disabled={level !== "university"} // Chỉ cho phép chọn ngành khi đã chọn cấp
@@ -100,31 +100,31 @@ export default function UniversityListPage() {
                 </div>
                 <Accordion type="single" collapsible className="sm:hidden">
                     <AccordionItem value="item-1">
-                        <AccordionTrigger className="p-0 text-[16px]">Bộ lọc nâng cao</AccordionTrigger>
+                        <AccordionTrigger className="p-0 text-[16px]">Advanced Filters</AccordionTrigger>
                         <AccordionContent className="pb-0">
                             <div className="flex gap-2 flex-wrap flex-col sm:flex-row pt-2 text-[16px] ">
-                                <FilterCombobox
+                                {/* <FilterCombobox
                                     options={levelOptions}
                                     placeholder="Cấp"
                                     value={level}
                                     onChange={setLevel}
-                                />
+                                /> */}
                                 <FilterCombobox
                                     options={majorOptions}
-                                    placeholder="Ngành học"
+                                    placeholder="Field of study"
                                     value={major}
                                     onChange={setMajor}
-                                    disabled={level !== "university"} // Chỉ cho phép chọn ngành khi đã chọn cấp
+                                // disabled={level !== "university"} // Chỉ cho phép chọn ngành khi đã chọn cấp
                                 />
                                 <FilterCombobox
                                     options={cityOptions}
-                                    placeholder="Thành phố"
+                                    placeholder="City"
                                     value={city}
                                     onChange={setCity}
                                 />
                                 <FilterCombobox
                                     options={typeOptions}
-                                    placeholder="Loại trường"
+                                    placeholder="Type"
                                     value={type}
                                     onChange={setType}
                                 />

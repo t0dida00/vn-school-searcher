@@ -20,13 +20,13 @@ export default function CustomFunnel() {
             <button className="fixed bottom-12 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => setOpen(true)} >
                 <CustomTooltip
                     name={<Funnel size={30} className="w-6 h-6" />}
-                    title="Bộ lọc trường học"
+                    title="Advanced Filter"
                 />
             </button>
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetContent className="w-[320px]">
                     <SheetHeader>
-                        <SheetTitle className="!text-[16px]">Bộ lọc trường học</SheetTitle>
+                        <SheetTitle className="!text-[16px]">Filter</SheetTitle>
                         {/* <SheetDescription>
                             Hành động này không thể hoàn tác. Dữ liệu của bạn sẽ bị xóa khỏi hệ thống.
                         </SheetDescription> */}

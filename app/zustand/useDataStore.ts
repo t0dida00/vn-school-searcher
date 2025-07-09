@@ -7,8 +7,8 @@ interface State {
   error: string | null;
   fetchData: () => Promise<void>;
   setData: (data: any[]) => void;
-  filteredData: any[]; // Optional, if you want to store filtered data
-  setFilteredData: (data: any[]) => void; // Optional, if you want to set filtered dat
+  filteredData: any[] | null; // Optional, if you want to store filtered data
+  setFilteredData: (data: any[] | null) => void; // Optional, if you want to set filtered dat
   setError: (error: string | null) => void;
 }
 
@@ -34,7 +34,7 @@ const useDataStore = create<State>((set) => ({
     }
   },
   filteredData: [],
-  setFilteredData: (data: any[]) => set({ filteredData: data }),
+  setFilteredData: (data: any[] | null) => set({ filteredData: data }),
   setError: (error: string | null) => set({ error }),
  })
 );

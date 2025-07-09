@@ -53,12 +53,12 @@ const MobileList: React.FC<MobileListProps> = ({ map, setQuery, setSearchFocus }
     if (error) {
         return <div className="w-full h-full flex items-center justify-center text-red-500"> Error: {error}</div>;
     }
-    if (filteredData.length === 0) {
+    if (filteredData && filteredData.length === 0) {
         return null
     }
     return (
         <div className={styles.container}>
-            <ul className="flex flex-col gap-y-3">{renderPoints(filteredData)}</ul>
+            <ul className="flex flex-col gap-y-3">{renderPoints(filteredData ?? [])}</ul>
         </div>
     )
 };

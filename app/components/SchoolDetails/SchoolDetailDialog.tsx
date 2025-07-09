@@ -25,7 +25,6 @@ import { stringToArray } from '@/app/utils/stringToArray';
 
 const SchoolDetailDialog = () => {
     const { isOpen, setIsOpen, selectedPoint } = useStore();
-    console.log(selectedPoint,)
     const { properties } = selectedPoint || {};
     const {
         id,

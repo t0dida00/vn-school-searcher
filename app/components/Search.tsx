@@ -24,7 +24,7 @@ export default function Search({
         const handler = setTimeout(() => {
             const trimmed = query.trim();
             if (trimmed.length < 3) {
-                setFilteredData([]);
+                setFilteredData(null);
                 return;
             }
             const lowerQuery = query.toLowerCase();
@@ -37,6 +37,7 @@ export default function Search({
                     city?.toLowerCase().includes(lowerQuery)
                 );
             });
+            console.log(filtered, "filtered results for query:");
             setFilteredData(filtered);
         }, 500);
         return () => clearTimeout(handler);

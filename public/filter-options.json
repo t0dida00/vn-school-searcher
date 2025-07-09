@@ -21,226 +21,68 @@
     { "label": "Vaasa", "value": "vaasa" },
     { "label": "Vantaa", "value": "vantaa" }
 ],
- "fields": [
-    { "label": "All fields", "value": "" },
-    {
-      "label": "Architecture",
-      "value": "architecture"
-    },
-    {
-      "label": "Art and Design",
-      "value": "art-and-design"
-    },
-    {
-      "label": "Arts",
-      "value": "arts"
-    },
-    {
-      "label": "Arts (Art and Design)",
-      "value": "arts-(art-and-design)"
-    },
-    {
-      "label": "Arts (Dance)",
-      "value": "arts-(dance)"
-    },
-    {
-      "label": "Arts (Theatre and Drama)",
-      "value": "arts-(theatre-and-drama)"
-    },
-    {
-      "label": "Arts and Design",
-      "value": "arts-and-design"
-    },
-    {
-      "label": "Beauty and Cosmetics",
-      "value": "beauty-and-cosmetics"
-    },
-    {
-      "label": "Built Environment",
-      "value": "built-environment"
-    },
-    {
-      "label": "Business",
-      "value": "business"
-    },
-    {
-      "label": "Business Administration",
-      "value": "business-administration"
-    },
-    {
-      "label": "Business and Economics",
-      "value": "business-and-economics"
-    },
-    {
-      "label": "Culture and Arts",
-      "value": "culture-and-arts"
-    },
-    {
-      "label": "Economics and Business Administration",
-      "value": "economics-and-business-administration"
-    },
-    {
-      "label": "Education",
-      "value": "education"
-    },
-    {
-      "label": "Education and Culture",
-      "value": "education-and-culture"
-    },
-    {
-      "label": "Education and Learning",
-      "value": "education-and-learning"
-    },
-    {
-      "label": "Engineering",
-      "value": "engineering"
-    },
-    {
-      "label": "Engineering and Natural Sciences",
-      "value": "engineering-and-natural-sciences"
-    },
-    {
-      "label": "Environmental, Food and Biological Sciences",
-      "value": "environmental,-food-and-biological-sciences"
-    },
-    {
-      "label": "Ethical Technological Future",
-      "value": "ethical-technological-future"
-    },
-    {
-      "label": "Fine Arts",
-      "value": "fine-arts"
-    },
-    {
-      "label": "Forest Sciences",
-      "value": "forest-sciences"
-    },
-    {
-      "label": "Health",
-      "value": "health"
-    },
-    {
-      "label": "Health Care",
-      "value": "health-care"
-    },
-    {
-      "label": "Health Sciences",
-      "value": "health-sciences"
-    },
-    {
-      "label": "Health and Biomedical Sciences",
-      "value": "health-and-biomedical-sciences"
-    },
-    {
-      "label": "Hospitality Management",
-      "value": "hospitality-management"
-    },
-    {
-      "label": "Human Sciences",
-      "value": "human-sciences"
-    },
-    {
-      "label": "Humanities",
-      "value": "humanities"
-    },
-    {
-      "label": "Humanities and Social Sciences",
-      "value": "humanities-and-social-sciences"
-    },
-    {
-      "label": "Information Technology",
-      "value": "information-technology"
-    },
-    {
-      "label": "Information Technology and Communication Sciences",
-      "value": "information-technology-and-communication-sciences"
-    },
-    {
-      "label": "Information Technology and Engineering",
-      "value": "information-technology-and-engineering"
-    },
-    {
-      "label": "Laboratory Services",
-      "value": "laboratory-services"
-    },
-    {
-      "label": "Law",
-      "value": "law"
-    },
-    {
-      "label": "Life Sciences",
-      "value": "life-sciences"
-    },
-    {
-      "label": "Management and Business",
-      "value": "management-and-business"
-    },
-    {
-      "label": "Maritime Management",
-      "value": "maritime-management"
-    },
-    {
-      "label": "Mathematics and Sciences",
-      "value": "mathematics-and-sciences"
-    },
-    {
-      "label": "Medicine and Health Technology",
-      "value": "medicine-and-health-technology"
-    },
-    {
-      "label": "Mining",
-      "value": "mining"
-    },
-    {
-      "label": "Music",
-      "value": "music"
-    },
-    {
-      "label": "Natural Sciences",
-      "value": "natural-sciences"
-    },
-    {
-      "label": "Sciences",
-      "value": "sciences"
-    },
-    {
-      "label": "Social Sciences",
-      "value": "social-sciences"
-    },
-    {
-      "label": "Social Sciences and Humanities",
-      "value": "social-sciences-and-humanities"
-    },
-    {
-      "label": "Social Services",
-      "value": "social-services"
-    },
-    {
-      "label": "Society",
-      "value": "society"
-    },
-    {
-      "label": "Sport and Health Sciences",
-      "value": "sport-and-health-sciences"
-    },
-    {
-      "label": "Sports Management",
-      "value": "sports-management"
-    },
-    {
-      "label": "Sustainability Transformation",
-      "value": "sustainability-transformation"
-    },
-    {
-      "label": "Technology and Engineering",
-      "value": "technology-and-engineering"
-    }
-  
-  ],
+ "fields": 
+[
+  { "label": "All fields", "value": "" },
+  { "label": "Architecture", "value": "Architecture" },
+  { "label": "Art and Design", "value": "Art and Design" },
+  { "label": "Arts", "value": "Arts" },
+  { "label": "Arts (Art and Design)", "value": "Arts (Art and Design)" },
+  { "label": "Arts (Dance)", "value": "Arts (Dance)" },
+  { "label": "Arts (Theatre and Drama)", "value": "Arts (Theatre and Drama)" },
+  { "label": "Arts and Design", "value": "Arts and Design" },
+  { "label": "Beauty and Cosmetics", "value": "Beauty and Cosmetics" },
+  { "label": "Built Environment", "value": "Built Environment" },
+  { "label": "Business", "value": "Business" },
+  { "label": "Business Administration", "value": "Business Administration" },
+  { "label": "Business and Economics", "value": "Business and Economics" },
+  { "label": "Culture and Arts", "value": "Culture and Arts" },
+  { "label": "Economics and Business Administration", "value": "Economics and Business Administration" },
+  { "label": "Education", "value": "Education" },
+  { "label": "Education and Culture", "value": "Education and Culture" },
+  { "label": "Education and Learning", "value": "Education and Learning" },
+  { "label": "Engineering", "value": "Engineering" },
+  { "label": "Engineering and Natural Sciences", "value": "Engineering and Natural Sciences" },
+  { "label": "Environmental, Food and Biological Sciences", "value": "Environmental, Food and Biological Sciences" },
+  { "label": "Ethical Technological Future", "value": "Ethical Technological Future" },
+  { "label": "Fine Arts", "value": "Fine Arts" },
+  { "label": "Forest Sciences", "value": "Forest Sciences" },
+  { "label": "Health", "value": "Health" },
+  { "label": "Health Care", "value": "Health Care" },
+  { "label": "Health Sciences", "value": "Health Sciences" },
+  { "label": "Health and Biomedical Sciences", "value": "Health and Biomedical Sciences" },
+  { "label": "Hospitality Management", "value": "Hospitality Management" },
+  { "label": "Human Sciences", "value": "Human Sciences" },
+  { "label": "Humanities", "value": "Humanities" },
+  { "label": "Humanities and Social Sciences", "value": "Humanities and Social Sciences" },
+  { "label": "Information Technology", "value": "Information Technology" },
+  { "label": "Information Technology and Communication Sciences", "value": "Information Technology and Communication Sciences" },
+  { "label": "Information Technology and Engineering", "value": "Information Technology and Engineering" },
+  { "label": "Laboratory Services", "value": "Laboratory Services" },
+  { "label": "Law", "value": "Law" },
+  { "label": "Life Sciences", "value": "Life Sciences" },
+  { "label": "Management and Business", "value": "Management and Business" },
+  { "label": "Maritime Management", "value": "Maritime Management" },
+  { "label": "Mathematics and Sciences", "value": "Mathematics and Sciences" },
+  { "label": "Medicine and Health Technology", "value": "Medicine and Health Technology" },
+  { "label": "Mining", "value": "Mining" },
+  { "label": "Music", "value": "Music" },
+  { "label": "Natural Sciences", "value": "Natural Sciences" },
+  { "label": "Sciences", "value": "Sciences" },
+  { "label": "Social Sciences", "value": "Social Sciences" },
+  { "label": "Social Sciences and Humanities", "value": "Social Sciences and Humanities" },
+  { "label": "Social Services", "value": "Social Services" },
+  { "label": "Society", "value": "Society" },
+  { "label": "Sport and Health Sciences", "value": "Sport and Health Sciences" },
+  { "label": "Sports Management", "value": "Sports Management" },
+  { "label": "Sustainability Transformation", "value": "Sustainability Transformation" },
+  { "label": "Technology and Engineering", "value": "Technology and Engineering" }
+]
+,
   "systems": [
     { "label": "All", "value": "all" },
-    { "label": "University", "value": "uni" },
-    { "label": "University of Applied Sciences", "value": "uas" }
+    { "label": "University", "value": "University" },
+    { "label": "University of Applied Sciences", "value": "University of Applied Sciences" }
   ]
  
 }
