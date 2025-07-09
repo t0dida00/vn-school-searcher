@@ -63,7 +63,7 @@ export default function Map() {
         if (map && map.getSource("universities")) {
             const geojson: GeoJSON.FeatureCollection = {
                 type: "FeatureCollection",
-                features: filteredData && filteredData.length > 0 ? filteredData : Array.isArray(data) ? data : [],
+                features: filteredData ? filteredData : Array.isArray(data) ? data : [],
             };
 
             // 👇 Just update the existing source's data
