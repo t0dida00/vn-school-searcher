@@ -40,8 +40,6 @@ const SchoolDrawer: React.FC = () => {
         type2,
         majors,
         website: webpage,
-        wiki,
-        introduce,
         fields,
         scholarship,
         ranking,
