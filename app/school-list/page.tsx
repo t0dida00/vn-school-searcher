@@ -30,6 +30,7 @@ export default function UniversityListPage() {
     const [cityOptions, setCityOptions] = useState([]);
     const [typeOptions, setTypeOptions] = useState([]);
     const { data, setData, setError, setFilteredData, filteredData } = useDataStore()
+    const [query, setQuery] = useState("");
     const source = filteredData ? filteredData : data;
     useEffect(() => {
         const fetchData = async () => {
@@ -90,7 +91,34 @@ export default function UniversityListPage() {
             setVisibleCount((prev) => prev + PAGE_SIZE);
         }
     }, [inView, visibleCount, filteredData, data]);
-
+    React.useEffect(() => {
+        const handler = setTimeout(() => {
+            const trimmed = query.trim();
+            if (trimmed.length < 3) {
+                const customFilteredData = data.filter(item => {
+                    const { properties } = item
+                    const cityMatch = properties.city.toLowerCase().includes(city.toLowerCase());
+                    const systemMatch = type === "all" || properties.type === type;
+                    const fieldMatch = !major || stringToArray(properties.fieldOptions).map(f => f.toLowerCase()).includes(major.toLowerCase());;
+                    return cityMatch && fieldMatch && systemMatch;
+                });
+                setFilteredData(customFilteredData);
+                return;
+            }
+            const lowerQuery = query.toLowerCase();
+            const filtered = source.filter((item: any) => {
+                const { name, code, address, city } = item.properties || {};
+                return (
+                    name?.toLowerCase().includes(lowerQuery) ||
+                    code?.toLowerCase().includes(lowerQuery) ||
+                    address?.toLowerCase().includes(lowerQuery) ||
+                    city?.toLowerCase().includes(lowerQuery)
+                );
+            });
+            setFilteredData(filtered);
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [query, data, setFilteredData]);
     const visibleItems = React.useMemo(() => {
         const source = filteredData ? filteredData : data;
         return source?.slice(0, visibleCount);
@@ -108,6 +136,7 @@ export default function UniversityListPage() {
                     type="text"
                     placeholder="Find universities by name, code, address or city"
                     className="flex-1 px-4 py-2 rounded-md focus:outline-none w-full"
+                    onChange={(e) => setQuery(e.target.value)}
                 />
                 <div className=" gap-2 flex-wrap flex-col hidden sm:flex sm:flex-row">
                     {/* <FilterCombobox
@@ -171,7 +200,7 @@ export default function UniversityListPage() {
                     </AccordionItem>
                 </Accordion>
                 <p className=" text-sm text-gray-400 text-[14px]">
-                    Show {visibleItems.length} / {data?.length} results
+                    Show {visibleItems.length} / {source?.length} results
                 </p>
             </div>
 

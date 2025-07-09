@@ -37,7 +37,6 @@ export default function Search({
                     city?.toLowerCase().includes(lowerQuery)
                 );
             });
-            console.log(filtered, "filtered results for query:");
             setFilteredData(filtered);
         }, 500);
         return () => clearTimeout(handler);
