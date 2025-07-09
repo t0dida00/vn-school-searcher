@@ -44,6 +44,7 @@ const MobileList: React.FC<MobileListProps> = ({ map, setQuery, setSearchFocus }
                 </li>
             );
         });
+    console.log(filteredData, "filteredData in MobileList component");
     if (loading) {
         return (<div className="w-full h-full flex items-center justify-center">
             <Loader2Icon className="animate-spin " />
@@ -53,7 +54,8 @@ const MobileList: React.FC<MobileListProps> = ({ map, setQuery, setSearchFocus }
     if (error) {
         return <div className="w-full h-full flex items-center justify-center text-red-500"> Error: {error}</div>;
     }
-    if (filteredData && filteredData.length === 0) {
+
+    if (!filteredData || filteredData.length === 0) {
         return null
     }
     return (

@@ -85,7 +85,6 @@ export default function Map() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
     return (
         <div ref={mapContainerRef} style={{ width: "100%", height: "100dvh", position: "relative" }}>
             <div className={styles.left_container}>
@@ -103,10 +102,11 @@ export default function Map() {
                 {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
                 <SchoolDrawer />
                 <div className="absolute flex flex-row overflow-auto gap-[10px] translate-y-3 left-0 w-full ">
-                    {filteredData && filteredData.length == 0 && points.map((point, index) => {
+                    {!filteredData && points.map((point, index) => {
                         const { properties } = point;
                         const { logo, name } = properties || {};
-                        if (!logo) return null; // Skip if no logo
+
+                        // if (!logo) return null; // Skip if no logo
                         return (
                             <div key={index} onClick={() => zoomToPoint(point)} >
                                 <SchoolLogo src={logo} alt={name || `School ${index + 1}`} customStyle={{ height: '45px', width: "45px" }} />
