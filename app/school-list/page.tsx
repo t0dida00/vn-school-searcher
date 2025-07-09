@@ -21,11 +21,11 @@ const baseUrl = process.env.NEXT_INTERNAL_BASE_URL || 'http://localhost:3000';
 export default function UniversityListPage() {
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const router = useRouter();
-    const [level, setLevel] = useState("");
+    // const [level, setLevel] = useState("");
     const [major, setMajor] = useState("");
     const [city, setCity] = useState("");
     const [type, setType] = useState("all");
-    const [levelOptions, setLevelOptions] = useState([]);
+    // const [levelOptions, setLevelOptions] = useState([]);
     const [majorOptions, setMajorOptions] = useState([]);
     const [cityOptions, setCityOptions] = useState([]);
     const [typeOptions, setTypeOptions] = useState([]);

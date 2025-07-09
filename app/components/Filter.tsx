@@ -3,7 +3,7 @@ import {
     RadioGroup,
     RadioGroupItem,
 } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import styles from "./styles/filter.module.scss";
@@ -17,7 +17,7 @@ type Option = { label: string; value: string };
 export default function FilterSection() {
     const [dataset, setDataset] = useState("university");
     const [system, setSystem] = useState("all");
-    const [includeCollege, setIncludeCollege] = useState(false);
+    // const [includeCollege, setIncludeCollege] = useState(false);
     const [city, setCity] = useState("");
     const [field, setField] = useState("");
 
