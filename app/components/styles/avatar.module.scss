@@ -1,6 +1,7 @@
 .container{
     height: 120px;
-    width: 120px;
+    min-width: 120px;
+    max-width: 300px;
 }
 .link{
     width: fit-content;

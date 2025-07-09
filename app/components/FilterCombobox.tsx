@@ -70,7 +70,7 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
                         placeholder={`Tìm ${placeholder.toLowerCase()}...`}
                         className="!text-[16px]"
                     />
-                    <CommandEmpty>Không có kết quả.</CommandEmpty>
+                    <CommandEmpty>No result.</CommandEmpty>
                     <CommandGroup className={`${styles.input} max-h-[40dvh] overflow-y-auto`}>
                         {options.map((option) => (
                             <CommandItem

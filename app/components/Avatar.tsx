@@ -9,10 +9,13 @@ interface SchoolLogoProps {
 }
 const SchoolLogo = ({ src, alt, href, customStyle = {} }: SchoolLogoProps) => {
     const avatarContent = (
-        <Avatar className={styles.container} style={customStyle}>
-            <AvatarImage src={src} alt={alt} />
-            <AvatarFallback>{alt?.charAt(0).toUpperCase() || "?"}</AvatarFallback>
-        </Avatar>
+        <img src={src} alt={alt} className={styles.container} style={customStyle}>
+
+        </img>
+        //     <Avatar className={styles.container} style={customStyle}>
+        //         <AvatarImage src={src} alt={alt} />
+        //         <AvatarFallback>{alt?.charAt(0).toUpperCase() || "?"}</AvatarFallback>
+        //     </Avatar>
     );
 
     if (href) {

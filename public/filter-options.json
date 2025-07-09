@@ -1,108 +1,246 @@
 {
  "cities": [
-  { "label": "Tất cả thành phố", "value": "" },
-  { "label": "An Giang", "value": "an-giang" },
-  { "label": "Bà Rịa - Vũng Tàu", "value": "ba-ria-vung-tau" },
-  { "label": "Bạc Liêu", "value": "bac-lieu" },
-  { "label": "Bắc Giang", "value": "bac-giang" },
-  { "label": "Bắc Kạn", "value": "bac-kan" },
-  { "label": "Bắc Ninh", "value": "bac-ninh" },
-  { "label": "Bến Tre", "value": "ben-tre" },
-  { "label": "Bình Dương", "value": "binh-duong" },
-  { "label": "Bình Định", "value": "binh-dinh" },
-  { "label": "Bình Phước", "value": "binh-phuoc" },
-  { "label": "Bình Thuận", "value": "binh-thuan" },
-  { "label": "Cà Mau", "value": "ca-mau" },
-  { "label": "Cao Bằng", "value": "cao-bang" },
-  { "label": "Cần Thơ", "value": "can-tho" },
-  { "label": "Đà Nẵng", "value": "da-nang" },
-  { "label": "Đắk Lắk", "value": "dak-lak" },
-  { "label": "Đắk Nông", "value": "dak-nong" },
-  { "label": "Điện Biên", "value": "dien-bien" },
-  { "label": "Đồng Nai", "value": "dong-nai" },
-  { "label": "Đồng Tháp", "value": "dong-thap" },
-  { "label": "Gia Lai", "value": "gia-lai" },
-  { "label": "Hà Giang", "value": "ha-giang" },
-  { "label": "Hà Nam", "value": "ha-nam" },
-  { "label": "Hà Nội", "value": "ha-noi" },
-  { "label": "Hà Tĩnh", "value": "ha-tinh" },
-  { "label": "Hải Dương", "value": "hai-duong" },
-  { "label": "Hải Phòng", "value": "hai-phong" },
-  { "label": "Hậu Giang", "value": "hau-giang" },
-  { "label": "Hòa Bình", "value": "hoa-binh" },
-  { "label": "Hưng Yên", "value": "hung-yen" },
-  { "label": "Khánh Hòa", "value": "khanh-hoa" },
-  { "label": "Kiên Giang", "value": "kien-giang" },
-  { "label": "Kon Tum", "value": "kon-tum" },
-  { "label": "Lai Châu", "value": "lai-chau" },
-  { "label": "Lâm Đồng", "value": "lam-dong" },
-  { "label": "Lạng Sơn", "value": "lang-son" },
-  { "label": "Lào Cai", "value": "lao-cai" },
-  { "label": "Long An", "value": "long-an" },
-  { "label": "Nam Định", "value": "nam-dinh" },
-  { "label": "Nghệ An", "value": "nghe-an" },
-  { "label": "Ninh Bình", "value": "ninh-binh" },
-  { "label": "Ninh Thuận", "value": "ninh-thuan" },
-  { "label": "Phú Thọ", "value": "phu-tho" },
-  { "label": "Phú Yên", "value": "phu-yen" },
-  { "label": "Quảng Bình", "value": "quang-binh" },
-  { "label": "Quảng Nam", "value": "quang-nam" },
-  { "label": "Quảng Ngãi", "value": "quang-ngai" },
-  { "label": "Quảng Ninh", "value": "quang-ninh" },
-  { "label": "Quảng Trị", "value": "quang-tri" },
-  { "label": "Sóc Trăng", "value": "soc-trang" },
-  { "label": "Sơn La", "value": "son-la" },
-  { "label": "Tây Ninh", "value": "tay-ninh" },
-  { "label": "Thái Bình", "value": "thai-binh" },
-  { "label": "Thái Nguyên", "value": "thai-nguyen" },
-  { "label": "Thanh Hóa", "value": "thanh-hoa" },
-  { "label": "Thừa Thiên Huế", "value": "thua-thien-hue" },
-  { "label": "Tiền Giang", "value": "tien-giang" },
-  { "label": "TP.HCM", "value": "ho-chi-minh" },
-  { "label": "Trà Vinh", "value": "tra-vinh" },
-  { "label": "Tuyên Quang", "value": "tuyen-quang" },
-  { "label": "Vĩnh Long", "value": "vinh-long" },
-  { "label": "Vĩnh Phúc", "value": "vinh-phuc" },
-  { "label": "Yên Bái", "value": "yen-bai" }
+  { "label": "All cities", "value": "" },
+    { "label": "Espoo", "value": "espoo" },
+    { "label": "Helsinki", "value": "helsinki" },
+    { "label": "Hämeenlinna", "value": "hämeenlinna" },
+    { "label": "Joensuu", "value": "joensuu" },
+    { "label": "Jyväskylä", "value": "jyväskylä" },
+    { "label": "Kajaani", "value": "kajaani" },
+    { "label": "Kokkola", "value": "kokkola" },
+    { "label": "Kuopio", "value": "kuopio" },
+    { "label": "Lahti", "value": "lahti" },
+    { "label": "Lappeenranta", "value": "lappeenranta" },
+    { "label": "Mikkeli", "value": "mikkeli" },
+    { "label": "Oulu", "value": "oulu" },
+    { "label": "Pori", "value": "pori" },
+    { "label": "Rovaniemi", "value": "rovaniemi" },
+    { "label": "Seinäjoki", "value": "seinäjoki" },
+    { "label": "Tampere", "value": "tampere" },
+    { "label": "Turku", "value": "turku" },
+    { "label": "Vaasa", "value": "vaasa" },
+    { "label": "Vantaa", "value": "vantaa" }
 ],
  "fields": [
-    { "label": "Tất cả ngành", "value": "" },
-    { "label": "An ninh Công an Quân sự", "value": "an-ninh-cong-an-quan-su" },
-    { "label": "Chính trị", "value": "chinh-tri" },
-    { "label": "Chuỗi cung ứng", "value": "chuoi-cung-ung" },
-    { "label": "Công nghệ", "value": "cong-nghe" },
-    { "label": "Điện ảnh", "value": "dien-anh" },
-    { "label": "Du lịch", "value": "du-lich" },
-    { "label": "Hàng không", "value": "hang-khong" },
-    { "label": "Khoa học tự nhiên", "value": "khoa-hoc-tu-nhien" },
-    { "label": "Khoa học xã hội", "value": "khoa-hoc-xa-hoi" },
-    { "label": "Kiến trúc xây dựng", "value": "kien-truc-xay-dung" },
-    { "label": "Kinh tế Kinh doanh Quản trị", "value": "kinh-te-kinh-doanh-quan-tri" },
-    { "label": "Kỹ thuật kỹ sư", "value": "ky-thuat-ky-su" },
-    { "label": "Luật", "value": "luat" },
-    { "label": "Môi trường", "value": "moi-truong" },
-    { "label": "Nghệ thuật thiết kế", "value": "nghe-thuat-thiet-ke" },
-    { "label": "Nghiệp vụ", "value": "nghiep-vu" },
-    { "label": "Ngoại giao quốc tế", "value": "ngoai-giao-quoc-te" },
-    { "label": "Ngôn ngữ", "value": "ngon-ngu" },
-    { "label": "Nông lâm", "value": "nong-lam" },
-    { "label": "Phân tích dữ liệu", "value": "phan-tich-du-lieu" },
-    { "label": "Sư phạm", "value": "su-pham" },
-    { "label": "Tài chính ngân hàng kế toán", "value": "tai-chinh-ngan-hang-ke-toan" },
-    { "label": "Thể thao", "value": "the-thao" },
-    { "label": "Thực phẩm dinh dưỡng", "value": "thuc-pham-dinh-duong" },
-    { "label": "Triết học", "value": "triet-hoc" },
-    { "label": "Trí tuệ nhân tạo", "value": "tri-tue-nhan-tao" },
-    { "label": "Truyền thông Marketing", "value": "truyen-thong-marketing" },
-    { "label": "Y Dược", "value": "y-duoc" }
+    { "label": "All fields", "value": "" },
+    {
+      "label": "Architecture",
+      "value": "architecture"
+    },
+    {
+      "label": "Art and Design",
+      "value": "art-and-design"
+    },
+    {
+      "label": "Arts",
+      "value": "arts"
+    },
+    {
+      "label": "Arts (Art and Design)",
+      "value": "arts-(art-and-design)"
+    },
+    {
+      "label": "Arts (Dance)",
+      "value": "arts-(dance)"
+    },
+    {
+      "label": "Arts (Theatre and Drama)",
+      "value": "arts-(theatre-and-drama)"
+    },
+    {
+      "label": "Arts and Design",
+      "value": "arts-and-design"
+    },
+    {
+      "label": "Beauty and Cosmetics",
+      "value": "beauty-and-cosmetics"
+    },
+    {
+      "label": "Built Environment",
+      "value": "built-environment"
+    },
+    {
+      "label": "Business",
+      "value": "business"
+    },
+    {
+      "label": "Business Administration",
+      "value": "business-administration"
+    },
+    {
+      "label": "Business and Economics",
+      "value": "business-and-economics"
+    },
+    {
+      "label": "Culture and Arts",
+      "value": "culture-and-arts"
+    },
+    {
+      "label": "Economics and Business Administration",
+      "value": "economics-and-business-administration"
+    },
+    {
+      "label": "Education",
+      "value": "education"
+    },
+    {
+      "label": "Education and Culture",
+      "value": "education-and-culture"
+    },
+    {
+      "label": "Education and Learning",
+      "value": "education-and-learning"
+    },
+    {
+      "label": "Engineering",
+      "value": "engineering"
+    },
+    {
+      "label": "Engineering and Natural Sciences",
+      "value": "engineering-and-natural-sciences"
+    },
+    {
+      "label": "Environmental, Food and Biological Sciences",
+      "value": "environmental,-food-and-biological-sciences"
+    },
+    {
+      "label": "Ethical Technological Future",
+      "value": "ethical-technological-future"
+    },
+    {
+      "label": "Fine Arts",
+      "value": "fine-arts"
+    },
+    {
+      "label": "Forest Sciences",
+      "value": "forest-sciences"
+    },
+    {
+      "label": "Health",
+      "value": "health"
+    },
+    {
+      "label": "Health Care",
+      "value": "health-care"
+    },
+    {
+      "label": "Health Sciences",
+      "value": "health-sciences"
+    },
+    {
+      "label": "Health and Biomedical Sciences",
+      "value": "health-and-biomedical-sciences"
+    },
+    {
+      "label": "Hospitality Management",
+      "value": "hospitality-management"
+    },
+    {
+      "label": "Human Sciences",
+      "value": "human-sciences"
+    },
+    {
+      "label": "Humanities",
+      "value": "humanities"
+    },
+    {
+      "label": "Humanities and Social Sciences",
+      "value": "humanities-and-social-sciences"
+    },
+    {
+      "label": "Information Technology",
+      "value": "information-technology"
+    },
+    {
+      "label": "Information Technology and Communication Sciences",
+      "value": "information-technology-and-communication-sciences"
+    },
+    {
+      "label": "Information Technology and Engineering",
+      "value": "information-technology-and-engineering"
+    },
+    {
+      "label": "Laboratory Services",
+      "value": "laboratory-services"
+    },
+    {
+      "label": "Law",
+      "value": "law"
+    },
+    {
+      "label": "Life Sciences",
+      "value": "life-sciences"
+    },
+    {
+      "label": "Management and Business",
+      "value": "management-and-business"
+    },
+    {
+      "label": "Maritime Management",
+      "value": "maritime-management"
+    },
+    {
+      "label": "Mathematics and Sciences",
+      "value": "mathematics-and-sciences"
+    },
+    {
+      "label": "Medicine and Health Technology",
+      "value": "medicine-and-health-technology"
+    },
+    {
+      "label": "Mining",
+      "value": "mining"
+    },
+    {
+      "label": "Music",
+      "value": "music"
+    },
+    {
+      "label": "Natural Sciences",
+      "value": "natural-sciences"
+    },
+    {
+      "label": "Sciences",
+      "value": "sciences"
+    },
+    {
+      "label": "Social Sciences",
+      "value": "social-sciences"
+    },
+    {
+      "label": "Social Sciences and Humanities",
+      "value": "social-sciences-and-humanities"
+    },
+    {
+      "label": "Social Services",
+      "value": "social-services"
+    },
+    {
+      "label": "Society",
+      "value": "society"
+    },
+    {
+      "label": "Sport and Health Sciences",
+      "value": "sport-and-health-sciences"
+    },
+    {
+      "label": "Sports Management",
+      "value": "sports-management"
+    },
+    {
+      "label": "Sustainability Transformation",
+      "value": "sustainability-transformation"
+    },
+    {
+      "label": "Technology and Engineering",
+      "value": "technology-and-engineering"
+    }
+  
   ],
   "systems": [
-    { "label": "Tất cả", "value": "all" },
-    { "label": "Công lập", "value": "public" },
-    { "label": "Tư thục", "value": "private" }
-  ],
-  "datasets": [
-    { "label": "Đại học", "value": "university" },
-    { "label": "THPT", "value": "highschool" }
+    { "label": "All", "value": "all" },
+    { "label": "University", "value": "uni" },
+    { "label": "University of Applied Sciences", "value": "uas" }
   ]
+ 
 }

@@ -21,9 +21,11 @@ import remarkGfm from 'remark-gfm';
 import { PhoneCall, Mail, School, MapPinHouse, Building2 } from 'lucide-react';
 import { capitalizeFirst } from '../../utils/common';
 import { Badge } from "@/components/ui/badge";
+import { stringToArray } from '@/app/utils/stringToArray';
 
 const SchoolDetailDialog = () => {
     const { isOpen, setIsOpen, selectedPoint } = useStore();
+    console.log(selectedPoint,)
     const { properties } = selectedPoint || {};
     const {
         id,
@@ -42,12 +44,18 @@ const SchoolDetailDialog = () => {
         tuitions,
         type,
         type2,
-        webpage,
+        website,
         wiki,
+        overview,
+        tuition,
+        scholarship,
+        fieldOptions
     } = properties || {};
+    const formattedfieldOptions = stringToArray(fieldOptions);
 
     const [isMobile, setIsMobile] = useState(false);
-
+    // console.log(fieldOptions, typeof (fieldOptions));
+    // console.log(properties)
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 576);
         checkMobile();
@@ -62,9 +70,9 @@ const SchoolDetailDialog = () => {
             <DialogContent className={styles.dialog_content}>
                 <DialogHeader>
                     <DialogTitle style={{ fontSize: 24 }} title='Tên trường'>
-                        <a href={webpage} target="_blank" rel="noopener noreferrer" className={styles.link}>
+                        <a href={website} target="_blank" rel="noopener noreferrer" className={styles.link}>
                             {name || 'N/A'} {code && `(${code})`}
-                            {ranking || ranking != 0 && (
+                            {ranking && (
                                 <Badge title='Ranking' style={{ fontSize: "16px" }} className="ml-4 bg-black text-white">
                                     {ranking}
                                 </Badge>
@@ -75,31 +83,32 @@ const SchoolDetailDialog = () => {
                     <div className={styles.container}>
                         <div className={styles.wrapper}>
                             {logo && (<div className={styles.left_container}>
-                                <SchoolLogo src={logo} alt={name || code} href={webpage} />
+                                <SchoolLogo src={logo} alt={name || code} href={website} />
                             </div>)}
 
-                            <div className={styles.middle_container}>
+                            {/* <div className={styles.middle_container}>
                                 <CustomLink url={webpage} shortUrl="Thông tin tuyển sinh" />
                                 {wiki && <CustomLink url={wiki} shortUrl="Đề án tuyển sinh" />}
                                 {wiki && <CustomLink url={wiki} shortUrl="Wikipedia" />}
-                            </div>
+                            </div> */}
                             <div className={styles.right_container}>
-                                <div><PhoneCall size={24} /> {phone || 'N/A'}</div>
-                                <div><Mail size={24} /> {email || 'N/A'}</div>
-                                <div><School size={24} /> {capitalizeFirst(type) || 'N/A'}</div>
-                                <div><School size={24} /> {capitalizeFirst(type2) || 'N/A'}</div>
-                                <div><MapPinHouse /> {address || 'N/A'}</div>
-                                <div><Building2 /> {city || 'N/A'}</div>
+                                {phone && <div><PhoneCall size={24} /> {phone}</div>}
+                                {email && <div><Mail size={24} /> {email}</div>}
+                                {type && <div><School size={24} /> {capitalizeFirst(type)}</div>}
+                                {type2 && <div><School size={24} /> {capitalizeFirst(type2)}</div>}
+                                {address && <div><MapPinHouse /> {address}</div>}
+                                {city && <div><Building2 /> {city}</div>}
+                                {website && <CustomLink url={website} shortUrl="Website" />}
                             </div>
                         </div>
                     </div>
 
                     <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
-                        {introduce && (
+                        {overview && (
                             <AccordionItem value="item-1" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Giới thiệu</AccordionTrigger>
+                                <AccordionTrigger className="text-xl cursor-pointer">Overview</AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <p>{introduce}</p>
+                                    <p>{overview}</p>
                                 </AccordionContent>
                             </AccordionItem>
                         )}
@@ -119,19 +128,19 @@ const SchoolDetailDialog = () => {
                                 </AccordionContent>
                             </AccordionItem>
                         )}
-                        {tuitions && (
+                        {tuition && (
                             <AccordionItem value="item-4" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Học phí</AccordionTrigger>
+                                <AccordionTrigger className="text-xl cursor-pointer">Tuitions</AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{tuitions}</ReactMarkdown>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{tuition}</ReactMarkdown>
                                 </AccordionContent>
                             </AccordionItem>
                         )}
-                        {scholarships && (
+                        {scholarship && (
                             <AccordionItem value="item-5" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Học bổng</AccordionTrigger>
+                                <AccordionTrigger className="text-xl cursor-pointer">Scholarships</AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{scholarships}</ReactMarkdown>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{scholarship}</ReactMarkdown>
                                 </AccordionContent>
                             </AccordionItem>
                         )}
@@ -143,6 +152,11 @@ const SchoolDetailDialog = () => {
                     {/* Example dynamic badges - replace with real data if needed */}
                     {type && <Badge variant="secondary" className={styles.badge}>{capitalizeFirst(type)}</Badge>}
                     {city && <Badge variant="secondary" className={styles.badge}>{city}</Badge>}
+                    {formattedfieldOptions && formattedfieldOptions.length > 0 ? formattedfieldOptions.map((field: string, index: number) => (
+                        <Badge key={index} variant="secondary" className={styles.badge}>
+                            {field}
+                        </Badge>
+                    )) : null}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

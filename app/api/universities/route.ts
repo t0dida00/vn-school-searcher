@@ -6,9 +6,10 @@ export async function GET() { // Export a function named GET for GET requests
   try {
     const client = await clientPromise;
     const db = client.db("schoolAPI"); // Replace with your database name
-    const universities = await db.collection("universities").find({}).toArray();
-    const hightschools = await db.collection("highschools").find({}).toArray();
-    const combinedData = [...universities, ...hightschools];
+    const universities = await db.collection("fin_universities").find({}).toArray();
+    // const hightschools = await db.collection("highschools").find({}).toArray();
+    // const combinedData = [...universities, ...hightschools];
+    const combinedData = [...universities,];
     return NextResponse.json(combinedData, { status: 200 }); // Use NextResponse.json
   } catch (error) {
     console.error("Failed to fetch universities:", error);

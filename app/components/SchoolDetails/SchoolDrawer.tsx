@@ -35,16 +35,17 @@ const SchoolDrawer: React.FC = () => {
         email,
         logo,
         phone,
-        tuitions,
+        tuition,
         type,
         type2,
         majors,
-        webpage,
+        website: webpage,
         wiki,
         introduce,
         fields,
-        scholarships,
+        scholarship,
         ranking,
+        overview
     } = properties || {};
 
     useEffect(() => {
@@ -92,28 +93,30 @@ const SchoolDrawer: React.FC = () => {
                                     <SchoolLogo src={logo} alt={name || code} href={webpage} />
                                 </div>}
 
-                                <div className={styles.middle_container}>
+                                {/* <div className={styles.middle_container}>
                                     <CustomLink url={webpage} shortUrl="Thông tin tuyển sinh" />
                                     {wiki && <CustomLink url={wiki} shortUrl="Wikipedia" />}
-                                </div>
+                                </div> */}
                                 <div className={styles.right_container}>
-                                    <div><PhoneCall size={24} /> {phone || 'N/A'}</div>
-                                    <div><Mail size={24} /> {email || 'N/A'}</div>
-                                    <div><School size={24} /> {capitalizeFirst(type) || 'N/A'}</div>
-                                    <div><School size={24} /> {capitalizeFirst(type2) || 'N/A'}</div>
-                                    <div><MapPinHouse /> {address || 'N/A'}</div>
-                                    <div><Building2 /> {city || 'N/A'}</div>
+
+                                    {phone && <div><PhoneCall size={24} /> {phone}</div>}
+                                    {email && <div><Mail size={24} /> {email}</div>}
+                                    {type && <div><School size={24} /> {capitalizeFirst(type)}</div>}
+                                    {type2 && <div><School size={24} /> {capitalizeFirst(type2)}</div>}
+                                    {address && <div><MapPinHouse /> {address}</div>}
+                                    {city && <div><Building2 /> {city}</div>}
+                                    {webpage && <CustomLink url={webpage} shortUrl="Website" />}
                                 </div>
                             </div>
                         </div>
                     </DrawerHeader>
 
                     <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
-                        {introduce && (
+                        {overview && (
                             <AccordionItem value="item-1" className={styles.accordion_item}>
-                                <AccordionTrigger className='text-xl cursor-pointer'>Giới thiệu</AccordionTrigger>
+                                <AccordionTrigger className='text-xl cursor-pointer'>Overview</AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <p>{introduce}</p>
+                                    <p>{overview}</p>
                                 </AccordionContent>
                             </AccordionItem>
                         )}
@@ -133,19 +136,19 @@ const SchoolDrawer: React.FC = () => {
                                 </AccordionContent>
                             </AccordionItem>
                         )}
-                        {tuitions && (
+                        {tuition && (
                             <AccordionItem value="item-4" className={styles.accordion_item}>
-                                <AccordionTrigger className='text-xl cursor-pointer'>Học phí</AccordionTrigger>
+                                <AccordionTrigger className='text-xl cursor-pointer'>Tuition</AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{tuitions}</ReactMarkdown>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{tuition}</ReactMarkdown>
                                 </AccordionContent>
                             </AccordionItem>
                         )}
-                        {scholarships && (
+                        {scholarship && (
                             <AccordionItem value="item-5" className={styles.accordion_item}>
-                                <AccordionTrigger className='text-xl cursor-pointer'>Học bổng</AccordionTrigger>
+                                <AccordionTrigger className='text-xl cursor-pointer'>Scholarship</AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{scholarships}</ReactMarkdown>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{scholarship}</ReactMarkdown>
                                 </AccordionContent>
                             </AccordionItem>
                         )}

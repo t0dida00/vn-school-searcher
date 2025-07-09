@@ -31,7 +31,7 @@ export default function FilterSection() {
                 setCityOptions(data.cities);
                 setFieldOptions(data.fields);
                 setSystemOptions(data.systems);
-                setDatasetOptions(data.datasets);
+                setDatasetOptions(data.datasets || []);
             } catch (err) {
                 console.error("Error loading filter options", err);
             }
@@ -94,7 +94,7 @@ export default function FilterSection() {
 
             {/* System */}
             <div className="mb-4">
-                <Label className="mb-2 block !text-[16px]">Hệ</Label>
+                <Label className="mb-2 block !text-[16px]">Type</Label>
                 <RadioGroup
                     value={system}
                     onValueChange={setSystem}
@@ -110,7 +110,7 @@ export default function FilterSection() {
             </div>
 
             {/* Include College */}
-            <div className="mb-4 flex items-center space-x-2">
+            {/* <div className="mb-4 flex items-center space-x-2">
                 <Checkbox
                     id="cao-dang"
                     checked={dataset === "university" && includeCollege}
@@ -119,7 +119,7 @@ export default function FilterSection() {
                     className="cursor-pointer"
                 />
                 <Label htmlFor="cao-dang" className="cursor-pointer !text-[16px]">Gồm Cao Đẳng</Label>
-            </div>
+            </div> */}
 
             <Button type="submit" className="w-full cursor-pointer !text-[16px]">Filter</Button>
         </form>

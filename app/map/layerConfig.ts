@@ -4,6 +4,7 @@ const FONT = ["DIN Offc Pro Medium", "Arial Unicode MS Bold"];
 const TEXT_SIZE = 12;
 const CLUSTER_CIRCLE_COLOR = "#51bbd6";
 const CLUSTER_CIRCLE_STROKE_COLOR = "#fff";
+ const COUNTRY_CODE = process.env.NEXT_PUBLIC_MAP_HIGHLIGHT_COUNTRY;
 
 export function addCountryHighlightLayer(map: Map) {
   map.addSource("country-boundaries", {
@@ -18,7 +19,7 @@ export function addCountryHighlightLayer(map: Map) {
 
   map.addLayer(
   {
-    id: "highlight-vietnam",
+    id: "highlight",
     type: "fill",
     source: "country-boundaries",
     "source-layer": "country_boundaries",
@@ -32,7 +33,7 @@ export function addCountryHighlightLayer(map: Map) {
         0      // opacity for zoom >= 20
       ],
     },
-    filter: ["==", ["get", "iso_3166_1_alpha_3"], "VNM"],
+    filter: ["==", ["get", "iso_3166_1_alpha_3"], COUNTRY_CODE],
   },
   labelLayerId
 );
@@ -44,8 +45,8 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
     type: "geojson",
     data: geojsonData,
     cluster: true,
-    clusterMaxZoom: 14,
-    clusterRadius: 50,
+    clusterMaxZoom: 6,
+    clusterRadius: 30,
   });
 
   map.addLayer({
@@ -58,11 +59,7 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
       "circle-radius": [
         "step",
         ["get", "point_count"],
-        15,
-        10,
-        20,
-        30,
-        25,
+      15, 20, 20, 30, 25
       ],
       "circle-stroke-width": 1,
       "circle-stroke-color": CLUSTER_CIRCLE_STROKE_COLOR,

@@ -30,7 +30,6 @@ export default function Map() {
     const [searchFocus, setSearchFocus] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const zoomToPoint = useZoomToPoint(map);
-    console.log(filteredData.length, "filteredData length");
     useEffect(() => {
         if (!map && mapContainerRef.current) {
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;

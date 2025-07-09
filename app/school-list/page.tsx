@@ -32,7 +32,7 @@ export default function UniversityListPage() {
             try {
                 const res = await fetch("/filter-options.json");
                 const data = await res.json();
-                setLevelOptions(data.datasets); // "Đại học", "THPT"
+                setLevelOptions(data.datasets || []); // "Đại học", "THPT"
                 setMajorOptions(data.fields);   // majors
                 setCityOptions(data.cities);    // cities
                 setTypeOptions(data.systems);   // Công lập / Tư thục
@@ -72,18 +72,18 @@ export default function UniversityListPage() {
                     className="flex-1 px-4 py-2 rounded-md focus:outline-none w-full"
                 />
                 <div className=" gap-2 flex-wrap flex-col hidden sm:flex sm:flex-row">
-                    <FilterCombobox
+                    {/* <FilterCombobox
                         options={levelOptions}
                         placeholder="Cấp"
                         value={level}
                         onChange={setLevel}
-                    />
+                    /> */}
                     <FilterCombobox
                         options={majorOptions}
                         placeholder="Ngành học"
                         value={major}
                         onChange={setMajor}
-                        disabled={level !== "university"} // Chỉ cho phép chọn ngành khi đã chọn cấp
+                    // disabled={level !== "university"} // Chỉ cho phép chọn ngành khi đã chọn cấp
                     />
                     <FilterCombobox
                         options={cityOptions}
