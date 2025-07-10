@@ -18,6 +18,7 @@ import { stringToArray } from "../utils/stringToArray";
 import SubFooter from "./components/SubFooter";
 import QnA from "./components/QnA";
 import Breaker from "./components/breaker";
+import Link from "next/link";
 const PAGE_SIZE = 10;
 const baseUrl = process.env.NEXT_INTERNAL_BASE_URL || 'http://localhost:3000';
 
@@ -212,7 +213,7 @@ export default function UniversityListPage() {
                 <Accordion type="single" collapsible >
                     {visibleItems.map((uni) => {
                         const { properties } = uni
-                        const { city, fieldOptions, type, logo, overview, tuition, scholarship } = properties || {};
+                        const { city, fieldOptions, type, logo, overview, tuition, scholarship, website } = properties || {};
                         const formattedfieldOptions = stringToArray(fieldOptions);
                         return (
                             <React.Fragment key={uni._id}>
@@ -240,7 +241,19 @@ export default function UniversityListPage() {
                                                 <AccordionItem value="nested-item-overview">
                                                     <AccordionTrigger className="text-xl cursor-pointer">Overview</AccordionTrigger>
                                                     <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                                        {overview}
+                                                        <p>
+                                                            {overview}
+                                                        </p>
+                                                        <div className="flex flex-col sm:flex-row gap-2 justify-between">
+                                                            <div className="font-[500]">
+                                                                Location: {city}
+                                                            </div>
+                                                            <Link href={website} target="_blank" rel="noopener noreferrer" className="hover:underline underline font-[500] text-right">
+                                                                Website: {website}
+                                                            </Link>
+                                                        </div>
+
+
                                                     </AccordionContent>
                                                 </AccordionItem>
                                             )}

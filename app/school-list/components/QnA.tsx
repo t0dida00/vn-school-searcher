@@ -9,6 +9,11 @@ import {
 
 const faqData = [
     {
+        question: "Is the map data accurate?",
+        answer:
+            "The map data may not be 100% accurate, as it is provided by Mapbox. We recommend using it for general reference only and verifying exact locations if needed.",
+    },
+    {
         question: "Is the information on the website accurate?",
         answer:
             "We strive to update information from the official sources of the universities. However, to ensure absolute accuracy, you should verify the information on the official websites of the universities you're interested in."
