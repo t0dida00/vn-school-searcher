@@ -15,6 +15,9 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import useDataStore from "../zustand/useDataStore";
 import { stringToArray } from "../utils/stringToArray";
+import SubFooter from "./components/SubFooter";
+import QnA from "./components/QnA";
+import Breaker from "./components/breaker";
 const PAGE_SIZE = 10;
 const baseUrl = process.env.NEXT_INTERNAL_BASE_URL || 'http://localhost:3000';
 
@@ -301,8 +304,9 @@ export default function UniversityListPage() {
                 />
 
             </button>
-
-
+            <Breaker className="mb-10 w-full sm:w-[60%] m-auto " />
+            <QnA />
+            <SubFooter />
         </main>
     );
 }
