@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "FinUnies",
   description: "Search for universities in Finland",
+  icons: {
+    icon: "/images/favicon.png",
+  },
 };
 export const viewport: Viewport = {
   width: "device-width",

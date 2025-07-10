@@ -18,9 +18,9 @@ export default function Header() {
                     <Link href="/map" className="hover:underline ">
                         Map
                     </Link>
-                    <Link href="/blog" className="hover:underline ">
+                    {/* <Link href="/blog" className="hover:underline ">
                         {route === "/blog" ? <Badge>Blog</Badge> : "Blog"}
-                    </Link>
+                    </Link> */}
 
                 </nav>
             </div>
