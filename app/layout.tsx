@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Danh sách trường học Phần Lan",
-  description: "Tìm kiếm và khám phá các trường học tại Phần Lan",
+  title: "FinUnies",
+  description: "Search for universities in Finland",
 };
 export const viewport: Viewport = {
   width: "device-width",

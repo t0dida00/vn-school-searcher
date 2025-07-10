@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import useDataStore from "../zustand/useDataStore";
 import { stringToArray } from "../utils/stringToArray";
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 const baseUrl = process.env.NEXT_INTERNAL_BASE_URL || 'http://localhost:3000';
 
 export default function UniversityListPage() {
@@ -31,6 +31,7 @@ export default function UniversityListPage() {
     const [typeOptions, setTypeOptions] = useState([]);
     const { data, setData, setError, setFilteredData, filteredData } = useDataStore()
     const [query, setQuery] = useState("");
+    const [loading, setLoading] = useState(true);
     const source = filteredData ? filteredData : data;
     useEffect(() => {
         const fetchData = async () => {
@@ -89,6 +90,7 @@ export default function UniversityListPage() {
         const source = filteredData?.length ? filteredData : data;
         if (inView && visibleCount < source?.length) {
             setVisibleCount((prev) => prev + PAGE_SIZE);
+            setLoading(false);
         }
     }, [inView, visibleCount, filteredData, data]);
     React.useEffect(() => {
@@ -121,6 +123,7 @@ export default function UniversityListPage() {
     }, [query, data, setFilteredData]);
     const visibleItems = React.useMemo(() => {
         const source = filteredData ? filteredData : data;
+
         return source?.slice(0, visibleCount);
     }, [filteredData, data, visibleCount]);
     return (
@@ -129,8 +132,6 @@ export default function UniversityListPage() {
             <p className="text-center text-gray-400 mb-6">
                 Easily find information about Finnish universities
             </p>
-
-
             <div className="flex flex-col gap-4 mb-6 sticky top-0 bg-white z-10 p-4 rounded-lg shadow-md border border-gray-200">
                 <Input
                     type="text"
@@ -267,12 +268,13 @@ export default function UniversityListPage() {
             </div>
 
             {/* Sentinel element để trigger load thêm */}
+
             {visibleItems.length < source.length && (
                 <div ref={ref} className="text-center py-6 text-gray-400">
                     Loading...
                 </div>
             )}
-            {source.length == 0 && (
+            {source.length == 0 && data.length != 0 && (
                 <div className="text-center py-6 text-gray-400">
                     Result not found
                 </div>

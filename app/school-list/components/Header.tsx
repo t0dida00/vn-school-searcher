@@ -8,13 +8,13 @@ export default function Header() {
 
                 <nav className="hidden sm:flex gap-4 items-center text-sm">
                     <Link href="/school-list" className="hover:underline ">
-                        Trang chủ
+                        Home
                     </Link>
                     <Link href="/map" className="hover:underline ">
-                        Bản đồ
+                        Map View
                     </Link>
                     <Link href="/trac-nghiem" className="hover:underline ">
-                        Trắc nghiệm
+                        Blog
                     </Link>
 
                 </nav>
