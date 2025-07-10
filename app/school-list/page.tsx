@@ -35,7 +35,6 @@ export default function UniversityListPage() {
     const [typeOptions, setTypeOptions] = useState([]);
     const { data, setData, setError, setFilteredData, filteredData } = useDataStore()
     const [query, setQuery] = useState("");
-    const [loading, setLoading] = useState(true);
     const source = filteredData ? filteredData : data;
     useEffect(() => {
         const fetchData = async () => {
@@ -94,7 +93,6 @@ export default function UniversityListPage() {
         const source = filteredData?.length ? filteredData : data;
         if (inView && visibleCount < source?.length) {
             setVisibleCount((prev) => prev + PAGE_SIZE);
-            setLoading(false);
         }
     }, [inView, visibleCount, filteredData, data]);
     React.useEffect(() => {
