@@ -10,7 +10,12 @@ export async function GET() { // Export a function named GET for GET requests
     // const hightschools = await db.collection("highschools").find({}).toArray();
     // const combinedData = [...universities, ...hightschools];
     const combinedData = [...universities,];
-    return NextResponse.json(combinedData, { status: 200 }); // Use NextResponse.json
+     const res = NextResponse.json(combinedData, { status: 200 });
+      res.headers.set('Access-Control-Allow-Origin', '*'); // Replace * with specific domain if needed
+    res.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    
+    return res;
   } catch (error) {
     console.error("Failed to fetch universities:", error);
     return NextResponse.json(
