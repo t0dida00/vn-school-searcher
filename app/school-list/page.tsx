@@ -232,11 +232,11 @@ export default function UniversityListPage() {
                                                         <p>
                                                             {overview}
                                                         </p>
-                                                        <div className="flex flex-col sm:flex-row gap-2 justify-between">
+                                                        <div className="flex flex-col sm:flex-row gap-2 sm:justify-between">
                                                             <div className="font-[500]">
                                                                 Location: {city}
                                                             </div>
-                                                            <Link href={website} target="_blank" rel="noopener noreferrer" className="hover:underline underline font-[500] text-right">
+                                                            <Link href={website} target="_blank" rel="noopener noreferrer" className="hover:underline underline font-[500] sm:text-right">
                                                                 Website: {website}
                                                             </Link>
                                                         </div>
