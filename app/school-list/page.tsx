@@ -207,7 +207,8 @@ export default function UniversityListPage() {
                                 <AccordionItem className="p-0" value={uni._id}>
                                     <AccordionTrigger className="text-left py-4  items-start gap-1 hover:no-underline ">
                                         <div className="w-full cursor-pointer">
-                                            <div className="font-semibold text-lg hover:underline mb-4 flex flex-col sm:flex-row sm:items-center gap-2 justify-between w-full"><img src={logo} className="max-w-[240px] sm:max-w-[300px] min-w-[120px] h-[120px]"></img>{properties.name}</div>
+                                            <div className="font-semibold text-lg hover:underline mb-4 flex flex-col sm:flex-row sm:items-center gap-2 justify-between w-fit sm:w-full">
+                                                <img src={logo} className="max-w-[240px] sm:max-w-[300px] min-w-[120px] h-[120px]"></img>{properties.name}</div>
                                             <div className="flex flex-wrap gap-2">
                                                 <Badge variant="outline">{type}</Badge>
                                                 <Badge variant="outline">{city}</Badge>
