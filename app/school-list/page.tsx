@@ -33,20 +33,10 @@ export default function UniversityListPage() {
     const [majorOptions, setMajorOptions] = useState([]);
     const [cityOptions, setCityOptions] = useState([]);
     const [typeOptions, setTypeOptions] = useState([]);
-    const { data, setData, setError, setFilteredData, filteredData } = useDataStore()
+    const { data, setData, setError, setFilteredData, filteredData, fetchData } = useDataStore()
     const [query, setQuery] = useState("");
     const source = filteredData ? filteredData : data;
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch(`${baseUrl}/api/universities`);
-                const data = await res.json();
-                setData(data);
-                setError(null);
-            } catch (error) {
-                setError(error instanceof Error ? error.message : String(error));
-            }
-        };
 
         fetchData();
     }, []);
