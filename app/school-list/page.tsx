@@ -20,7 +20,6 @@ import QnA from "./components/QnA";
 import Breaker from "./components/breaker";
 import Link from "next/link";
 const PAGE_SIZE = 10;
-const baseUrl = process.env.NEXT_INTERNAL_BASE_URL || 'http://localhost:3000';
 
 export default function UniversityListPage() {
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -33,7 +32,7 @@ export default function UniversityListPage() {
     const [majorOptions, setMajorOptions] = useState([]);
     const [cityOptions, setCityOptions] = useState([]);
     const [typeOptions, setTypeOptions] = useState([]);
-    const { data, setData, setError, setFilteredData, filteredData, fetchData } = useDataStore()
+    const { data, setFilteredData, filteredData, fetchData } = useDataStore()
     const [query, setQuery] = useState("");
     const source = filteredData ? filteredData : data;
     useEffect(() => {
