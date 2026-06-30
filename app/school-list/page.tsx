@@ -10,6 +10,7 @@ import {
     AccordionContent,
 } from "@/components/ui/accordion";
 import { ArrowUp, Globe } from "lucide-react";
+import { SpinnerGapIcon } from "@phosphor-icons/react";
 import CustomTooltip from "../components/Tooltip";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +33,7 @@ export default function UniversityListPage() {
     const [majorOptions, setMajorOptions] = useState([]);
     const [cityOptions, setCityOptions] = useState([]);
     const [typeOptions, setTypeOptions] = useState([]);
-    const { data, setFilteredData, filteredData, fetchData } = useDataStore()
+    const { data, setFilteredData, filteredData, fetchData, loading } = useDataStore()
     const [query, setQuery] = useState("");
     const source = filteredData ? filteredData : data;
     useEffect(() => {
@@ -196,6 +197,16 @@ export default function UniversityListPage() {
                 </p>
             </div>
 
+            {loading && (
+                <div className="flex flex-col items-center justify-center py-12">
+                    <div className="animate-spin">
+                        <SpinnerGapIcon size={32} className="text-blue-500" />
+                    </div>
+                    <p className="mt-4 text-gray-500">Loading universities...</p>
+                </div>
+            )}
+
+            {!loading && (
             <div className="pb-10">
                 <Accordion type="single" collapsible >
                     {visibleItems.map((uni) => {
@@ -270,15 +281,16 @@ export default function UniversityListPage() {
                     })}
                 </Accordion>
             </div>
+            )}
 
             {/* Sentinel element để trigger load thêm */}
 
-            {visibleItems.length < source.length && (
+            {!loading && visibleItems.length < source.length && (
                 <div ref={ref} className="text-center py-6 text-gray-400">
                     Loading...
                 </div>
             )}
-            {source.length == 0 && data.length != 0 && (
+            {!loading && source.length === 0 && data.length !== 0 && (
                 <div className="text-center py-6 text-gray-400">
                     Result not found
                 </div>
@@ -311,4 +323,3 @@ export default function UniversityListPage() {
         </main>
     );
 }
-
