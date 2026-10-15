@@ -4,6 +4,8 @@
 [![Next.js](https://img.shields.io/badge/Next.js-14+-black?logo=next.js)](https://nextjs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
 
+[![FinUnies preview](docs/preview.png)](https://finunies.dinhapps.com)
+
 **FinUnies** is a modern web app that helps users explore and search for universities, universities of applied sciences (UAS), and vocational schools across Finland.  
 Built with **Next.js**, **Mapbox**, and **MongoDB Atlas**, it provides an intuitive and interactive experience.
 
