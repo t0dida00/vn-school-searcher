@@ -31,7 +31,7 @@
     }
 }
 
-.finland {
+.country {
     opacity: 0;
     animation: fadeIn 500ms ease 350ms forwards;
 }
@@ -135,7 +135,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .panel,
-    .finland,
+    .country,
     .pin,
     .message {
         animation: none;

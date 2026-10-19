@@ -1,6 +1,5 @@
-// properties.ranking holds the uniRank 2026 national rank (https://www.unirank.org/fi/ranking/) as a
-// string, "" when uniRank doesn't list the school.
-export const RANKING_SOURCE = "uniRank 2026 ranking in Finland";
+// properties.ranking holds the national rank as a string (source per country in COUNTRIES[*].ranking),
+// "" when the ranking doesn't list the school.
 
 export function rankOf(school: any): number | null {
     const rank = Number.parseInt(String(school?.properties?.ranking ?? ""), 10);

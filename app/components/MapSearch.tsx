@@ -34,6 +34,12 @@ export default function MapSearch({ map }: { map: mapboxgl.Map | null }) {
     const { points, selectedPoint } = usePointStore();
     const [query, setQuery] = useState("");
     const [type, setType] = useState("all");
+    // Only the types in this country's data; no pills at all when every school has the same type (Vietnam)
+    const typeOptions = useMemo(() => {
+        const types = new Set(data.map((d) => d.properties?.type));
+        const options = TYPE_OPTIONS.filter((opt) => opt.value === "all" || types.has(opt.value));
+        return options.length > 2 ? options : [];
+    }, [data]);
     const [activeIndex, setActiveIndex] = useState(-1);
     // Open by default on desktop; on phones (and short landscape phones, where it would cover the map)
     // the list only opens while searching
@@ -169,7 +175,7 @@ export default function MapSearch({ map }: { map: mapboxgl.Map | null }) {
                 </div>
 
                 <div className="flex items-center gap-1 px-2 py-2" role="radiogroup" aria-label="School type">
-                    {TYPE_OPTIONS.map((opt) => (
+                    {typeOptions.map((opt) => (
                         <button
                             key={opt.value}
                             type="button"

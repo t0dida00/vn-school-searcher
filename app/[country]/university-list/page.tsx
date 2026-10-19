@@ -20,7 +20,7 @@ import SubFooter from "./components/SubFooter";
 import QnA from "./components/QnA";
 import Breaker from "./components/breaker";
 import Hero from "./components/Hero";
-import { useCountry, useCountryPath } from "../../utils/useCountry";
+import { useCountry, useCountryConfig, useCountryPath } from "../../utils/useCountry";
 
 // Divisible by 2 and 3 so every page fills whole grid rows
 const PAGE_SIZE = 12;
@@ -28,11 +28,16 @@ const GRID = "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3";
 
 type Option = { label: string; value: string };
 
+const EMPTY: any[] = [];
+
 function UniversityList() {
     const searchParams = useSearchParams();
-    const { data, fetchData, loading, error } = useDataStore();
+    const { data: storeData, country: dataCountry, fetchData, loading, error } = useDataStore();
     const country = useCountry();
+    const { hasMap } = useCountryConfig();
     const path = useCountryPath();
+    // Hide another country's schools while this country's load (e.g. right after switching countries)
+    const data = dataCountry === country ? storeData : EMPTY;
 
     const [filters, setFilters] = useState<Filters>(() => ({
         query: searchParams.get("q") ?? "",
@@ -63,11 +68,11 @@ function UniversityList() {
     }, [country, fetchData]);
 
     useEffect(() => {
-        fetch("/filter-options.json")
+        fetch(`/filter-options/${country}.json`)
             .then((res) => res.json())
             .then(setOptions)
             .catch((err) => console.error("Failed to load filter options", err));
-    }, []);
+    }, [country]);
 
     // Keep filters in the URL so results can be shared and survive reloads
     useEffect(() => {
@@ -164,23 +169,26 @@ function UniversityList() {
                             id="school-filters"
                             className={cn("flex-col gap-2 sm:flex sm:flex-row sm:items-center", filtersOpen ? "flex" : "hidden")}
                         >
-                            <div role="radiogroup" aria-label="School type" className="flex rounded-lg bg-muted p-1 text-sm">
-                                {options.systems.map((opt) => (
-                                    <button
-                                        key={opt.value}
-                                        type="button"
-                                        role="radio"
-                                        aria-checked={filters.type === opt.value}
-                                        onClick={() => update({ type: opt.value })}
-                                        className={cn(
-                                            "flex-1 cursor-pointer whitespace-nowrap rounded-md px-3 py-1.5 font-medium text-muted-foreground transition-colors",
-                                            filters.type === opt.value && "bg-background text-foreground shadow-xs"
-                                        )}
-                                    >
-                                        {opt.value === "University of Applied Sciences" ? "UAS" : opt.label}
-                                    </button>
-                                ))}
-                            </div>
+                            {/* Only worth showing when there's a choice beyond "All" and one type */}
+                            {options.systems.length > 2 && (
+                                <div role="radiogroup" aria-label="School type" className="flex rounded-lg bg-muted p-1 text-sm">
+                                    {options.systems.map((opt) => (
+                                        <button
+                                            key={opt.value}
+                                            type="button"
+                                            role="radio"
+                                            aria-checked={filters.type === opt.value}
+                                            onClick={() => update({ type: opt.value })}
+                                            className={cn(
+                                                "flex-1 cursor-pointer whitespace-nowrap rounded-md px-3 py-1.5 font-medium text-muted-foreground transition-colors",
+                                                filters.type === opt.value && "bg-background text-foreground shadow-xs"
+                                            )}
+                                        >
+                                            {opt.value === "University of Applied Sciences" ? "UAS" : opt.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                             {(savedIds.length > 0 || savedOnly) && (
                                 <button
                                     type="button"
@@ -301,12 +309,14 @@ function UniversityList() {
                             <ArrowUp />
                         </Button>
                     )}
-                    <Button asChild className="rounded-full shadow-lg">
-                        <Link href={path("/map")}>
-                            <MapIcon />
-                            Map view
-                        </Link>
-                    </Button>
+                    {hasMap && (
+                        <Button asChild className="rounded-full shadow-lg">
+                            <Link href={path("/map")}>
+                                <MapIcon />
+                                Map view
+                            </Link>
+                        </Button>
+                    )}
                 </div>
 
                 <div className="mx-auto max-w-3xl">

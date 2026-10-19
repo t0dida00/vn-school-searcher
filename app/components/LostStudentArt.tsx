@@ -1,7 +1,9 @@
 import React from "react";
 
-// Original illustration for the 404 page: a lost student on a stack of books, a "404" signpost
-// a reindeer in a Finnish-flag scarf and a Finnish flag on a pole. Pure SVG so it scales crisply and needs no asset.
+// Original illustration for the 404 page: a lost student on a stack of books next to a "404" signpost.
+// The scenery changes by country: snowy pines, a Finnish flag and a reindeer for Finland; palms, a
+// Vietnamese flag and a water buffalo for Vietnam; plain trees and a desk globe anywhere else.
+// Pure SVG so it scales crisply and needs no asset.
 const SKIN = "#f1c7a0";
 const SKIN_SHADE = "#dba67c";
 const HOODIE = "#ff7a59";
@@ -14,6 +16,13 @@ const PAPER_SHADE = "#ecdfc0";
 const FUR = "#a47551";
 const FUR_LIGHT = "#d2a982";
 const ANTLER = "#ecd9b6";
+const HIDE = "#5a6170";
+const HIDE_LIGHT = "#737a89";
+const HORN = "#eadfc8";
+const VN_RED = "#da251d";
+const VN_YELLOW = "#ffcd00";
+
+export type LostScene = "fi" | "vn" | "generic";
 
 function Book({ x, y, w, h, color, spine }: { x: number; y: number; w: number; h: number; color: string; spine: string }) {
     return (
@@ -43,16 +52,232 @@ function Pine({ x, y, s = 1, color }: { x: number; y: number; s?: number; color:
     );
 }
 
-export default function LostStudentArt({ className }: { className?: string }) {
+// Coconut palm with a gently curved trunk; `flip` leans it the other way
+function Palm({ x, y, s = 1, color, flip }: { x: number; y: number; s?: number; color: string; flip?: boolean }) {
+    return (
+        <g transform={`translate(${x} ${y}) scale(${flip ? -s : s} ${s})`}>
+            <path d="M-5 0 Q-12 -70 10 -140 L18 -138 Q0 -70 5 0 Z" fill="#4a3424" />
+            {[-30, -60, -90, -115].map((ty) => (
+                <path key={ty} d={`M${-8 + ty * -0.05} ${ty} h12`} stroke="#33241a" strokeWidth={2} opacity={0.6} />
+            ))}
+            {/* Fronds fanning out from the crown */}
+            <g fill={color}>
+                <path d="M14 -140 Q46 -160 78 -128 Q46 -142 14 -134 Z" />
+                <path d="M14 -140 Q50 -132 66 -96 Q42 -124 12 -132 Z" />
+                <path d="M14 -140 Q-18 -164 -52 -134 Q-18 -146 14 -134 Z" />
+                <path d="M14 -140 Q-22 -134 -38 -98 Q-14 -126 16 -132 Z" />
+                <path d="M14 -140 Q8 -176 34 -184 Q18 -164 18 -138 Z" />
+            </g>
+            <circle cx={10} cy={-132} r={5} fill="#5b4126" />
+            <circle cx={19} cy={-130} r={5} fill="#4f3820" />
+        </g>
+    );
+}
+
+// Round-crowned tree for the neutral scene
+function Tree({ x, y, s = 1, color }: { x: number; y: number; s?: number; color: string }) {
+    return (
+        <g transform={`translate(${x} ${y}) scale(${s})`}>
+            <rect x={-5} y={-50} width={10} height={60} rx={3} fill="#3a2c22" />
+            <circle cx={0} cy={-80} r={36} fill={color} />
+            <circle cx={-22} cy={-60} r={24} fill={color} />
+            <circle cx={22} cy={-58} r={26} fill={color} />
+            <circle cx={-8} cy={-96} r={14} fill="#fff" opacity={0.08} />
+        </g>
+    );
+}
+
+// Five-pointed star polygon centred on (cx, cy)
+function starPoints(cx: number, cy: number, outer: number) {
+    const inner = outer * 0.382;
+    return Array.from({ length: 10 }, (_, i) => {
+        const r = i % 2 ? inner : outer;
+        const a = -Math.PI / 2 + (i * Math.PI) / 5;
+        return `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`;
+    }).join(" ");
+}
+
+// Pole with a waving flag; `children` paints the 72 × 56 flag field (clipped to the wave). `snowy` piles
+// snow at the foot of the pole.
+function FlagPole({ snowy, children }: { snowy?: boolean; children: React.ReactNode }) {
+    return (
+        <g>
+            <ellipse cx={548.5} cy={352} rx={14} ry={4} fill={snowy ? "#e9f5f9" : "#000"} opacity={snowy ? 0.6 : 0.2} />
+            <rect x={546} y={40} width={5} height={312} rx={2} fill="#cfd8dc" />
+            <rect x={546} y={40} width={2} height={312} fill="#fff" opacity={0.6} />
+            <circle cx={548.5} cy={37} r={5} fill={GOLD} />
+            <g transform="translate(551 48)">
+                <g clipPath="url(#lost-flag-wave)">
+                    {children}
+                    <rect x={0} y={-6} width={72} height={56} fill="url(#lost-flag-shade)" />
+                </g>
+            </g>
+        </g>
+    );
+}
+
+function FinlandBackdrop() {
+    return (
+        <>
+            {/* Background pines */}
+            <Pine x={70} y={350} s={1.1} color="#123f4b" />
+            <Pine x={44} y={360} s={0.75} color="#0f3540" />
+            <Pine x={570} y={350} s={1.2} color="#123f4b" />
+            <Pine x={606} y={362} s={0.8} color="#0f3540" />
+            {/* Finnish flag behind the reindeer. Nordic cross: vertical bar at 5/18–8/18, horizontal at 4/11–7/11 */}
+            <FlagPole snowy>
+                <rect x={0} y={-6} width={72} height={56} fill="#fff" />
+                <rect x={20} y={-6} width={12} height={56} fill="#003580" />
+                <rect x={0} y={16} width={72} height={12} fill="#003580" />
+            </FlagPole>
+            {/* Snowy ground */}
+            <ellipse cx={320} cy={362} rx={300} ry={34} fill="url(#lost-snow)" opacity={0.18} />
+        </>
+    );
+}
+
+function VietnamBackdrop() {
+    return (
+        <>
+            {/* Background palms, leaning out of the frame */}
+            <Palm x={78} y={352} s={1.05} color="#1e4a37" />
+            <Palm x={40} y={362} s={0.7} color="#173b2c" flip />
+            <Palm x={584} y={352} s={1.1} color="#1e4a37" flip />
+            <Palm x={616} y={364} s={0.72} color="#173b2c" />
+            {/* Vietnamese flag: red field, yellow five-pointed star */}
+            <FlagPole>
+                <rect x={0} y={-6} width={72} height={56} fill={VN_RED} />
+                <polygon points={starPoints(36, 22, 13)} fill={VN_YELLOW} />
+            </FlagPole>
+            {/* Rice-paddy glow under the scene */}
+            <ellipse cx={320} cy={362} rx={300} ry={34} fill="url(#lost-paddy)" opacity={0.3} />
+        </>
+    );
+}
+
+function GenericBackdrop() {
+    return (
+        <>
+            <Tree x={70} y={350} s={1.05} color="#1f4f5c" />
+            <Tree x={40} y={362} s={0.7} color="#183f4a" />
+            <Tree x={574} y={350} s={1.1} color="#1f4f5c" />
+            <Tree x={610} y={362} s={0.75} color="#183f4a" />
+            <ellipse cx={320} cy={362} rx={300} ry={34} fill="url(#lost-grass)" opacity={0.22} />
+        </>
+    );
+}
+
+// Reindeer friend in a Finnish-flag scarf
+function Reindeer() {
+    return (
+        <g>
+            <ellipse cx={510} cy={354} rx={58} ry={8} fill="#000" opacity={0.25} />
+            {/* Back legs, body, front legs */}
+            <rect x={528} y={308} width={9} height={44} rx={4} fill="#8a5f3f" />
+            <rect x={480} y={308} width={9} height={44} rx={4} fill="#8a5f3f" />
+            <ellipse cx={512} cy={300} rx={46} ry={27} fill={FUR} />
+            <ellipse cx={510} cy={312} rx={32} ry={12} fill={FUR_LIGHT} opacity={0.7} />
+            <rect x={542} y={310} width={10} height={44} rx={4} fill={FUR} />
+            <rect x={492} y={312} width={10} height={42} rx={4} fill={FUR} />
+            {[536, 484, 546, 496].map((x) => (
+                <rect key={x} x={x} y={346} width={x === 546 || x === 496 ? 11 : 10} height={7} rx={2.5} fill="#3b2a20" />
+            ))}
+            <path d="M556 290 Q568 284 566 296" stroke={FUR_LIGHT} strokeWidth={6} strokeLinecap="round" fill="none" />
+            {/* Neck and head, turned toward the student */}
+            <path d="M478 296 Q466 270 470 248 L492 246 Q494 272 504 288 Z" fill={FUR} />
+            <ellipse cx={472} cy={238} rx={21} ry={17} fill={FUR} />
+            <ellipse cx={455} cy={246} rx={13} ry={10} fill={FUR_LIGHT} />
+            <ellipse cx={447} cy={243} rx={5} ry={4} fill="#3b2a20" />
+            <circle cx={470} cy={232} r={3} fill={INK} />
+            <circle cx={471} cy={231} r={1} fill="#fff" />
+            <path d="M452 252 Q457 255 462 252" stroke="#6b4a33" strokeWidth={1.8} fill="none" strokeLinecap="round" />
+            <ellipse cx={490} cy={228} rx={9} ry={5} transform="rotate(-25 490 228)" fill={FUR} />
+            <ellipse cx={490} cy={228} rx={5} ry={2.5} transform="rotate(-25 490 228)" fill={FUR_LIGHT} />
+            {/* Antlers */}
+            <path d="M470 222 Q466 200 452 190 M462 205 Q452 204 446 196 M466 196 Q470 186 466 178" stroke={ANTLER} strokeWidth={5} strokeLinecap="round" fill="none" />
+            <path d="M482 222 Q490 200 504 190 M494 204 Q504 202 510 194 M490 196 Q488 186 494 178" stroke={ANTLER} strokeWidth={5} strokeLinecap="round" fill="none" />
+            {/* Scarf: white with a blue band */}
+            <path d="M468 262 Q484 270 500 262 L502 276 Q484 284 466 276 Z" fill="#fff" />
+            <path d="M467 268 Q484 276 501 268 L501.5 272 Q484 280 466.5 272 Z" fill="#2f6fd6" />
+            <path d="M494 272 L506 300 L496 302 L488 276 Z" fill="#fff" />
+            <path d="M497 280 L501 290 L497 291 Z" fill="#2f6fd6" />
+        </g>
+    );
+}
+
+// Water buffalo friend in a red scarf with a little yellow star
+function Buffalo() {
+    return (
+        <g>
+            <ellipse cx={512} cy={354} rx={62} ry={8} fill="#000" opacity={0.25} />
+            {/* Back legs, body, front legs */}
+            <rect x={534} y={306} width={11} height={44} rx={4} fill="#474d5a" />
+            <rect x={486} y={306} width={11} height={44} rx={4} fill="#474d5a" />
+            <ellipse cx={516} cy={296} rx={52} ry={30} fill={HIDE} />
+            <ellipse cx={514} cy={312} rx={36} ry={12} fill={HIDE_LIGHT} opacity={0.6} />
+            <rect x={548} y={308} width={12} height={46} rx={4} fill={HIDE} />
+            <rect x={496} y={310} width={12} height={44} rx={4} fill={HIDE} />
+            {[534, 486, 548, 496].map((x) => (
+                <rect key={x} x={x} y={346} width={x === 548 || x === 496 ? 12 : 11} height={7} rx={2.5} fill="#2a2d33" />
+            ))}
+            {/* Tail with a tuft */}
+            <path d="M566 288 Q578 300 572 326" stroke={HIDE} strokeWidth={4} strokeLinecap="round" fill="none" />
+            <ellipse cx={571} cy={330} rx={4} ry={6} fill="#2a2d33" />
+            {/* Neck and low-held head, turned toward the student */}
+            <path d="M474 282 Q470 262 482 252 L506 266 Q502 284 510 296 Z" fill={HIDE} />
+            <ellipse cx={466} cy={266} rx={24} ry={19} fill={HIDE} />
+            <ellipse cx={449} cy={277} rx={15} ry={11} fill="#8b909b" />
+            <ellipse cx={443} cy={275} rx={2.4} ry={2} fill="#2a2d33" />
+            <ellipse cx={452} cy={276} rx={2.4} ry={2} fill="#2a2d33" />
+            <circle cx={466} cy={259} r={3} fill={INK} />
+            <circle cx={467} cy={258} r={1} fill="#fff" />
+            <ellipse cx={490} cy={262} rx={10} ry={5} transform="rotate(15 490 262)" fill={HIDE_LIGHT} />
+            {/* Swept-back crescent horns */}
+            <path d="M462 250 Q430 238 438 210 Q446 232 470 244 Z" fill={HORN} />
+            <path d="M476 248 Q496 222 526 230 Q500 234 482 254 Z" fill={HORN} />
+            {/* Scarf: red with a yellow star on the hanging end */}
+            <path d="M474 280 Q490 290 506 282 L508 296 Q490 304 472 294 Z" fill={VN_RED} />
+            <path d="M498 292 L510 320 L498 322 L490 296 Z" fill={VN_RED} />
+            <polygon points={starPoints(501, 312, 4.5)} fill={VN_YELLOW} />
+        </g>
+    );
+}
+
+// Desk globe in the companion's spot for the neutral scene
+function Globe() {
+    return (
+        <g>
+            <ellipse cx={512} cy={354} rx={44} ry={7} fill="#000" opacity={0.25} />
+            <path d="M488 352 H536 L528 340 H496 Z" fill="#8d6e4e" />
+            <rect x={508} y={316} width={8} height={26} fill="#a5835f" />
+            <circle cx={512} cy={282} r={38} fill="#3fa7d6" />
+            <path d="M486 266 Q500 252 516 262 Q528 270 520 282 Q508 290 500 280 Q490 276 486 266 Z" fill="#7bc96f" />
+            <path d="M520 298 Q534 290 542 300 Q538 312 526 312 Q516 308 520 298 Z" fill="#7bc96f" />
+            <ellipse cx={512} cy={282} rx={38} ry={14} fill="none" stroke="#fff" strokeOpacity={0.35} strokeWidth={1.5} />
+            <ellipse cx={512} cy={282} rx={14} ry={38} fill="none" stroke="#fff" strokeOpacity={0.35} strokeWidth={1.5} />
+            <path d="M470 282 A42 42 0 0 1 554 282" stroke="#cfd8dc" strokeWidth={4} fill="none" />
+            <circle cx={500} cy={268} r={8} fill="#fff" opacity={0.15} />
+        </g>
+    );
+}
+
+const SCENES: Record<LostScene, { title: string; Backdrop: () => React.ReactElement; Companion: () => React.ReactElement }> = {
+    fi: { title: "a reindeer and a Finnish flag", Backdrop: FinlandBackdrop, Companion: Reindeer },
+    vn: { title: "a water buffalo and a Vietnamese flag", Backdrop: VietnamBackdrop, Companion: Buffalo },
+    generic: { title: "a desk globe", Backdrop: GenericBackdrop, Companion: Globe },
+};
+
+export default function LostStudentArt({ scene = "generic", className }: { scene?: LostScene; className?: string }) {
+    const { title, Backdrop, Companion } = SCENES[scene];
     return (
         <svg viewBox="0 0 640 400" className={className} role="img" aria-labelledby="lost-art-title">
-            <title id="lost-art-title">A puzzled student sitting on a stack of books, reading a map next to a 404 signpost, a reindeer and a Finnish flag</title>
+            <title id="lost-art-title">{`A puzzled student sitting on a stack of books, reading a map next to a 404 signpost, ${title}`}</title>
             <defs>
                 <radialGradient id="lost-ground" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stopColor="#000" stopOpacity={0.45} />
                     <stop offset="100%" stopColor="#000" stopOpacity={0} />
                 </radialGradient>
-                {/* Wavy outline for the flag, in flag-local coordinates (72 × 44, Finnish 18:11) */}
+                {/* Wavy outline for the flag, in flag-local coordinates (72 × 44) */}
                 <clipPath id="lost-flag-wave">
                     <path d="M0 0 Q18 -5 36 0 T72 0 V44 Q54 49 36 44 T0 44 Z" />
                 </clipPath>
@@ -67,40 +292,26 @@ export default function LostStudentArt({ className }: { className?: string }) {
                     <stop offset="0%" stopColor="#e9f5f9" />
                     <stop offset="100%" stopColor="#b9dbe6" />
                 </linearGradient>
+                <linearGradient id="lost-paddy" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#c9e07a" />
+                    <stop offset="100%" stopColor="#6f9a3c" />
+                </linearGradient>
+                <linearGradient id="lost-grass" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#bfe3c6" />
+                    <stop offset="100%" stopColor="#7fb38a" />
+                </linearGradient>
             </defs>
 
-            {/* Background pines */}
-            <Pine x={70} y={350} s={1.1} color="#123f4b" />
-            <Pine x={44} y={360} s={0.75} color="#0f3540" />
-            <Pine x={570} y={350} s={1.2} color="#123f4b" />
-            <Pine x={606} y={362} s={0.8} color="#0f3540" />
+            <Backdrop />
 
-            {/* Flagpole with the Finnish flag, behind the reindeer */}
-            <g>
-                <ellipse cx={548.5} cy={352} rx={14} ry={4} fill="#e9f5f9" opacity={0.6} />
-                <rect x={546} y={40} width={5} height={312} rx={2} fill="#cfd8dc" />
-                <rect x={546} y={40} width={2} height={312} fill="#fff" opacity={0.6} />
-                <circle cx={548.5} cy={37} r={5} fill={GOLD} />
-                <g transform="translate(551 48)">
-                    <g clipPath="url(#lost-flag-wave)">
-                        <rect x={0} y={-6} width={72} height={56} fill="#fff" />
-                        {/* Nordic cross: vertical bar at 5/18–8/18, horizontal at 4/11–7/11 */}
-                        <rect x={20} y={-6} width={12} height={56} fill="#003580" />
-                        <rect x={0} y={16} width={72} height={12} fill="#003580" />
-                        <rect x={0} y={-6} width={72} height={56} fill="url(#lost-flag-shade)" />
-                    </g>
-                </g>
-            </g>
-
-            {/* Snowy ground and soft shadow */}
-            <ellipse cx={320} cy={362} rx={300} ry={34} fill="url(#lost-snow)" opacity={0.18} />
+            {/* Soft shadow under the scene */}
             <ellipse cx={320} cy={352} rx={230} ry={22} fill="url(#lost-ground)" />
 
             {/* Signpost */}
             <g>
                 <rect x={128} y={150} width={11} height={205} rx={3} fill="#8d6e4e" />
                 <rect x={128} y={150} width={4} height={205} fill="#a5835f" />
-                <ellipse cx={133.5} cy={150} rx={9} ry={4} fill="#e9f5f9" />
+                {scene === "fi" && <ellipse cx={133.5} cy={150} rx={9} ry={4} fill="#e9f5f9" />}
                 <g transform="rotate(-4 133 172)">
                     <path d="M96 158 H186 L200 172 L186 186 H96 Z" fill={GOLD} />
                     <text x={146} y={179} textAnchor="middle" fontSize={17} fontWeight={800} fill={INK} letterSpacing={1}>404</text>
@@ -202,39 +413,7 @@ export default function LostStudentArt({ className }: { className?: string }) {
                 <circle cx={336} cy={104} r={2.5} fill="#fff" opacity={0.6} />
             </g>
 
-            {/* Reindeer friend in a Finnish-flag scarf */}
-            <g>
-                <ellipse cx={510} cy={354} rx={58} ry={8} fill="#000" opacity={0.25} />
-                {/* Back legs, body, front legs */}
-                <rect x={528} y={308} width={9} height={44} rx={4} fill="#8a5f3f" />
-                <rect x={480} y={308} width={9} height={44} rx={4} fill="#8a5f3f" />
-                <ellipse cx={512} cy={300} rx={46} ry={27} fill={FUR} />
-                <ellipse cx={510} cy={312} rx={32} ry={12} fill={FUR_LIGHT} opacity={0.7} />
-                <rect x={542} y={310} width={10} height={44} rx={4} fill={FUR} />
-                <rect x={492} y={312} width={10} height={42} rx={4} fill={FUR} />
-                {[536, 484, 546, 496].map((x) => (
-                    <rect key={x} x={x} y={346} width={x === 546 || x === 496 ? 11 : 10} height={7} rx={2.5} fill="#3b2a20" />
-                ))}
-                <path d="M556 290 Q568 284 566 296" stroke={FUR_LIGHT} strokeWidth={6} strokeLinecap="round" fill="none" />
-                {/* Neck and head, turned toward the student */}
-                <path d="M478 296 Q466 270 470 248 L492 246 Q494 272 504 288 Z" fill={FUR} />
-                <ellipse cx={472} cy={238} rx={21} ry={17} fill={FUR} />
-                <ellipse cx={455} cy={246} rx={13} ry={10} fill={FUR_LIGHT} />
-                <ellipse cx={447} cy={243} rx={5} ry={4} fill="#3b2a20" />
-                <circle cx={470} cy={232} r={3} fill={INK} />
-                <circle cx={471} cy={231} r={1} fill="#fff" />
-                <path d="M452 252 Q457 255 462 252" stroke="#6b4a33" strokeWidth={1.8} fill="none" strokeLinecap="round" />
-                <ellipse cx={490} cy={228} rx={9} ry={5} transform="rotate(-25 490 228)" fill={FUR} />
-                <ellipse cx={490} cy={228} rx={5} ry={2.5} transform="rotate(-25 490 228)" fill={FUR_LIGHT} />
-                {/* Antlers */}
-                <path d="M470 222 Q466 200 452 190 M462 205 Q452 204 446 196 M466 196 Q470 186 466 178" stroke={ANTLER} strokeWidth={5} strokeLinecap="round" fill="none" />
-                <path d="M482 222 Q490 200 504 190 M494 204 Q504 202 510 194 M490 196 Q488 186 494 178" stroke={ANTLER} strokeWidth={5} strokeLinecap="round" fill="none" />
-                {/* Scarf: white with a blue band */}
-                <path d="M468 262 Q484 270 500 262 L502 276 Q484 284 466 276 Z" fill="#fff" />
-                <path d="M467 268 Q484 276 501 268 L501.5 272 Q484 280 466.5 272 Z" fill="#2f6fd6" />
-                <path d="M494 272 L506 300 L496 302 L488 276 Z" fill="#fff" />
-                <path d="M497 280 L501 290 L497 291 Z" fill="#2f6fd6" />
-            </g>
+            <Companion />
         </svg>
     );
 }

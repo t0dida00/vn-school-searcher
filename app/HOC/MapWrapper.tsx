@@ -7,7 +7,7 @@ import type { CountryCode } from "../lib/countries";
 const Map = dynamic(() => import("../components/Map"), { ssr: false, loading: () => <MapLoading /> });
 
 interface MapClientWrapperProps {
-    data: any[];
+    data: any[] | null;
     error: string | null;
     country: CountryCode;
 }

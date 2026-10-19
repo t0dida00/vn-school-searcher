@@ -1,13 +1,11 @@
 import type { Map } from "mapbox-gl";
-// Simplified Finland outline (incl. Åland) from geoBoundaries gbOpen FIN ADM0, OpenStreetMap data, ODbL 1.0
-import finland from "./finland.json";
+import type { CountryMap } from "./countryMaps";
 
 const FONT = ["DIN Offc Pro Bold", "Arial Unicode MS Bold"];
 const TEXT_SIZE = 13;
 const CLUSTER_CIRCLE_STROKE_COLOR = "#fff";
-// Finnish flag blue; clusters are round flags with the count on top
-const FLAG_BLUE = "#002f6c";
-const FLAG_IMAGE = "finland-flag";
+// Clusters are round flags of the country with the count on top
+const FLAG_IMAGE = "country-flag";
 // Drawn at 2× so it stays sharp on retina; 64px at pixelRatio 2 = a 32px badge = the smallest cluster
 const FLAG_SIZE = 64;
 // Warm sand tones: light enough that the clusters and white logo badges stand out
@@ -15,35 +13,35 @@ const OUTSIDE_COLOR = "#fbf8f4";
 const SILHOUETTE_COLOR = "#e9c9a6";
 const BORDER_COLOR = "#c49a72";
 
-// The world with Finland cut out as holes. Covering the basemap with it leaves Finland as the only
-// thing drawn, at every zoom level, without needing a custom Mapbox style.
+// The world with the country cut out as holes. Covering the basemap with it leaves the country as the
+// only thing drawn, at every zoom level, without needing a custom Mapbox style.
 const WORLD_RING = [[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]];
-const outsideFinland: GeoJSON.Feature<GeoJSON.Polygon> = {
-  type: "Feature",
-  properties: {},
-  geometry: {
-    type: "Polygon",
-    coordinates: [WORLD_RING, ...finland.geometry.coordinates.map((polygon) => polygon[0])],
-  },
-};
 
-export function addFinlandLayers(map: Map) {
-  map.addSource("finland", { type: "geojson", data: finland as GeoJSON.Feature<GeoJSON.MultiPolygon> });
-  map.addSource("outside-finland", { type: "geojson", data: outsideFinland });
+export function addCountryLayers(map: Map, outline: GeoJSON.Feature<GeoJSON.MultiPolygon>) {
+  const outside: GeoJSON.Feature<GeoJSON.Polygon> = {
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "Polygon",
+      coordinates: [WORLD_RING, ...outline.geometry.coordinates.map((polygon) => polygon[0])],
+    },
+  };
+  map.addSource("country", { type: "geojson", data: outline });
+  map.addSource("outside-country", { type: "geojson", data: outside });
 
   // Opaque mask above every basemap layer, labels included; the school layers are added after it
   map.addLayer({
-    id: "outside-finland",
+    id: "outside-country",
     type: "fill",
-    source: "outside-finland",
+    source: "outside-country",
     paint: { "fill-color": OUTSIDE_COLOR, "fill-opacity": 1, "fill-antialias": false },
   });
 
-  // Grey silhouette at country scale, fading out so streets show once the user zooms in
+  // Sand silhouette at country scale, fading out so streets show once the user zooms in
   map.addLayer({
-    id: "finland-silhouette",
+    id: "country-silhouette",
     type: "fill",
-    source: "finland",
+    source: "country",
     paint: {
       "fill-color": SILHOUETTE_COLOR,
       // Fully opaque at country scale: any see-through shows tiles as they load, in patchy bands
@@ -52,9 +50,9 @@ export function addFinlandLayers(map: Map) {
   });
 
   map.addLayer({
-    id: "finland-border",
+    id: "country-border",
     type: "line",
-    source: "finland",
+    source: "country",
     paint: {
       "line-color": BORDER_COLOR,
       "line-width": ["interpolate", ["linear"], ["zoom"], 5, 0.5, 10, 1.5],
@@ -62,27 +60,19 @@ export function addFinlandLayers(map: Map) {
   });
 }
 
-// A round crop of the Finnish flag (18:11, cross 3 units wide, vertical bar from 5 to 8), shifted so
-// the vertical bar sits a little left of centre like on the real flag
-function flagImage() {
+function flagImage(draw: CountryMap["flag"]["draw"]) {
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = FLAG_SIZE;
   const ctx = canvas.getContext("2d")!;
-  const unit = FLAG_SIZE / 11;
   ctx.beginPath();
   ctx.arc(FLAG_SIZE / 2, FLAG_SIZE / 2, FLAG_SIZE / 2, 0, Math.PI * 2);
   ctx.clip();
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0, 0, FLAG_SIZE, FLAG_SIZE);
-  ctx.fillStyle = FLAG_BLUE;
-  const barLeft = FLAG_SIZE * 0.4 - 1.5 * unit;
-  ctx.fillRect(barLeft, 0, 3 * unit, FLAG_SIZE);
-  ctx.fillRect(0, 4 * unit, FLAG_SIZE, 3 * unit);
+  draw(ctx, FLAG_SIZE);
   return ctx.getImageData(0, 0, FLAG_SIZE, FLAG_SIZE);
 }
 
-export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollection) {
-  if (!map.hasImage(FLAG_IMAGE)) map.addImage(FLAG_IMAGE, flagImage(), { pixelRatio: 2 });
+export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollection, flag: CountryMap["flag"]) {
+  if (!map.hasImage(FLAG_IMAGE)) map.addImage(FLAG_IMAGE, flagImage(flag.draw), { pixelRatio: 2 });
 
   map.addSource("universities", {
     type: "geojson",
@@ -135,8 +125,8 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
     },
     paint: {
       "text-color": "#fff",
-      // Blue halo keeps the count readable where it crosses the flag's white fields
-      "text-halo-color": FLAG_BLUE,
+      // Dark halo in the flag's colour keeps the count readable over its light parts (white, yellow)
+      "text-halo-color": flag.halo,
       "text-halo-width": 2,
     },
   });

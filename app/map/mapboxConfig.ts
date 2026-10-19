@@ -5,8 +5,4 @@ export const INITIAL_VIEWPORT = {
   maxZoom: Number(process.env.NEXT_PUBLIC_MAP_MAX_ZOOM || 15),
 };
 
-// Mainland Finland plus Åland, [[west, south], [east, north]]
-export const FINLAND_BOUNDS: [[number, number], [number, number]] = [
-  [19.0, 59.4],
-  [31.6, 70.1],
-];
+// Country bounds live in countryMaps.ts

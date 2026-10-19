@@ -23,11 +23,12 @@ export async function generateStaticParams({ params }: { params: { country: Coun
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { country, id } = await params;
     const school = await getSchool(country, id);
-    if (!school) return { title: "School not found · FinUnies" };
+    const { brand } = COUNTRIES[country];
+    if (!school) return { title: `School not found · ${brand}` };
     const { name, city, overview, logo } = school.properties;
     const description = overview ? overview.slice(0, 160) : `${name} in ${city}, ${COUNTRIES[country].name}.`;
     return {
-        title: `${name} · FinUnies`,
+        title: `${name} · ${brand}`,
         description,
         alternates: { canonical: countryPath(country, `/school/${school.properties.id}`) },
         openGraph: { title: name, description, images: logo ? [logo] : undefined },
@@ -48,12 +49,14 @@ export default async function SchoolPage({ params }: Props) {
                         All schools
                     </Link>
                 </Button>
-                <Button asChild variant="outline" size="sm">
-                    <Link href={countryPath(country, `/map?school=${encodeURIComponent(id)}`)}>
-                        <MapIcon />
-                        View on map
-                    </Link>
-                </Button>
+                {COUNTRIES[country].hasMap && (
+                    <Button asChild variant="outline" size="sm">
+                        <Link href={countryPath(country, `/map?school=${encodeURIComponent(id)}`)}>
+                            <MapIcon />
+                            View on map
+                        </Link>
+                    </Button>
+                )}
             </div>
 
             <article className="overflow-hidden rounded-xl border bg-card shadow-xs">

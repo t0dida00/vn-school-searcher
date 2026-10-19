@@ -1,0 +1,264 @@
+{
+ "cities": [
+  {
+   "label": "All cities",
+   "value": ""
+  },
+  {
+   "label": "Can Tho",
+   "value": "can tho"
+  },
+  {
+   "label": "Da Nang",
+   "value": "da nang"
+  },
+  {
+   "label": "Hanoi",
+   "value": "hanoi"
+  },
+  {
+   "label": "Ho Chi Minh City",
+   "value": "ho chi minh city"
+  }
+ ],
+ "fields": [
+  {
+   "label": "All fields",
+   "value": ""
+  },
+  {
+   "label": "Accounting",
+   "value": "Accounting"
+  },
+  {
+   "label": "Agriculture",
+   "value": "Agriculture"
+  },
+  {
+   "label": "Aquaculture",
+   "value": "Aquaculture"
+  },
+  {
+   "label": "Architecture",
+   "value": "Architecture"
+  },
+  {
+   "label": "Biology and Biotechnology",
+   "value": "Biology and Biotechnology"
+  },
+  {
+   "label": "Biotechnology",
+   "value": "Biotechnology"
+  },
+  {
+   "label": "Business Administration",
+   "value": "Business Administration"
+  },
+  {
+   "label": "Chemical Engineering",
+   "value": "Chemical Engineering"
+  },
+  {
+   "label": "Chemistry",
+   "value": "Chemistry"
+  },
+  {
+   "label": "Civil Engineering",
+   "value": "Civil Engineering"
+  },
+  {
+   "label": "Computer Science and Engineering",
+   "value": "Computer Science and Engineering"
+  },
+  {
+   "label": "Dentistry",
+   "value": "Dentistry"
+  },
+  {
+   "label": "Design and Arts",
+   "value": "Design and Arts"
+  },
+  {
+   "label": "Economics",
+   "value": "Economics"
+  },
+  {
+   "label": "Economics and Business",
+   "value": "Economics and Business"
+  },
+  {
+   "label": "Economics and Management",
+   "value": "Economics and Management"
+  },
+  {
+   "label": "Education",
+   "value": "Education"
+  },
+  {
+   "label": "Electrical and Electronic Engineering",
+   "value": "Electrical and Electronic Engineering"
+  },
+  {
+   "label": "Engineering",
+   "value": "Engineering"
+  },
+  {
+   "label": "Engineering and Technology",
+   "value": "Engineering and Technology"
+  },
+  {
+   "label": "Environmental Engineering",
+   "value": "Environmental Engineering"
+  },
+  {
+   "label": "Environmental Sciences",
+   "value": "Environmental Sciences"
+  },
+  {
+   "label": "Fashion and Design",
+   "value": "Fashion and Design"
+  },
+  {
+   "label": "Finance and Banking",
+   "value": "Finance and Banking"
+  },
+  {
+   "label": "Foreign Languages",
+   "value": "Foreign Languages"
+  },
+  {
+   "label": "Health Sciences",
+   "value": "Health Sciences"
+  },
+  {
+   "label": "Industrial Management",
+   "value": "Industrial Management"
+  },
+  {
+   "label": "Information Technology",
+   "value": "Information Technology"
+  },
+  {
+   "label": "International Business",
+   "value": "International Business"
+  },
+  {
+   "label": "International Economics",
+   "value": "International Economics"
+  },
+  {
+   "label": "Journalism and Communication",
+   "value": "Journalism and Communication"
+  },
+  {
+   "label": "Law",
+   "value": "Law"
+  },
+  {
+   "label": "Logistics",
+   "value": "Logistics"
+  },
+  {
+   "label": "Management",
+   "value": "Management"
+  },
+  {
+   "label": "Maritime Studies",
+   "value": "Maritime Studies"
+  },
+  {
+   "label": "Marketing",
+   "value": "Marketing"
+  },
+  {
+   "label": "Materials Science",
+   "value": "Materials Science"
+  },
+  {
+   "label": "Mathematics",
+   "value": "Mathematics"
+  },
+  {
+   "label": "Mechanical Engineering",
+   "value": "Mechanical Engineering"
+  },
+  {
+   "label": "Medicine",
+   "value": "Medicine"
+  },
+  {
+   "label": "Medicine and Health Sciences",
+   "value": "Medicine and Health Sciences"
+  },
+  {
+   "label": "Medicine and Pharmacy",
+   "value": "Medicine and Pharmacy"
+  },
+  {
+   "label": "Natural Sciences",
+   "value": "Natural Sciences"
+  },
+  {
+   "label": "Nursing",
+   "value": "Nursing"
+  },
+  {
+   "label": "Oriental Studies",
+   "value": "Oriental Studies"
+  },
+  {
+   "label": "Pharmacy",
+   "value": "Pharmacy"
+  },
+  {
+   "label": "Physics",
+   "value": "Physics"
+  },
+  {
+   "label": "Psychology",
+   "value": "Psychology"
+  },
+  {
+   "label": "Public Health",
+   "value": "Public Health"
+  },
+  {
+   "label": "Social Sciences and Humanities",
+   "value": "Social Sciences and Humanities"
+  },
+  {
+   "label": "Technical Education",
+   "value": "Technical Education"
+  },
+  {
+   "label": "Tourism",
+   "value": "Tourism"
+  },
+  {
+   "label": "Tourism and Hospitality",
+   "value": "Tourism and Hospitality"
+  },
+  {
+   "label": "Traditional Medicine",
+   "value": "Traditional Medicine"
+  },
+  {
+   "label": "Transport Engineering",
+   "value": "Transport Engineering"
+  },
+  {
+   "label": "Water Resources Engineering",
+   "value": "Water Resources Engineering"
+  }
+ ],
+ "systems": [
+  {
+   "label": "All",
+   "value": "all"
+  },
+  {
+   "label": "University",
+   "value": "University"
+  }
+ ]
+}

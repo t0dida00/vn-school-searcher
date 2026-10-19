@@ -4,7 +4,7 @@ export type SchoolFilters = { query: string; city: string; field: string; type: 
 
 export const EMPTY_FILTERS: SchoolFilters = { query: "", city: "", field: "", type: "all" };
 
-// Shared by the list and map views. city/field come from public/filter-options.json (lowercased city values)
+// Shared by the list and map views. city/field come from public/filter-options/<country>.json (lowercased city values)
 export function matchSchool(item: any, { query, city, field, type }: SchoolFilters) {
     const p = item.properties || {};
     const fields = stringToArray(p.fieldOptions).map((f) => f.toLowerCase());
