@@ -10,6 +10,9 @@ export type CountryMap = {
     bounds: [[number, number], [number, number]];
     // Loaded on demand so each map page only downloads its own country's outline
     loadOutline: () => Promise<Outline>;
+    // The slim school GeoJSON from `npm run export:map`, bundled with the app so opening the map needs no
+    // API call (and the browser caches the file); full details load per school when its dialog opens
+    loadSchools: () => Promise<GeoJSON.Feature[]>;
     flag: {
         // Paints a round crop of the flag into a size × size canvas (already clipped to the circle)
         draw: (ctx: CanvasRenderingContext2D, size: number) => void;
@@ -34,6 +37,7 @@ export const COUNTRY_MAPS: Record<CountryCode, CountryMap> = {
         ],
         // Simplified Finland outline (incl. Åland) from geoBoundaries gbOpen FIN ADM0, OpenStreetMap data, ODbL 1.0
         loadOutline: () => import("./finland.json").then((m) => m.default as Outline),
+        loadSchools: () => import("./schools/fi.json").then((m) => m.default.features as GeoJSON.Feature[]),
         flag: {
             // 18:11, cross 3 units wide, vertical bar from 5 to 8, shifted so the bar sits a little left of
             // centre like on the real flag
@@ -66,6 +70,7 @@ export const COUNTRY_MAPS: Record<CountryCode, CountryMap> = {
         ],
         // Simplified Vietnam outline from geoBoundaries gbOpen VNM ADM0, CC BY 4.0
         loadOutline: () => import("./vietnam.json").then((m) => m.default as Outline),
+        loadSchools: () => import("./schools/vn.json").then((m) => m.default.features as GeoJSON.Feature[]),
         flag: {
             // Red field with the yellow five-pointed star; the star spans about 3/5 of the circle
             draw: (ctx, size) => {

@@ -118,6 +118,41 @@ export function SchoolDetailHeader({ school, title }: { school: any; title: Reac
     );
 }
 
+// Stands in for SchoolDetailBody while the map's dialog loads the school's details (useSchoolDetails)
+export function SchoolDetailBodyPending({ error, onRetry }: { error?: string | null; onRetry?: () => void }) {
+    if (error) {
+        return (
+            <div className="flex flex-col items-center gap-3 py-8 text-center text-sm">
+                <p className="text-muted-foreground">Couldn&apos;t load this school&apos;s details.</p>
+                {onRetry && (
+                    <Button type="button" variant="outline" size="sm" onClick={onRetry}>
+                        Try again
+                    </Button>
+                )}
+            </div>
+        );
+    }
+    const bar = "animate-pulse rounded bg-muted";
+    return (
+        <div className="flex flex-col gap-5" aria-busy="true" aria-label="Loading details">
+            <section className="flex flex-col gap-2">
+                <div className={`${bar} mb-1 h-6 w-24`} />
+                <div className={`${bar} h-4 w-full`} />
+                <div className={`${bar} h-4 w-full`} />
+                <div className={`${bar} h-4 w-2/3`} />
+            </section>
+            <section className="flex flex-col gap-2">
+                <div className={`${bar} mb-1 h-6 w-40`} />
+                <div className="flex flex-wrap gap-2">
+                    {[20, 28, 24, 16].map((w) => (
+                        <div key={w} className={`${bar} h-6`} style={{ width: `${w * 4}px` }} />
+                    ))}
+                </div>
+            </section>
+        </div>
+    );
+}
+
 export function SchoolDetailBody({ school }: { school: any }) {
     const { overview, tuition, scholarship, fieldOptions, phone, email, address, city, mainCity, mainCoordinates, campus: viewedCampus } = school?.properties || {};
     const fields = stringToArray(fieldOptions);
@@ -260,12 +295,20 @@ function ShareButton({ school }: { school: any }) {
     );
 }
 
-export function SchoolDetailActions({ school }: { school: any }) {
+// `pending`: the details (and so the website) are still loading, so hold the website button's place
+export function SchoolDetailActions({ school, pending = false }: { school: any; pending?: boolean }) {
     const { website } = school?.properties || {};
     const coords = school?.geometry?.type === "Point" ? school.geometry.coordinates : null;
     return (
         <div className="flex gap-2">
-            {website && (
+            {pending && (
+                <Button type="button" disabled className="min-w-0 flex-1">
+                    <span className="max-[399px]:hidden">Visit website</span>
+                    <span className="min-[400px]:hidden">Website</span>
+                    <ExternalLink />
+                </Button>
+            )}
+            {!pending && website && (
                 <Button asChild className="min-w-0 flex-1">
                     <a href={website} target="_blank" rel="noopener noreferrer">
                         {/* Shorter label so four buttons fit on a 280px Galaxy Fold */}

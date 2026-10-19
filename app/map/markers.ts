@@ -1,5 +1,5 @@
 import mapboxgl, { type Map as MapboxMap } from "mapbox-gl";
-import useDataStore from "../zustand/useDataStore";
+import useMapDataStore from "../zustand/useMapDataStore";
 import usePointStore from "../zustand/usePointStore";
 import styles from "./markers.module.scss";
 import { schoolId } from "../utils/schoolId";
@@ -95,7 +95,7 @@ export function syncSchoolMarkers(map: MapboxMap) {
     if (!map.getSource("universities") || !map.isSourceLoaded("universities")) return;
 
     const markers = getMarkers(map);
-    const { data } = useDataStore.getState();
+    const { data } = useMapDataStore.getState();
     const features = map.querySourceFeatures("universities", {
         filter: ["!", ["has", "point_count"]],
     });

@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import useStore from '../../zustand/usePointStore';
 import RankTag from '../RankTag';
-import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from './SchoolDetailContent';
+import { SchoolDetailActions, SchoolDetailBody, SchoolDetailBodyPending, SchoolDetailHeader } from './SchoolDetailContent';
+import { useSchoolDetails } from './useSchoolDetails';
 
 const SchoolDetailDialog = () => {
     const { isOpen, setIsOpen, selectedPoint, setSelectedPoint } = useStore();
@@ -20,6 +21,9 @@ const SchoolDetailDialog = () => {
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
+
+    // The map selects slim GeoJSON; the rest of the school loads here
+    const details = useSchoolDetails(selectedPoint);
 
     if (isMobile || !selectedPoint) return null;
 
@@ -46,10 +50,14 @@ const SchoolDetailDialog = () => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="min-h-0 flex-1 overflow-y-auto p-5">
-                    <SchoolDetailBody key={selectedPoint.properties?.id} school={selectedPoint} />
+                    {details.school ? (
+                        <SchoolDetailBody key={selectedPoint.properties?.id} school={details.school} />
+                    ) : (
+                        <SchoolDetailBodyPending error={details.error} onRetry={details.retry} />
+                    )}
                 </div>
                 <div className="border-t bg-muted/30 p-4">
-                    <SchoolDetailActions school={selectedPoint} />
+                    <SchoolDetailActions school={details.school ?? selectedPoint} pending={details.loading} />
                 </div>
             </DialogContent>
         </Dialog>

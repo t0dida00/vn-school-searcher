@@ -19,8 +19,6 @@ interface State {
   // Skips the request when the cache is fresh for this country, unless `force` (e.g. Retry)
   fetchData: (country: CountryCode, options?: { force?: boolean }) => Promise<void>;
   setData: (data: any[], country: CountryCode) => void;
-  filteredData: any[] | null; // Optional, if you want to store filtered data
-  setFilteredData: (data: any[] | null) => void; // Optional, if you want to set filtered dat
   setError: (error: string | null) => void;
 }
 
@@ -61,8 +59,6 @@ const useDataStore = create<State>()(
         inFlight = { country, promise };
         return promise;
       },
-      filteredData: null,
-      setFilteredData: (data: any[] | null) => set({ filteredData: data }),
       setError: (error: string | null) => set({ error }),
     }),
     {

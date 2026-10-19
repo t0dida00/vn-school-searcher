@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import type mapboxgl from "mapbox-gl";
 import { ChevronDown, Loader2, MapPin, Search, SearchX, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import useDataStore from "../zustand/useDataStore";
+import useMapDataStore from "../zustand/useMapDataStore";
 import usePointStore from "../zustand/usePointStore";
 import { EMPTY_FILTERS, matchSchool } from "../utils/matchSchool";
 import { highlightSchool, schoolId, selectSchool } from "../map/markers";
@@ -30,7 +30,7 @@ function ResultLogo({ src, code }: { src?: string; code?: string }) {
 }
 
 export default function MapSearch({ map }: { map: mapboxgl.Map | null }) {
-    const { data, loading, error, setFilteredData } = useDataStore();
+    const { data, loading, error, setFilteredData } = useMapDataStore();
     const { points, selectedPoint } = usePointStore();
     const [query, setQuery] = useState("");
     const [type, setType] = useState("all");

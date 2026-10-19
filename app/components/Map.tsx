@@ -13,7 +13,7 @@ import { addCountryLayers, addUniversityLayers } from "../map/layerConfig";
 import { COUNTRY_MAPS } from "../map/countryMaps";
 import { addMapEventListeners, updateVisiblePoints } from "../map/events";
 import { schoolId, selectSchool } from "../map/markers";
-import useDataStore from "../zustand/useDataStore";
+import useMapDataStore from "../zustand/useMapDataStore";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
 import MapSearch from "./MapSearch";
@@ -42,7 +42,7 @@ export default function Map() {
         }, 500);
         return () => clearTimeout(t);
     }, [ready]);
-    const { data, filteredData } = useDataStore();
+    const { data, filteredData } = useMapDataStore();
     useEffect(() => {
         if (!map && mapContainerRef.current) {
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -69,20 +69,31 @@ export default function Map() {
                 if (removed) return;
                 addCountryLayers(newMap, countryOutline);
                 // Read from the store, not the closure: data may have arrived after this effect ran
-                const { data: latest, filteredData: latestFiltered } = useDataStore.getState();
+                const { data: latest, filteredData: latestFiltered } = useMapDataStore.getState();
                 addUniversityLayers(newMap, {
                     type: "FeatureCollection",
                     // Extra campuses become pins of their own
-                    features: toMapFeatures(latestFiltered ?? (Array.isArray(latest) ? latest : [])),
+                    features: toMapFeatures(latestFiltered ?? latest),
                 } as GeoJSON.FeatureCollection, countryMap.flag);
                 addMapEventListeners(newMap);
                 // Deep link from /school/[id] ("View on map") or a campus in the details (&campus=<slug>)
                 const params = new URLSearchParams(window.location.search);
                 const linked = params.get("school");
-                const school = linked && Array.isArray(latest) && latest.find((d) => schoolId(d) === linked);
-                const campus = school && campusesOf(school).find((c) => campusSlug(c.name) === params.get("campus"));
-                if (campus) selectSchool(newMap, campusView(school, campus), campus.coordinates);
-                else if (school) selectSchool(newMap, school);
+                const openLinked = (schools: any[]) => {
+                    const school = schools.find((d) => schoolId(d) === linked);
+                    const campus = school && campusesOf(school).find((c) => campusSlug(c.name) === params.get("campus"));
+                    if (campus) selectSchool(newMap, campusView(school, campus), campus.coordinates);
+                    else if (school) selectSchool(newMap, school);
+                };
+                if (linked && latest.length) openLinked(latest);
+                else if (linked) {
+                    // The bundled school GeoJSON can arrive after the map's style
+                    const unsubscribe = useMapDataStore.subscribe(({ data: arrived }) => {
+                        if (!arrived.length || removed) return;
+                        unsubscribe();
+                        openLinked(arrived);
+                    });
+                }
                 // First idle after the custom layers exist = the custom map is fully rendered
                 newMap.once("idle", () => setMapReady(true));
             });

@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/drawer";
 import useStore from '../../zustand/usePointStore';
 import RankTag from '../RankTag';
-import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from './SchoolDetailContent';
+import { SchoolDetailActions, SchoolDetailBody, SchoolDetailBodyPending, SchoolDetailHeader } from './SchoolDetailContent';
+import { useSchoolDetails } from './useSchoolDetails';
 
 const SchoolDrawer: React.FC = () => {
     const { selectedPoint, setSelectedPoint, isOpen } = useStore();
@@ -44,6 +45,9 @@ const SchoolDrawer: React.FC = () => {
         }, 200);
     };
 
+    // The map selects slim GeoJSON; the rest of the school loads here
+    const details = useSchoolDetails(selectedPoint);
+
     if (!isMobile || !selectedPoint) return null;
 
     return (
@@ -61,10 +65,14 @@ const SchoolDrawer: React.FC = () => {
                     </DrawerDescription>
                 </DrawerHeader>
                 <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
-                    <SchoolDetailBody key={selectedPoint.properties?.id} school={selectedPoint} />
+                    {details.school ? (
+                        <SchoolDetailBody key={selectedPoint.properties?.id} school={details.school} />
+                    ) : (
+                        <SchoolDetailBodyPending error={details.error} onRetry={details.retry} />
+                    )}
                 </div>
                 <DrawerFooter className="mt-0 border-t pb-[max(1rem,env(safe-area-inset-bottom))]">
-                    <SchoolDetailActions school={selectedPoint} />
+                    <SchoolDetailActions school={details.school ?? selectedPoint} pending={details.loading} />
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>

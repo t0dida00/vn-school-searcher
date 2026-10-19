@@ -1,29 +1,18 @@
 "use client";
 import dynamic from "next/dynamic";
-import useDataStore from "../zustand/useDataStore";
 import { useEffect } from "react";
+import useMapDataStore from "../zustand/useMapDataStore";
 import MapLoading from "../components/MapLoading";
 import type { CountryCode } from "../lib/countries";
 const Map = dynamic(() => import("../components/Map"), { ssr: false, loading: () => <MapLoading /> });
 
-interface MapClientWrapperProps {
-    data: any[] | null;
-    error: string | null;
-    country: CountryCode;
-}
-
-export default function MapClientWrapper({ data, error, country }: MapClientWrapperProps) {
-    const setData = useDataStore((state) => state.setData);
-    const setError = useDataStore((state) => state.setError);
+// Loads the country's slim school GeoJSON (bundled, no API call) while mapbox-gl downloads
+export default function MapClientWrapper({ country }: { country: CountryCode }) {
+    const load = useMapDataStore((state) => state.load);
 
     useEffect(() => {
-        if (data) {
-            setData(data, country);
-        }
-    }, [data, country, setData]);
-    useEffect(() => {
-        setError(error);
-    }, [error, setError]);
+        load(country);
+    }, [country, load]);
 
     return <Map />;
 }

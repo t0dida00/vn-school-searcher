@@ -1,6 +1,6 @@
 import { Map, MapMouseEvent } from "mapbox-gl";
 import useStore from "../zustand/usePointStore";
-import useDataStore from "../zustand/useDataStore";
+import useMapDataStore from "../zustand/useMapDataStore";
 import { applyMarkerState, syncSchoolMarkers } from "./markers";
 import { parentIdOf } from "../utils/campuses";
 import { schoolId } from "../utils/schoolId";
@@ -13,7 +13,7 @@ export function updateVisiblePoints(map: Map) {
     }
     const bounds = map.getBounds();
     const allFeatures = (source as any)._data.features as GeoJSON.Feature[];
-    const { data } = useDataStore.getState();
+    const { data } = useMapDataStore.getState();
     // One entry per school, even with several of its campuses in view; campus pins map back to the school
     const seen = new Set<string>();
     const visiblePoints: GeoJSON.Feature[] = [];
