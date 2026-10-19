@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-    { href: "/school-list", label: "Schools" },
+    { href: "/school-list", label: "Universities" },
     { href: "/map", label: "Map" },
 ];
 
@@ -27,7 +27,7 @@ export default function Header({ fullWidth = false }: { fullWidth?: boolean }) {
                             aria-current={route === href ? "page" : undefined}
                             className={cn(
                                 "rounded-md px-3 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground",
-                                route === href && "bg-muted text-foreground"
+                                route === href && "bg-black text-white hover:text-white"
                             )}
                         >
                             {label}

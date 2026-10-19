@@ -6,47 +6,186 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+import { CONTACT_EMAIL } from './SubFooter';
 
-const faqData = [
+const ExternalLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="font-medium underline underline-offset-4">
+        {children}
+    </a>
+);
+
+const EmailLink = ({ subject }: { subject: string }) => (
+    <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`} className="font-medium underline underline-offset-4">
+        {CONTACT_EMAIL}
+    </a>
+);
+
+const faqGroups: { title: string; items: { question: string; answer: React.ReactNode }[] }[] = [
     {
-        question: "Is the map data accurate?",
-        answer:
-            "The map data may not be 100% accurate, as it is provided by Mapbox. We recommend using it for general reference only and verifying exact locations if needed.",
+        title: "Using FinUnies",
+        items: [
+            {
+                question: "How can I find a suitable university?",
+                answer: (
+                    <>
+                        Search by school name, city or field of study, then narrow the results with the type, city and
+                        field filters. Open a card to see the overview, tuition, scholarships, fields of study and
+                        contact details, or switch to the map view to explore schools by location.
+                    </>
+                ),
+            },
+            {
+                question: "What is the difference between a university and a UAS?",
+                answer: (
+                    <>
+                        Finnish universities focus on research and academic study and award bachelor&apos;s,
+                        master&apos;s and doctoral degrees. Universities of applied sciences (UAS) focus on practical,
+                        working-life oriented education and award bachelor&apos;s and master&apos;s degrees; a UAS
+                        master&apos;s usually requires some work experience.
+                    </>
+                ),
+            },
+            {
+                question: "How do I apply?",
+                answer: (
+                    <>
+                        FinUnies doesn&apos;t handle applications. Most degree programmes in Finland are applied for
+                        through the national service <ExternalLink href="https://opintopolku.fi/konfo/en/">Studyinfo.fi</ExternalLink>,
+                        but some programmes have their own process, so always follow the instructions on the
+                        school&apos;s official website.
+                    </>
+                ),
+            },
+        ],
     },
     {
-        question: "Is the information on the website accurate?",
-        answer:
-            "We strive to update information from the official sources of the universities. However, to ensure absolute accuracy, you should verify the information on the official websites of the universities you're interested in."
+        title: "About the data",
+        items: [
+            {
+                question: "Is the map accurate?",
+                answer: (
+                    <>
+                        Not 100%. The base map comes from Mapbox and OpenStreetMap, and the outline of Finland is a
+                        simplified shape based on geoBoundaries and OpenStreetMap data. Borders, coastlines and place
+                        names may be inaccurate or out of date and don&apos;t represent any official or political
+                        position. Each school&apos;s pin shows an approximate location, usually the main campus, so
+                        check the exact address before you travel.
+                    </>
+                ),
+            },
+            {
+                question: "Is the school information accurate?",
+                answer: (
+                    <>
+                        We collect the information from the schools&apos; official websites and public sources, but
+                        details such as programmes, tuition fees, scholarships and contact information change often,
+                        and our copy may be incomplete or out of date. Always confirm everything on the school&apos;s
+                        official website before making a decision.
+                    </>
+                ),
+            },
+            {
+                question: "Where do the rankings come from?",
+                answer: (
+                    <>
+                        The &quot;#&quot; next to a school&apos;s name is its position in the{" "}
+                        <ExternalLink href="https://www.unirank.org/fi/ranking/">uniRank 2026 Finland ranking</ExternalLink>,
+                        which ranks universities and universities of applied sciences together. uniRank is based on
+                        web metrics, not on teaching or research quality, so treat it as one rough signal among many.
+                        Schools that uniRank doesn&apos;t list have no rank.
+                    </>
+                ),
+            },
+            {
+                question: "Are the tuition fees and scholarships up to date?",
+                answer: (
+                    <>
+                        They are indicative only. Fees usually apply to students from outside the EU/EEA, vary by
+                        programme and change from year to year, and scholarship rules differ between schools. Check
+                        the current amounts and eligibility on the school&apos;s official website.
+                    </>
+                ),
+            },
+        ],
     },
     {
-        question: "How can I find a suitable university?",
-        answer:
-            "You can use the search filters on the homepage to search by university name, field of study, location, or other criteria. We also provide detailed information about each university to help you compare and make the right decision."
+        title: "Disclaimer",
+        items: [
+            {
+                question: "Is FinUnies an official website?",
+                answer: (
+                    <>
+                        No. FinUnies is an independent project and isn&apos;t affiliated with, endorsed by or
+                        connected to any Finnish university, university of applied sciences or government authority.
+                        School names and logos belong to their respective owners and are shown only to identify the
+                        schools.
+                    </>
+                ),
+            },
+            {
+                question: "Who is responsible for decisions made using this information?",
+                answer: (
+                    <>
+                        All content on FinUnies is provided free of charge, &quot;as is&quot; and for general
+                        information only. It isn&apos;t official admissions, legal or financial advice. We make no
+                        guarantee that the information is complete, accurate or current, and we accept no
+                        responsibility for any loss, cost or missed opportunity resulting from its use. You are
+                        responsible for verifying information with the schools and official sources before acting on
+                        it.
+                    </>
+                ),
+            },
+        ],
     },
     {
-        question: "Can I contribute information to the website?",
-        answer:
-            "We always welcome contributions from the community. If you have updated information or notice any inaccuracies, please contact us via email or social media."
-    }
+        title: "Feedback",
+        items: [
+            {
+                question: "I found a mistake. How can I report it?",
+                answer: (
+                    <>
+                        Thank you! Email <EmailLink subject="FinUnies: data correction" /> with the school name, what is
+                        wrong and, if possible, a link to the official source, and we&apos;ll update it.
+                    </>
+                ),
+            },
+            {
+                question: "Can I contribute information to the website?",
+                answer: (
+                    <>
+                        Yes, contributions are welcome. If you know about a school that is missing, newer information
+                        or ideas for the site, write to <EmailLink subject="FinUnies: contribution" />.
+                    </>
+                ),
+            },
+        ],
+    },
 ];
+
 const QnA: React.FC = () => {
     return (
-        <div className='flex flex-col items-center justify-center gap-4 mb-10'>
-            <div className='text-lg font-semibold'>
-                Q & A
-            </div>
-            <div className='w-full'>
-                <Accordion type="single" collapsible>
-                    {faqData.map((item, index) => (
-                        <AccordionItem key={index} value={`item-${index}`}>
-                            <AccordionTrigger className='cursor-pointer'>{item.question}</AccordionTrigger>
-                            <AccordionContent>{item.answer}</AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
-            </div>
-
-        </div>
+        <section className='mb-10 flex flex-col gap-6' aria-labelledby="qna-title">
+            <h2 id="qna-title" className='text-center text-lg font-semibold'>
+                Questions &amp; answers
+            </h2>
+            {faqGroups.map((group) => (
+                <div key={group.title}>
+                    <h3 className='mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground'>
+                        {group.title}
+                    </h3>
+                    <Accordion type="single" collapsible>
+                        {group.items.map((item) => (
+                            <AccordionItem key={item.question} value={item.question}>
+                                <AccordionTrigger className='cursor-pointer text-base'>{item.question}</AccordionTrigger>
+                                <AccordionContent className='text-sm leading-relaxed text-muted-foreground'>
+                                    {item.answer}
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </div>
+            ))}
+        </section>
     );
 };
 

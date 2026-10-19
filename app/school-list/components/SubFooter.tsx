@@ -1,7 +1,7 @@
 import { Mail, MessageSquare } from 'lucide-react';
 import React from 'react';
 
-const CONTACT_EMAIL = "khoadinh.work@gmail.com";
+export const CONTACT_EMAIL = "khoadinh.work@gmail.com";
 
 const SubFooter: React.FC = () => {
     return (
