@@ -2,10 +2,12 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ExternalLink, GraduationCap, Mail, MapPin, Navigation, Phone, Wallet } from "lucide-react";
+import { Check, ExternalLink, GraduationCap, Mail, MapPin, Navigation, Phone, Share2, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { stringToArray } from "@/app/utils/stringToArray";
+import { schoolId } from "@/app/utils/schoolId";
+import SaveButton from "../SaveButton";
 
 // Tuition/scholarship text is mostly plain but occasionally markdown
 const Markdown = ({ children }: { children: string }) => (
@@ -160,31 +162,72 @@ export function SchoolDetailBody({ school }: { school: any }) {
     );
 }
 
+function ShareButton({ school }: { school: any }) {
+    const [copied, setCopied] = useState(false);
+    const name = school?.properties?.name ?? "School";
+
+    const share = async () => {
+        const url = `${window.location.origin}/school/${schoolId(school)}`;
+        if (navigator.share) {
+            // Rejects when the user cancels the share sheet; nothing to do then
+            await navigator.share({ title: name, url }).catch(() => {});
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(url);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            window.prompt("Copy this link", url);
+        }
+    };
+
+    return (
+        <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            onClick={share}
+            aria-label={copied ? "Link copied" : `Share ${name}`}
+            title={copied ? "Link copied" : "Share"}
+            className="shrink-0"
+        >
+            {copied ? <Check /> : <Share2 />}
+        </Button>
+    );
+}
+
 export function SchoolDetailActions({ school }: { school: any }) {
     const { website } = school?.properties || {};
     const coords = school?.geometry?.type === "Point" ? school.geometry.coordinates : null;
     return (
         <div className="flex gap-2">
             {website && (
-                <Button asChild className="flex-1">
+                <Button asChild className="min-w-0 flex-1">
                     <a href={website} target="_blank" rel="noopener noreferrer">
-                        Visit website
+                        {/* Shorter label so four buttons fit on a 280px Galaxy Fold */}
+                        <span className="max-[399px]:hidden">Visit website</span>
+                        <span className="min-[400px]:hidden">Website</span>
                         <ExternalLink />
                     </a>
                 </Button>
             )}
             {coords && (
-                <Button asChild variant="outline" className="flex-1">
+                <Button asChild variant="outline" className="min-w-0 flex-1 max-[399px]:flex-none max-[399px]:px-0 max-[399px]:size-9">
                     <a
                         href={`https://www.google.com/maps/dir/?api=1&destination=${coords[1]},${coords[0]}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Directions"
+                        title="Directions"
                     >
                         <Navigation />
-                        Directions
+                        <span className="max-[399px]:hidden">Directions</span>
                     </a>
                 </Button>
             )}
+            <SaveButton school={school} />
+            <ShareButton school={school} />
         </div>
     );
 }

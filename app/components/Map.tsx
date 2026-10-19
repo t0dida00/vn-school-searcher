@@ -10,6 +10,7 @@ import { FINLAND_BOUNDS, INITIAL_VIEWPORT, MAP_STYLE, MAPBOX_ACCESS_TOKEN } from
 import { keepFinlandLocked, lockToFinland } from "../map/viewport";
 import { addFinlandLayers, addUniversityLayers } from "../map/layerConfig";
 import { addMapEventListeners, updateVisiblePoints } from "../map/events";
+import { schoolId, selectSchool } from "../map/markers";
 import useDataStore from "../zustand/useDataStore";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
@@ -44,6 +45,10 @@ export default function Map() {
                     features: latestFiltered ?? (Array.isArray(latest) ? latest : []),
                 } as GeoJSON.FeatureCollection);
                 addMapEventListeners(newMap);
+                // Deep link from /school/[id] ("View on map")
+                const linked = new URLSearchParams(window.location.search).get("school");
+                const school = linked && Array.isArray(latest) && latest.find((d) => schoolId(d) === linked);
+                if (school) selectSchool(newMap, school);
             });
             newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
             setMap(newMap);

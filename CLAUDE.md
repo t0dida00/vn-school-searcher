@@ -35,11 +35,13 @@ There is no test suite.
 
 - `/school-list` (`app/school-list/page.tsx`, client component): the list view. It calls `fetchData()` on the client and filters **client-side** by city, field and type. The options for those filters come from `public/filter-options.json`, and the values are lowercased for comparison. Text search and filters run together through a single `matches()` predicate, with `useDeferredValue` keeping typing responsive. Results scroll in pages of 10 via `react-intersection-observer`, and the page count resets whenever a filter changes. Cards live in `app/school-list/components/SchoolCard.tsx`.
 - `/map` (`app/map/page.tsx`, server component with `revalidate = 60`): fetches `/api/universities` on the server. It passes the result to `app/HOC/MapWrapper.tsx`, which seeds the Zustand store and loads `app/components/Map.tsx` dynamically with `ssr: false`, because mapbox-gl needs `window`. Because the page fetches its own API over HTTP, the fetch fails during `next build` unless a server is reachable at `NEXT_INTERNAL_BASE_URL`. The error is caught, and the page renders with `data = null` until revalidation.
+- `/school/[id]` (`app/school/[id]/page.tsx`, SSG with `revalidate = 3600`): one page per school, keyed by the `properties.id` slug (`schoolId()` in `app/utils/schoolId.ts`). It reads MongoDB directly through `app/lib/schools.ts` (not over HTTP), so it prerenders during `next build`. It reuses the `SchoolDetailContent` pieces and links to `/map?school=<id>`, which `Map.tsx` opens on load. `app/sitemap.ts` lists these pages.
 
 **State (Zustand, `app/zustand/`).**
 
 - `useDataStore` holds `data` (all schools), `filteredData` (`null` means no filter is active, so use `data`), `loading`, `error` and `fetchData`. Only the `/map` view writes `filteredData` (from `MapSearch`, which resets it to `null` on unmount). `/school-list` filters locally and keeps its filters in the URL query (`q`, `city`, `field`, `type`).
 - `usePointStore` holds `points` (all features visible in the current map bounds), `selectedPoint` and `isOpen` (the detail dialog or drawer).
+- `useSavedStore` holds the shortlist (saved school ids), persisted to localStorage with `skipHydration`. Read it via `useSavedIds()`, which rehydrates after mount so server HTML matches. `SaveButton` toggles it. `/school-list` filters to saved schools with `?saved=1`.
 - Imperative map code reads and writes these stores through `useStore.getState()`, not hooks.
 
 **Map layer (`app/map/`).**

@@ -3,7 +3,7 @@ import React, { Suspense, useDeferredValue, useEffect, useMemo, useState } from 
 import { useInView } from "react-intersection-observer";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowUp, Map as MapIcon, RotateCcw, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUp, Heart, Map as MapIcon, RotateCcw, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { FilterCombobox } from "../components/FilterCombobox";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import useDataStore from "../zustand/useDataStore";
 import { EMPTY_FILTERS, matchSchool, type SchoolFilters as Filters } from "../utils/matchSchool";
 import { byRanking } from "../utils/ranking";
+import { schoolId } from "../utils/schoolId";
+import { useSavedIds } from "../zustand/useSavedStore";
 import SchoolCard, { SchoolCardSkeleton } from "./components/SchoolCard";
 import SchoolDetailDialog from "../components/SchoolDetails/SchoolDetailDialog";
 import SchoolDrawer from "../components/SchoolDetails/SchoolDrawer";
@@ -39,11 +41,17 @@ function UniversityList() {
         fields: [],
         systems: [],
     });
+    const [savedOnly, setSavedOnly] = useState(() => searchParams.get("saved") === "1");
+    const savedIds = useSavedIds();
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const [filtersOpen, setFiltersOpen] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     const update = (patch: Partial<Filters>) => setFilters((prev) => ({ ...prev, ...patch }));
+    const clearAll = () => {
+        setFilters(EMPTY_FILTERS);
+        setSavedOnly(false);
+    };
 
     useEffect(() => {
         if (!data.length) fetchData();
@@ -63,10 +71,11 @@ function UniversityList() {
         if (filters.city) params.set("city", filters.city);
         if (filters.field) params.set("field", filters.field);
         if (filters.type !== "all") params.set("type", filters.type);
+        if (savedOnly) params.set("saved", "1");
         const qs = params.toString();
         window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
         setVisibleCount(PAGE_SIZE);
-    }, [filters]);
+    }, [filters, savedOnly]);
 
     useEffect(() => {
         const onScroll = () => setShowScrollTop(window.scrollY > 600);
@@ -76,8 +85,11 @@ function UniversityList() {
 
     const deferredFilters = useDeferredValue(filters);
     const results = useMemo(
-        () => data.filter((item) => matchSchool(item, deferredFilters)).sort(byRanking),
-        [data, deferredFilters]
+        () =>
+            data
+                .filter((item) => (!savedOnly || savedIds.includes(schoolId(item))) && matchSchool(item, deferredFilters))
+                .sort(byRanking),
+        [data, deferredFilters, savedOnly, savedIds]
     );
     const visibleItems = results.slice(0, visibleCount);
 
@@ -93,7 +105,7 @@ function UniversityList() {
         filters.city && { key: "city", label: labelOf(options.cities, filters.city), clear: () => update({ city: "" }) },
         filters.field && { key: "field", label: labelOf(options.fields, filters.field), clear: () => update({ field: "" }) },
     ].filter(Boolean) as { key: string; label: string; clear: () => void }[];
-    const activeFilterCount = activeChips.length + (filters.type !== "all" ? 1 : 0);
+    const activeFilterCount = activeChips.length + (filters.type !== "all" ? 1 : 0) + (savedOnly ? 1 : 0);
     const hasAnyFilter = activeFilterCount > 0 || filters.query.trim() !== "";
     const cityCount = new Set(data.map((d) => d.properties?.city)).size;
 
@@ -171,6 +183,20 @@ function UniversityList() {
                                 </button>
                             ))}
                         </div>
+                        {(savedIds.length > 0 || savedOnly) && (
+                            <button
+                                type="button"
+                                aria-pressed={savedOnly}
+                                onClick={() => setSavedOnly((v) => !v)}
+                                className={cn(
+                                    "inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:h-10",
+                                    savedOnly && "border-foreground bg-foreground text-background hover:text-background"
+                                )}
+                            >
+                                <Heart className={cn("size-4", savedOnly && "fill-current")} />
+                                Saved ({savedIds.length})
+                            </button>
+                        )}
                         <div className="grid flex-1 gap-2 min-[360px]:grid-cols-2">
                             <FilterCombobox
                                 options={options.cities}
@@ -208,7 +234,7 @@ function UniversityList() {
                         {hasAnyFilter && (
                             <button
                                 type="button"
-                                onClick={() => setFilters(EMPTY_FILTERS)}
+                                onClick={clearAll}
                                 className="ml-auto cursor-pointer text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
                             >
                                 Clear all
@@ -242,7 +268,7 @@ function UniversityList() {
                             <SearchX className="size-8 text-muted-foreground" />
                             <p className="font-medium">No schools match your search</p>
                             <p className="text-sm text-muted-foreground">Try a different keyword or remove some filters.</p>
-                            <Button variant="outline" size="sm" onClick={() => setFilters(EMPTY_FILTERS)}>
+                            <Button variant="outline" size="sm" onClick={clearAll}>
                                 Clear all filters
                             </Button>
                         </div>

@@ -2,6 +2,7 @@ import mapboxgl, { type Map as MapboxMap } from "mapbox-gl";
 import useDataStore from "../zustand/useDataStore";
 import usePointStore from "../zustand/usePointStore";
 import styles from "./markers.module.scss";
+import { schoolId } from "../utils/schoolId";
 
 // Mapbox circle layers can't render remote logos, so unclustered schools are drawn
 // as HTML markers that follow the clustered "universities" source.
@@ -16,9 +17,7 @@ function getMarkers(map: MapboxMap) {
     return markers;
 }
 
-export function schoolId(school: any): string {
-    return school?.properties?.id ?? school?._id;
-}
+export { schoolId };
 
 export function selectSchool(map: MapboxMap | null, school: any) {
     const { setSelectedPoint, setIsOpen } = usePointStore.getState();

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { stringToArray } from "../../utils/stringToArray";
 import usePointStore from "../../zustand/usePointStore";
 import RankTag from "../../components/RankTag";
+import SaveButton from "../../components/SaveButton";
 
 const MAX_VISIBLE_FIELDS = 3;
 
@@ -53,9 +54,13 @@ export default function SchoolCard({ school }: { school: any }) {
         <article className="group relative flex h-full flex-col gap-3 rounded-xl border bg-card p-4 shadow-xs transition-shadow hover:shadow-md has-[button:focus-visible]:ring-[3px] has-[button:focus-visible]:ring-ring/50">
             <div className="flex items-start justify-between gap-3">
                 <SchoolLogo src={logo} name={name ?? ""} />
-                <Badge variant={type === "University" ? "default" : "secondary"}>
-                    {type === "University of Applied Sciences" ? "UAS" : type}
-                </Badge>
+                <div className="flex items-center gap-2">
+                    <Badge variant={type === "University" ? "default" : "secondary"}>
+                        {type === "University of Applied Sciences" ? "UAS" : type}
+                    </Badge>
+                    {/* Above the stretched button so it toggles instead of opening the card */}
+                    <SaveButton school={school} className="relative z-[1] -mr-1 -mt-1 size-8 border-transparent shadow-none" />
+                </div>
             </div>
 
             <div className="min-w-0">
