@@ -4,9 +4,13 @@ import finland from "./finland.json";
 
 const FONT = ["DIN Offc Pro Bold", "Arial Unicode MS Bold"];
 const TEXT_SIZE = 13;
-const CLUSTER_CIRCLE_COLOR = "#111827";
 const CLUSTER_CIRCLE_STROKE_COLOR = "#fff";
-// Warm sand tones: light enough that the dark clusters and white logo badges stand out
+// Finnish flag blue; clusters are round flags with the count on top
+const FLAG_BLUE = "#002f6c";
+const FLAG_IMAGE = "finland-flag";
+// Drawn at 2× so it stays sharp on retina; 64px at pixelRatio 2 = a 32px badge = the smallest cluster
+const FLAG_SIZE = 64;
+// Warm sand tones: light enough that the clusters and white logo badges stand out
 const OUTSIDE_COLOR = "#fbf8f4";
 const SILHOUETTE_COLOR = "#e9c9a6";
 const BORDER_COLOR = "#c49a72";
@@ -58,7 +62,28 @@ export function addFinlandLayers(map: Map) {
   });
 }
 
+// A round crop of the Finnish flag (18:11, cross 3 units wide, vertical bar from 5 to 8), shifted so
+// the vertical bar sits a little left of centre like on the real flag
+function flagImage() {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = FLAG_SIZE;
+  const ctx = canvas.getContext("2d")!;
+  const unit = FLAG_SIZE / 11;
+  ctx.beginPath();
+  ctx.arc(FLAG_SIZE / 2, FLAG_SIZE / 2, FLAG_SIZE / 2, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, FLAG_SIZE, FLAG_SIZE);
+  ctx.fillStyle = FLAG_BLUE;
+  const barLeft = FLAG_SIZE * 0.4 - 1.5 * unit;
+  ctx.fillRect(barLeft, 0, 3 * unit, FLAG_SIZE);
+  ctx.fillRect(0, 4 * unit, FLAG_SIZE, 3 * unit);
+  return ctx.getImageData(0, 0, FLAG_SIZE, FLAG_SIZE);
+}
+
 export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollection) {
+  if (!map.hasImage(FLAG_IMAGE)) map.addImage(FLAG_IMAGE, flagImage(), { pixelRatio: 2 });
+
   map.addSource("universities", {
     type: "geojson",
     data: geojsonData,
@@ -68,17 +93,32 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
     clusterRadius: 48,
   });
 
-  // Individual schools are HTML logo markers (see markers.ts); only clusters are drawn as layers
+  // Individual schools are HTML logo markers (see markers.ts); only clusters are drawn as layers.
+  // The circle is the white ring and the click target (events.ts); the flag icon covers its fill.
   map.addLayer({
     id: "clusters",
     type: "circle",
     source: "universities",
     filter: ["has", "point_count"],
     paint: {
-      "circle-color": CLUSTER_CIRCLE_COLOR,
+      "circle-color": "#fff",
       "circle-radius": ["step", ["get", "point_count"], 16, 5, 20, 10, 24],
       "circle-stroke-width": 3,
       "circle-stroke-color": CLUSTER_CIRCLE_STROKE_COLOR,
+    },
+  });
+
+  map.addLayer({
+    id: "cluster-flag",
+    type: "symbol",
+    source: "universities",
+    filter: ["has", "point_count"],
+    layout: {
+      "icon-image": FLAG_IMAGE,
+      // Matches the circle radii above: 16/20/24px against the 16px-radius image
+      "icon-size": ["step", ["get", "point_count"], 1, 5, 1.25, 10, 1.5],
+      "icon-allow-overlap": true,
+      "icon-ignore-placement": true,
     },
   });
 
@@ -95,6 +135,9 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
     },
     paint: {
       "text-color": "#fff",
+      // Blue halo keeps the count readable where it crosses the flag's white fields
+      "text-halo-color": FLAG_BLUE,
+      "text-halo-width": 2,
     },
   });
 }
