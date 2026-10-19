@@ -291,7 +291,7 @@ function UniversityList() {
 
             </div>
 
-            <div className="fixed bottom-6 right-4 z-20 flex flex-col items-end gap-2">
+            <div className="fixed bottom-3 right-3 z-20 sm:bottom-6 sm:right-4 flex flex-col items-end gap-2">
                 {showScrollTop && (
                     <Button
                         size="icon"
