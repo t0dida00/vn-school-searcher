@@ -19,6 +19,7 @@ import SchoolDrawer from "../components/SchoolDetails/SchoolDrawer";
 import SubFooter from "./components/SubFooter";
 import QnA from "./components/QnA";
 import Breaker from "./components/breaker";
+import Hero from "./components/Hero";
 
 // Divisible by 2 and 3 so every page fills whole grid rows
 const PAGE_SIZE = 12;
@@ -110,216 +111,210 @@ function UniversityList() {
     const cityCount = new Set(data.map((d) => d.properties?.city)).size;
 
     return (
-        <main className="relative mx-auto min-h-screen max-w-6xl px-4">
-            <section className="pb-6 pt-4 text-center sm:pt-8">
-                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Find your school in Finland</h1>
-                <p className="mx-auto mt-2 max-w-md text-muted-foreground">
-                    {data.length > 0
-                        ? `Compare ${data.length} universities and universities of applied sciences across ${cityCount} cities.`
-                        : "Easily find information about Finnish universities."}
-                </p>
-            </section>
-
-            {/* Own wrapper so the sticky search bar stops at the end of the results, not over the Q&A */}
-            <div>
-                <div className="sticky top-2 z-20 mb-4 flex flex-col gap-3 rounded-xl border bg-background/95 p-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80">
-                    <div className="flex gap-2">
-                        <div className="relative flex-1">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                            <Input
-                                type="search"
-                                value={filters.query}
-                                onChange={(e) => update({ query: e.target.value })}
-                                placeholder="Search schools, cities, fields"
-                                aria-label="Search schools"
-                                className="h-10 pl-9 pr-9 text-base [&::-webkit-search-cancel-button]:hidden"
-                            />
-                            {filters.query && (
-                                <button
-                                    type="button"
-                                    onClick={() => update({ query: "" })}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-muted-foreground hover:text-foreground"
-                                    aria-label="Clear search"
-                                >
-                                    <X className="size-4" />
-                                </button>
-                            )}
+        <>
+            <Hero schools={data} cityCount={cityCount} />
+            <main className="relative mx-auto min-h-screen max-w-6xl px-4 pt-6">
+                {/* Own wrapper so the sticky search bar stops at the end of the results, not over the Q&A */}
+                <div>
+                    <div className="sticky top-2 z-20 mb-4 flex flex-col gap-3 rounded-xl border bg-background/95 p-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80">
+                        <div className="flex gap-2">
+                            <div className="relative flex-1">
+                                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    type="search"
+                                    value={filters.query}
+                                    onChange={(e) => update({ query: e.target.value })}
+                                    placeholder="Search schools, cities, fields"
+                                    aria-label="Search schools"
+                                    className="h-10 pl-9 pr-9 text-base [&::-webkit-search-cancel-button]:hidden"
+                                />
+                                {filters.query && (
+                                    <button
+                                        type="button"
+                                        onClick={() => update({ query: "" })}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-muted-foreground hover:text-foreground"
+                                        aria-label="Clear search"
+                                    >
+                                        <X className="size-4" />
+                                    </button>
+                                )}
+                            </div>
+                            <Button
+                                variant="outline"
+                                className="relative h-10 max-[359px]:px-3 sm:hidden"
+                                onClick={() => setFiltersOpen((o) => !o)}
+                                aria-expanded={filtersOpen}
+                                aria-controls="school-filters"
+                            >
+                                <SlidersHorizontal />
+                                <span className="max-[359px]:sr-only">Filters</span>
+                                {activeFilterCount > 0 && (
+                                    <span className="flex size-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                                        {activeFilterCount}
+                                    </span>
+                                )}
+                            </Button>
                         </div>
-                        <Button
-                            variant="outline"
-                            className="relative h-10 max-[359px]:px-3 sm:hidden"
-                            onClick={() => setFiltersOpen((o) => !o)}
-                            aria-expanded={filtersOpen}
-                            aria-controls="school-filters"
-                        >
-                            <SlidersHorizontal />
-                            <span className="max-[359px]:sr-only">Filters</span>
-                            {activeFilterCount > 0 && (
-                                <span className="flex size-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
-                                    {activeFilterCount}
-                                </span>
-                            )}
-                        </Button>
-                    </div>
 
-                    <div
-                        id="school-filters"
-                        className={cn("flex-col gap-2 sm:flex sm:flex-row sm:items-center", filtersOpen ? "flex" : "hidden")}
-                    >
-                        <div role="radiogroup" aria-label="School type" className="flex rounded-lg bg-muted p-1 text-sm">
-                            {options.systems.map((opt) => (
+                        <div
+                            id="school-filters"
+                            className={cn("flex-col gap-2 sm:flex sm:flex-row sm:items-center", filtersOpen ? "flex" : "hidden")}
+                        >
+                            <div role="radiogroup" aria-label="School type" className="flex rounded-lg bg-muted p-1 text-sm">
+                                {options.systems.map((opt) => (
+                                    <button
+                                        key={opt.value}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={filters.type === opt.value}
+                                        onClick={() => update({ type: opt.value })}
+                                        className={cn(
+                                            "flex-1 cursor-pointer whitespace-nowrap rounded-md px-3 py-1.5 font-medium text-muted-foreground transition-colors",
+                                            filters.type === opt.value && "bg-background text-foreground shadow-xs"
+                                        )}
+                                    >
+                                        {opt.value === "University of Applied Sciences" ? "UAS" : opt.label}
+                                    </button>
+                                ))}
+                            </div>
+                            {(savedIds.length > 0 || savedOnly) && (
                                 <button
-                                    key={opt.value}
                                     type="button"
-                                    role="radio"
-                                    aria-checked={filters.type === opt.value}
-                                    onClick={() => update({ type: opt.value })}
+                                    aria-pressed={savedOnly}
+                                    onClick={() => setSavedOnly((v) => !v)}
                                     className={cn(
-                                        "flex-1 cursor-pointer whitespace-nowrap rounded-md px-3 py-1.5 font-medium text-muted-foreground transition-colors",
-                                        filters.type === opt.value && "bg-background text-foreground shadow-xs"
+                                        "inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:h-10",
+                                        savedOnly && "border-foreground bg-foreground text-background hover:text-background"
                                     )}
                                 >
-                                    {opt.value === "University of Applied Sciences" ? "UAS" : opt.label}
+                                    <Heart className={cn("size-4", savedOnly && "fill-current")} />
+                                    Saved ({savedIds.length})
+                                </button>
+                            )}
+                            <div className="grid flex-1 gap-2 min-[360px]:grid-cols-2">
+                                <FilterCombobox
+                                    options={options.cities}
+                                    placeholder="City"
+                                    value={filters.city}
+                                    onChange={(city) => update({ city })}
+                                    className="min-w-0"
+                                />
+                                <FilterCombobox
+                                    options={options.fields}
+                                    placeholder="Field of study"
+                                    value={filters.field}
+                                    onChange={(field) => update({ field })}
+                                    className="min-w-0"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex min-h-6 flex-wrap items-center gap-2 text-sm">
+                            <p className="text-muted-foreground" aria-live="polite">
+                                {loading ? "Loading…" : `${results.length} ${results.length === 1 ? "school" : "schools"}`}
+                            </p>
+                            {activeChips.map((chip) => (
+                                <button
+                                    key={chip.key}
+                                    type="button"
+                                    onClick={chip.clear}
+                                    className="inline-flex cursor-pointer items-center gap-1 rounded-full border bg-secondary px-2.5 py-0.5 text-xs font-medium hover:bg-secondary/70"
+                                    aria-label={`Remove filter ${chip.label}`}
+                                >
+                                    {chip.label}
+                                    <X className="size-3" />
                                 </button>
                             ))}
-                        </div>
-                        {(savedIds.length > 0 || savedOnly) && (
-                            <button
-                                type="button"
-                                aria-pressed={savedOnly}
-                                onClick={() => setSavedOnly((v) => !v)}
-                                className={cn(
-                                    "inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:h-10",
-                                    savedOnly && "border-foreground bg-foreground text-background hover:text-background"
-                                )}
-                            >
-                                <Heart className={cn("size-4", savedOnly && "fill-current")} />
-                                Saved ({savedIds.length})
-                            </button>
-                        )}
-                        <div className="grid flex-1 gap-2 min-[360px]:grid-cols-2">
-                            <FilterCombobox
-                                options={options.cities}
-                                placeholder="City"
-                                value={filters.city}
-                                onChange={(city) => update({ city })}
-                                className="min-w-0"
-                            />
-                            <FilterCombobox
-                                options={options.fields}
-                                placeholder="Field of study"
-                                value={filters.field}
-                                onChange={(field) => update({ field })}
-                                className="min-w-0"
-                            />
+                            {hasAnyFilter && (
+                                <button
+                                    type="button"
+                                    onClick={clearAll}
+                                    className="ml-auto cursor-pointer text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                                >
+                                    Clear all
+                                </button>
+                            )}
                         </div>
                     </div>
 
-                    <div className="flex min-h-6 flex-wrap items-center gap-2 text-sm">
-                        <p className="text-muted-foreground" aria-live="polite">
-                            {loading ? "Loading…" : `${results.length} ${results.length === 1 ? "school" : "schools"}`}
-                        </p>
-                        {activeChips.map((chip) => (
-                            <button
-                                key={chip.key}
-                                type="button"
-                                onClick={chip.clear}
-                                className="inline-flex cursor-pointer items-center gap-1 rounded-full border bg-secondary px-2.5 py-0.5 text-xs font-medium hover:bg-secondary/70"
-                                aria-label={`Remove filter ${chip.label}`}
-                            >
-                                {chip.label}
-                                <X className="size-3" />
-                            </button>
-                        ))}
-                        {hasAnyFilter && (
-                            <button
-                                type="button"
-                                onClick={clearAll}
-                                className="ml-auto cursor-pointer text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                            >
-                                Clear all
-                            </button>
+                    <div className="pb-10">
+                        {loading && (
+                            <div className={GRID}>
+                                {Array.from({ length: 6 }).map((_, i) => (
+                                    <SchoolCardSkeleton key={i} />
+                                ))}
+                            </div>
+                        )}
+
+                        {!loading && error && (
+                            <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-12 text-center">
+                                <p className="font-medium">Couldn&apos;t load schools</p>
+                                <p className="text-sm text-muted-foreground">Please check your connection and try again.</p>
+                                <Button variant="outline" size="sm" onClick={() => fetchData()}>
+                                    <RotateCcw />
+                                    Retry
+                                </Button>
+                            </div>
+                        )}
+
+                        {!loading && !error && data.length > 0 && results.length === 0 && (
+                            <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-12 text-center">
+                                <SearchX className="size-8 text-muted-foreground" />
+                                <p className="font-medium">No schools match your search</p>
+                                <p className="text-sm text-muted-foreground">Try a different keyword or remove some filters.</p>
+                                <Button variant="outline" size="sm" onClick={clearAll}>
+                                    Clear all filters
+                                </Button>
+                            </div>
+                        )}
+
+                        {!loading && (
+                            <div className={GRID}>
+                                {visibleItems.map((school) => (
+                                    <SchoolCard key={school._id} school={school} />
+                                ))}
+                            </div>
+                        )}
+
+                        {!loading && visibleItems.length < results.length && (
+                            <div ref={ref} className={cn(GRID, "mt-4")}>
+                                <SchoolCardSkeleton />
+                            </div>
                         )}
                     </div>
+
                 </div>
 
-                <div className="pb-10">
-                    {loading && (
-                        <div className={GRID}>
-                            {Array.from({ length: 6 }).map((_, i) => (
-                                <SchoolCardSkeleton key={i} />
-                            ))}
-                        </div>
+                <div className="fixed bottom-3 right-3 z-20 sm:bottom-6 sm:right-4 flex flex-col items-end gap-2">
+                    {showScrollTop && (
+                        <Button
+                            size="icon"
+                            variant="outline"
+                            className="rounded-full bg-background shadow-lg"
+                            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                            aria-label="Scroll to top"
+                        >
+                            <ArrowUp />
+                        </Button>
                     )}
-
-                    {!loading && error && (
-                        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-12 text-center">
-                            <p className="font-medium">Couldn&apos;t load schools</p>
-                            <p className="text-sm text-muted-foreground">Please check your connection and try again.</p>
-                            <Button variant="outline" size="sm" onClick={() => fetchData()}>
-                                <RotateCcw />
-                                Retry
-                            </Button>
-                        </div>
-                    )}
-
-                    {!loading && !error && data.length > 0 && results.length === 0 && (
-                        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-12 text-center">
-                            <SearchX className="size-8 text-muted-foreground" />
-                            <p className="font-medium">No schools match your search</p>
-                            <p className="text-sm text-muted-foreground">Try a different keyword or remove some filters.</p>
-                            <Button variant="outline" size="sm" onClick={clearAll}>
-                                Clear all filters
-                            </Button>
-                        </div>
-                    )}
-
-                    {!loading && (
-                        <div className={GRID}>
-                            {visibleItems.map((school) => (
-                                <SchoolCard key={school._id} school={school} />
-                            ))}
-                        </div>
-                    )}
-
-                    {!loading && visibleItems.length < results.length && (
-                        <div ref={ref} className={cn(GRID, "mt-4")}>
-                            <SchoolCardSkeleton />
-                        </div>
-                    )}
-                </div>
-
-            </div>
-
-            <div className="fixed bottom-3 right-3 z-20 sm:bottom-6 sm:right-4 flex flex-col items-end gap-2">
-                {showScrollTop && (
-                    <Button
-                        size="icon"
-                        variant="outline"
-                        className="rounded-full bg-background shadow-lg"
-                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                        aria-label="Scroll to top"
-                    >
-                        <ArrowUp />
+                    <Button asChild className="rounded-full shadow-lg">
+                        <Link href="/map">
+                            <MapIcon />
+                            Map view
+                        </Link>
                     </Button>
-                )}
-                <Button asChild className="rounded-full shadow-lg">
-                    <Link href="/map">
-                        <MapIcon />
-                        Map view
-                    </Link>
-                </Button>
-            </div>
+                </div>
 
-            <div className="mx-auto max-w-3xl">
-                <Breaker className="m-auto mb-10 w-full sm:w-[60%]" />
-                <QnA />
-                <SubFooter />
-            </div>
+                <div className="mx-auto max-w-3xl">
+                    <Breaker className="m-auto mb-10 w-full sm:w-[60%]" />
+                    <QnA />
+                    <SubFooter />
+                </div>
 
-            <SchoolDetailDialog />
-            <SchoolDrawer />
-        </main>
+                <SchoolDetailDialog />
+                <SchoolDrawer />
+            </main>
+        </>
     );
 }
 

@@ -1,0 +1,94 @@
+// Letter-by-letter word swap and the endless logo strip in the /school-list hero
+
+.title {
+    // Sized so the longest word ("UNIVERSITIES.") fits a 280px Galaxy Fold
+    font-size: clamp(2rem, 10.5vw, 6.5rem);
+    line-height: 0.95;
+}
+
+.word {
+    display: inline-flex;
+    white-space: nowrap;
+}
+
+.letter {
+    display: inline-block;
+    animation: letter-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(var(--i) * 32ms);
+}
+
+.leaving .letter {
+    animation: letter-out 0.32s cubic-bezier(0.4, 0, 1, 1) both;
+    animation-delay: calc(var(--i) * 22ms);
+}
+
+@keyframes letter-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.4em) rotate(8deg);
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+}
+
+@keyframes letter-out {
+    to {
+        opacity: 0;
+        transform: translateY(-0.35em);
+        filter: blur(6px);
+    }
+}
+
+.marquee {
+    overflow: hidden;
+    // Soft fade at both edges instead of a hard cut
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--duration, 60s) linear infinite;
+}
+
+// Second row drifts the other way
+.reverse {
+    animation-direction: reverse;
+}
+
+// Two identical groups, each padded by the gap, so -50% lands exactly on the seam
+.group {
+    display: flex;
+    gap: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.marquee:hover .track,
+.marquee:focus-within .track {
+    animation-play-state: paused;
+}
+
+@keyframes marquee {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .letter,
+    .leaving .letter {
+        animation: none;
+    }
+
+    .track {
+        animation: none;
+    }
+
+    .marquee {
+        overflow-x: auto;
+    }
+}
