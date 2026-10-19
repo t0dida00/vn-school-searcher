@@ -12,7 +12,8 @@ import RankTag from '../RankTag';
 import { SchoolDetailActions, SchoolDetailBody, SchoolDetailBodyPending, SchoolDetailHeader } from './SchoolDetailContent';
 import { useSchoolDetails } from './useSchoolDetails';
 
-const SchoolDrawer: React.FC = () => {
+// campusLinks: see SchoolDetailBody (the university list turns them off)
+const SchoolDrawer = ({ campusLinks = true }: { campusLinks?: boolean }) => {
     const { selectedPoint, setSelectedPoint, isOpen } = useStore();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
@@ -66,7 +67,7 @@ const SchoolDrawer: React.FC = () => {
                 </DrawerHeader>
                 <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
                     {details.school ? (
-                        <SchoolDetailBody key={selectedPoint.properties?.id} school={details.school} />
+                        <SchoolDetailBody key={selectedPoint.properties?.id} school={details.school} campusLinks={campusLinks} />
                     ) : (
                         <SchoolDetailBodyPending error={details.error} onRetry={details.retry} />
                     )}

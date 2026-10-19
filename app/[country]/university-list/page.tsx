@@ -325,8 +325,9 @@ function UniversityList() {
                     <SubFooter />
                 </div>
 
-                <SchoolDetailDialog />
-                <SchoolDrawer />
+                {/* Campus rows stay plain here instead of jumping to the map */}
+                <SchoolDetailDialog campusLinks={false} />
+                <SchoolDrawer campusLinks={false} />
             </main>
         </>
     );

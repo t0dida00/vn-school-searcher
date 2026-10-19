@@ -56,10 +56,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 // One row of the Campuses list. On the map it flies there; elsewhere it opens the map on that campus
-// (/map?school=<id>&campus=<slug>); without a map for the country it's plain text.
-function CampusRow({ school, campus, coordinates, children }: { school: any; campus?: string; coordinates?: [number, number]; children: React.ReactNode }) {
+// (/map?school=<id>&campus=<slug>). Plain text without a map for the country, or with `linkable` off.
+function CampusRow({ school, campus, coordinates, linkable, children }: { school: any; campus?: string; coordinates?: [number, number]; linkable: boolean; children: React.ReactNode }) {
     const path = useCountryPath();
-    const { hasMap } = useCountryConfig();
+    const hasMap = useCountryConfig().hasMap && linkable;
     const rowClass = "flex w-full items-start gap-3 px-3 py-2.5 text-left";
     const label = `Show ${campus ?? "the main campus"} on the map`;
     const content = (
@@ -153,7 +153,8 @@ export function SchoolDetailBodyPending({ error, onRetry }: { error?: string | n
     );
 }
 
-export function SchoolDetailBody({ school }: { school: any }) {
+// `campusLinks`: whether Campuses rows show the campus on the map (off on the university list)
+export function SchoolDetailBody({ school, campusLinks = true }: { school: any; campusLinks?: boolean }) {
     const { overview, tuition, scholarship, fieldOptions, phone, email, address, city, mainCity, mainCoordinates, campus: viewedCampus } = school?.properties || {};
     const fields = stringToArray(fieldOptions);
     const campuses = campusesOf(school);
@@ -216,12 +217,12 @@ export function SchoolDetailBody({ school }: { school: any }) {
                 <Section title={`Campuses (${campuses.length + 1})`}>
                     <ul className="flex flex-col divide-y overflow-hidden rounded-xl border text-sm">
                         {/* Opened from a campus pin, geometry is that campus's; mainCoordinates keeps the main one */}
-                        <CampusRow school={school} coordinates={mainCoordinates ?? school?.geometry?.coordinates}>
+                        <CampusRow school={school} coordinates={mainCoordinates ?? school?.geometry?.coordinates} linkable={campusLinks}>
                             <span className="font-medium">{mainCity ?? city}</span>
                             <span className="text-muted-foreground"> · main campus</span>
                         </CampusRow>
                         {campuses.map((campus) => (
-                            <CampusRow key={campus.name} school={school} campus={campus.name} coordinates={campus.coordinates}>
+                            <CampusRow key={campus.name} school={school} campus={campus.name} coordinates={campus.coordinates} linkable={campusLinks}>
                                 <span className="font-medium">{campus.name}</span>
                                 {campus.name === viewedCampus && <span className="text-muted-foreground"> · this campus</span>}
                                 <span className="block text-muted-foreground">{campus.address || campus.city}</span>

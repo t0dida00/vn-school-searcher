@@ -11,7 +11,8 @@ import RankTag from '../RankTag';
 import { SchoolDetailActions, SchoolDetailBody, SchoolDetailBodyPending, SchoolDetailHeader } from './SchoolDetailContent';
 import { useSchoolDetails } from './useSchoolDetails';
 
-const SchoolDetailDialog = () => {
+// campusLinks: see SchoolDetailBody (the university list turns them off)
+const SchoolDetailDialog = ({ campusLinks = true }: { campusLinks?: boolean }) => {
     const { isOpen, setIsOpen, selectedPoint, setSelectedPoint } = useStore();
     const [isMobile, setIsMobile] = useState(false);
 
@@ -51,7 +52,7 @@ const SchoolDetailDialog = () => {
                 </DialogHeader>
                 <div className="min-h-0 flex-1 overflow-y-auto p-5">
                     {details.school ? (
-                        <SchoolDetailBody key={selectedPoint.properties?.id} school={details.school} />
+                        <SchoolDetailBody key={selectedPoint.properties?.id} school={details.school} campusLinks={campusLinks} />
                     ) : (
                         <SchoolDetailBodyPending error={details.error} onRetry={details.retry} />
                     )}
