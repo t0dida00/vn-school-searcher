@@ -42,17 +42,6 @@
     }
 }
 
-// The dashed trail drifts along behind the plane
-.trail {
-    animation: dash 1.2s linear infinite;
-}
-
-@keyframes dash {
-    to {
-        stroke-dashoffset: -24;
-    }
-}
-
 // Pins drop onto the cities one after another, hold, then lift off, on a shared 4.8s cycle
 .pin {
     opacity: 0;
@@ -154,7 +143,6 @@
         transform: none;
     }
 
-    .trail,
     .pulse,
     .dots span {
         animation: none;

@@ -3,8 +3,8 @@ import React, { useEffect, useId, useState } from "react";
 import styles from "./styles/mapLoading.module.scss";
 
 // Shared by MapWrapper's dynamic() placeholder and Map's own "rendering" phase, so the hand-off between
-// the two looks like one continuous loading state: a folded paper map of Finland with an airplane
-// flying across it from left to right while pins drop onto university cities.
+// the two looks like one continuous loading state: a folded paper map of Finland while pins drop onto
+// university cities.
 // The loader stays up for at least MIN_LOADING_MS (see loaderTimeLeft) so the message sequence plays to
 // the end even when the map is ready sooner. The clock is shared by both mounts, so the hand-off doesn't
 // restart it.
@@ -30,10 +30,6 @@ const CITIES = [
     { name: "Joensuu", x: 74.9, y: 152.8 },
     { name: "Oulu", x: 40, y: 108.4 },
 ];
-
-// A gentle wave across the top of the map, starting and ending just outside the viewBox
-const FLIGHT_PATH = "M-30 64 C 50 40, 110 22, 160 30 S 270 58, 350 36";
-const FLIGHT_SECONDS = 3;
 
 const MESSAGES = ["Unfolding the map", "Plotting the campuses", "Charting the route", "Almost there"];
 const MESSAGE_MS = 900;
@@ -71,22 +67,8 @@ function usePrefersReducedMotion() {
     return reduced;
 }
 
-function Airplane() {
-    // Top-down airliner pointing along +x, so animateMotion's rotate="auto" turns it with the path
-    return (
-        <path
-            d="M16 0 C16 -1.6 14 -2.2 12 -2.2 L3 -2.2 L-5 -15 L-9 -15 L-4 -2.2 L-11 -2.2 L-15 -7 L-17.5 -7 L-15 -1.2 L-15 1.2 L-17.5 7 L-15 7 L-11 2.2 L-4 2.2 L-9 15 L-5 15 L3 2.2 L12 2.2 C14 2.2 16 1.6 16 0 Z"
-            fill="#fff"
-            stroke={INK}
-            strokeWidth={1.2}
-            strokeLinejoin="round"
-        />
-    );
-}
-
 export default function MapLoading() {
     const uid = useId().replace(/:/g, "");
-    const flightId = `flight-${uid}`;
     const reducedMotion = usePrefersReducedMotion();
     const [messageIndex, setMessageIndex] = useState(0);
 
@@ -145,39 +127,6 @@ export default function MapLoading() {
                         </g>
                     ))}
                 </g>
-
-                {/* Flight route and the plane following it */}
-                <path id={flightId} d={FLIGHT_PATH} fill="none" />
-                <path
-                    d={FLIGHT_PATH}
-                    fill="none"
-                    stroke={INK}
-                    strokeOpacity={0.35}
-                    strokeWidth={1.5}
-                    strokeDasharray="6 6"
-                    strokeLinecap="round"
-                    className={styles.trail}
-                />
-                {reducedMotion ? (
-                    <g transform="translate(160 30)">
-                        <Airplane />
-                    </g>
-                ) : (
-                    <g opacity={0}>
-                        <Airplane />
-                        <animateMotion dur={`${FLIGHT_SECONDS}s`} repeatCount="indefinite" rotate="auto">
-                            <mpath href={`#${flightId}`} />
-                        </animateMotion>
-                        {/* Fade in and out at the edges so each pass doesn't pop in */}
-                        <animate
-                            attributeName="opacity"
-                            values="0;1;1;0"
-                            keyTimes="0;0.12;0.88;1"
-                            dur={`${FLIGHT_SECONDS}s`}
-                            repeatCount="indefinite"
-                        />
-                    </g>
-                )}
             </svg>
 
             <p className="flex items-baseline text-base font-semibold text-white drop-shadow-sm">
