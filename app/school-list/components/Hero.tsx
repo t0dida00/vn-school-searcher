@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronRight, Map as MapIcon, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
-import usePointStore from "../../zustand/usePointStore";
 import { schoolId } from "../../utils/schoolId";
 import styles from "../../components/styles/hero.module.scss";
 
@@ -46,31 +45,20 @@ function RotatingWord() {
     );
 }
 
-function LogoTile({ school, hidden }: { school: any; hidden?: boolean }) {
+// Decorative only: the strip just shows the schools, it doesn't open them
+function LogoTile({ school }: { school: any }) {
     const { name, logo } = school.properties || {};
     const [failed, setFailed] = useState(false);
-    const open = () => {
-        const { setSelectedPoint, setIsOpen } = usePointStore.getState();
-        setSelectedPoint(school);
-        setIsOpen(true);
-    };
 
     return (
-        <button
-            type="button"
-            onClick={open}
-            tabIndex={hidden ? -1 : undefined}
-            title={name}
-            aria-label={`Open ${name}`}
-            className="flex h-16 w-32 shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-white p-3 shadow-sm transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-20 sm:w-40"
-        >
+        <div title={name} className="flex h-16 w-32 shrink-0 select-none items-center justify-center rounded-2xl bg-white p-3 shadow-sm sm:h-20 sm:w-40">
             {logo && !failed ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={logo} alt="" loading="lazy" className="max-h-full max-w-full object-contain" onError={() => setFailed(true)} />
+                <img src={logo} alt={name ?? ""} loading="lazy" draggable={false} className="max-h-full max-w-full object-contain" onError={() => setFailed(true)} />
             ) : (
                 <span className="line-clamp-2 text-xs font-semibold text-slate-600">{name}</span>
             )}
-        </button>
+        </div>
     );
 }
 
@@ -86,10 +74,10 @@ function MarqueeRow({ schools, reverse }: { schools: any[]; reverse?: boolean })
                         <LogoTile key={schoolId(s)} school={s} />
                     ))}
                 </div>
-                {/* Second copy makes the loop seamless; hidden from assistive tech and tab order */}
+                {/* Second copy makes the loop seamless; hidden from assistive tech */}
                 <div className={styles.group} aria-hidden>
                     {schools.map((s) => (
-                        <LogoTile key={schoolId(s)} school={s} hidden />
+                        <LogoTile key={schoolId(s)} school={s} />
                     ))}
                 </div>
             </div>

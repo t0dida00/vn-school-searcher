@@ -67,11 +67,6 @@
     padding-right: 0.75rem;
 }
 
-.marquee:hover .track,
-.marquee:focus-within .track {
-    animation-play-state: paused;
-}
-
 @keyframes marquee {
     to {
         transform: translateX(-50%);
