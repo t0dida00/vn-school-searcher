@@ -16,7 +16,7 @@ import useDataStore from "../zustand/useDataStore";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
 import MapSearch from "./MapSearch";
-import MapLoading, { loaderTimeLeft, resetLoaderClock } from "./MapLoading";
+import MapLoading, { resetLoaderClock } from "./MapLoading";
 
 // Reveal anyway if the first full render never settles (e.g. a tile keeps failing)
 const READY_FALLBACK_MS = 10000;
@@ -25,14 +25,7 @@ export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
     // Hidden until the Finland mask is drawn: before that Mapbox shows the plain world basemap
-    const [mapReady, setMapReady] = useState(false);
-    // A fast map still waits for the loader's sequence to finish, so it doesn't flash and cut off
-    const [loaderDone, setLoaderDone] = useState(false);
-    useEffect(() => {
-        const t = setTimeout(() => setLoaderDone(true), loaderTimeLeft());
-        return () => clearTimeout(t);
-    }, []);
-    const ready = mapReady && loaderDone;
+    const [ready, setMapReady] = useState(false);
     // Keep the loader mounted while it fades out over the revealed map
     const [loaderGone, setLoaderGone] = useState(false);
     useEffect(() => {

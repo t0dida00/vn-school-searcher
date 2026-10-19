@@ -5,9 +5,7 @@ import styles from "./styles/mapLoading.module.scss";
 // Shared by MapWrapper's dynamic() placeholder and Map's own "rendering" phase, so the hand-off between
 // the two looks like one continuous loading state: a folded paper map of Finland while pins drop onto
 // university cities.
-// The loader stays up for at least MIN_LOADING_MS (see loaderTimeLeft) so the message sequence plays to
-// the end even when the map is ready sooner. The clock is shared by both mounts, so the hand-off doesn't
-// restart it.
+// The message clock is shared by both mounts, so the hand-off doesn't restart the sequence.
 
 // Same colours as the live map (app/map/layerConfig.ts)
 const PAPER = "#fbf8f4";
@@ -33,21 +31,12 @@ const CITIES = [
 
 const MESSAGES = ["Unfolding the map", "Plotting the campuses", "Charting the route", "Almost there"];
 const MESSAGE_MS = 900;
-// Long enough to show every message, the last one for a full step
-export const MIN_LOADING_MS = MESSAGES.length * MESSAGE_MS;
-
 // When the first loader mounted; null until then and again after resetLoaderClock()
 let loaderStartedAt: number | null = null;
 
 function startLoaderClock() {
     if (loaderStartedAt === null) loaderStartedAt = Date.now();
     return loaderStartedAt;
-}
-
-// Milliseconds the loader should still stay up. Zero with reduced motion: there is no animation to finish.
-export function loaderTimeLeft() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return 0;
-    return Math.max(0, MIN_LOADING_MS - (Date.now() - startLoaderClock()));
 }
 
 // Call once the loader is gone, so the next visit to /map starts a fresh sequence
