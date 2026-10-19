@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import GlobeMapLoader from "../components/GlobeMapLoader";
-import type { GlobeCountry } from "../components/GlobeMap";
+import GlobeMapLoader from "../GlobeMapLoader";
+import type { GlobeCountry } from "../GlobeMap";
 
 // Desktop: country cards on the left (60%), the globe on the right (40%). The globe can expand across the
 // whole row, with the cards moving below it in two columns. Phones and tablets stack the globe above the cards.

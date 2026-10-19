@@ -1,9 +1,9 @@
 "use client";
-import { Mail, MessageSquare } from 'lucide-react';
+import { CircleHelp, Mail, MessageSquare } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 import { useCountryConfig } from '../../../utils/useCountry';
-
-export const CONTACT_EMAIL = "khoadinh.work@gmail.com";
+import { CONTACT_EMAIL } from '../../../lib/contact';
 
 const SubFooter: React.FC = () => {
     const { brand, name } = useCountryConfig();
@@ -27,6 +27,13 @@ const SubFooter: React.FC = () => {
             </div>
             <div>
                 <div className='text-lg font-semibold mb-2'>Links</div>
+                <Link
+                    href="/#faq"
+                    className="mb-2 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground hover:underline underline-offset-4"
+                >
+                    <CircleHelp className="size-4 shrink-0" />
+                    Questions &amp; answers
+                </Link>
                 <a
                     href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${brand} feedback`)}`}
                     className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground hover:underline underline-offset-4"

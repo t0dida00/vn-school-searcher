@@ -17,5 +17,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             ];
         })
     );
-    return [{ url: `${SITE_URL}/countries`, priority: 0.9 }, ...perCountry.flat()];
+    return [
+        { url: `${SITE_URL}/`, priority: 0.9 },
+        ...perCountry.flat(),
+        { url: `${SITE_URL}/disclaimer`, priority: 0.2 },
+        { url: `${SITE_URL}/privacy`, priority: 0.2 },
+    ];
 }

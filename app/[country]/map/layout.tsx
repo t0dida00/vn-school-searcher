@@ -10,7 +10,8 @@ export default function MapLayout({ children }: { children: React.ReactNode }) {
             <div className="relative min-h-0 flex-1">
                 {children}
             </div>
-            <Footer />
+            {/* Just the bottom row, so the map keeps the screen */}
+            <Footer compact />
         </div>
     );
 }

@@ -4,9 +4,9 @@ import { COUNTRY_CODES } from "./app/lib/countries";
 const nextConfig: NextConfig = {
  async redirects() {
     // Pages live under /<country>/ (app/[country]/); the old country-less URLs go to Finland.
-    // "/" is temporary so it can later pick a country (or a country chooser) without browsers caching it.
+    // "/" is the landing page (app/page.tsx); /countries was its old address.
     return [
-      { source: '/', destination: '/fi/university-list', permanent: false },
+      { source: '/countries', destination: '/', permanent: true },
       { source: '/school-list', destination: '/fi/university-list', permanent: true },
       { source: '/university-list', destination: '/fi/university-list', permanent: true },
       { source: '/:country/school-list', destination: '/:country/university-list', permanent: true },

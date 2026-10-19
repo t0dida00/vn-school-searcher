@@ -17,7 +17,6 @@ import SchoolCard, { SchoolCardSkeleton } from "./components/SchoolCard";
 import SchoolDetailDialog from "../../components/SchoolDetails/SchoolDetailDialog";
 import SchoolDrawer from "../../components/SchoolDetails/SchoolDrawer";
 import SubFooter from "./components/SubFooter";
-import QnA from "./components/QnA";
 import Breaker from "./components/breaker";
 import Hero from "./components/Hero";
 import { useCountry, useCountryConfig, useCountryPath } from "../../utils/useCountry";
@@ -321,7 +320,7 @@ function UniversityList() {
 
                 <div className="mx-auto max-w-3xl">
                     <Breaker className="m-auto mb-10 w-full sm:w-[60%]" />
-                    <QnA />
+                    {/* Questions and answers live on the landing page (/#faq), linked from SubFooter */}
                     <SubFooter />
                 </div>
 

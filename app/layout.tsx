@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { slab } from "./fonts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,9 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://finunies.vercel.app"),
   title: "FinUnies",
   description: "Search for universities in Finland",
-  icons: {
-    icon: "/images/favicon.png",
-  },
+  // Icons come from app/favicon.ico, app/icon.png and app/apple-icon.png (the Unies cap-and-book)
 };
 export const viewport: Viewport = {
   width: "device-width",
@@ -33,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${slab.variable} antialiased`}
       >
         {children}
       </body>

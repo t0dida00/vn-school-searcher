@@ -164,7 +164,7 @@ export default function GlobeMap({ countries, className }: { countries: GlobeCou
             }
         };
 
-        // The /countries layout can expand the globe across the row; keep the canvas sized to its box
+        // The landing page's layout can expand the globe across the row; keep the canvas sized to its box
         const observer = new ResizeObserver(() => map.resize());
         observer.observe(containerRef.current);
 

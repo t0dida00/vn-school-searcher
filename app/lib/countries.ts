@@ -1,5 +1,5 @@
 // Countries the app has data for. Every page lives under /<code>/..., so adding a country means adding
-// an entry here (plus its MongoDB collection, logo and public/filter-options/<code>.json); unknown codes
+// an entry here (plus its MongoDB collection and public/filter-options/<code>.json); unknown codes
 // 404 via app/[country]/layout.tsx.
 export type Country = {
     code: string;
@@ -8,9 +8,8 @@ export type Country = {
     adjective: string;
     // MongoDB collection in schoolAPI
     collection: string;
-    // Site name shown in the header logo, titles and copy
+    // Country-site name used in titles and copy (the header shows the site-wide Unies mark)
     brand: string;
-    logo: string;
     // Whether app/map/countryMaps.ts has a map for this country (outline, bounds, cluster flag, loader
     // art); without one, /<code>/map 404s and map links are hidden
     hasMap: boolean;
@@ -36,7 +35,6 @@ export const COUNTRIES = {
         adjective: "Finnish",
         collection: "fin_universities",
         brand: "FinUnies",
-        logo: "/logo.png",
         hasMap: true,
         ranking: { source: "uniRank 2026 ranking in Finland", url: "https://www.unirank.org/fi/ranking/" },
         hero: {
@@ -53,7 +51,6 @@ export const COUNTRIES = {
         adjective: "Vietnamese",
         collection: "vn_universities",
         brand: "VieUnies",
-        logo: "/logo-vn.png",
         hasMap: true,
         ranking: { source: "uniRank 2026 ranking in Vietnam", url: "https://www.unirank.org/vn/ranking/" },
         hero: {
