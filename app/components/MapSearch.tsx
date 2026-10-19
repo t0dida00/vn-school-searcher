@@ -7,6 +7,7 @@ import useDataStore from "../zustand/useDataStore";
 import usePointStore from "../zustand/usePointStore";
 import { EMPTY_FILTERS, matchSchool } from "../utils/matchSchool";
 import { highlightSchool, schoolId, selectSchool } from "../map/markers";
+import RankTag from "./RankTag";
 
 const TYPE_OPTIONS = [
     { label: "All", value: "all" },
@@ -248,7 +249,10 @@ export default function MapSearch({ map }: { map: mapboxgl.Map | null }) {
                                         >
                                             <ResultLogo src={logo} code={code} />
                                             <span className="min-w-0 flex-1">
-                                                <span className="block truncate text-sm font-medium">{name}</span>
+                                                <span className="flex items-center gap-1.5">
+                                                    <span className="truncate text-sm font-medium">{name}</span>
+                                                    <RankTag school={school} />
+                                                </span>
                                                 <span className="block truncate text-xs text-muted-foreground">
                                                     {city} · {schoolType === "University of Applied Sciences" ? "UAS" : schoolType}
                                                 </span>

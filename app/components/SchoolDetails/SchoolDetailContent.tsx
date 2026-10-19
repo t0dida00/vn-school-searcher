@@ -2,7 +2,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Award, ExternalLink, GraduationCap, Mail, MapPin, Navigation, Phone, Wallet } from "lucide-react";
+import { ExternalLink, GraduationCap, Mail, MapPin, Navigation, Phone, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { stringToArray } from "@/app/utils/stringToArray";
@@ -51,7 +51,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 /** Title block: rendered inside the dialog/drawer title so it's announced as the heading */
 export function SchoolDetailHeader({ school, title }: { school: any; title: React.ReactNode }) {
-    const { name, code, city, type, logo, ranking } = school?.properties || {};
+    const { name, code, city, type, logo } = school?.properties || {};
     return (
         <div className="flex items-center gap-4 text-left">
             <Logo src={logo} name={name} code={code} />
@@ -68,12 +68,6 @@ export function SchoolDetailHeader({ school, title }: { school: any; title: Reac
                         </Badge>
                     )}
                     {code && <span className="font-mono text-xs">{code}</span>}
-                    {ranking && (
-                        <Badge variant="outline" className="gap-1" title="National university ranking">
-                            <Award />
-                            {/^\d+$/.test(String(ranking)) ? `#${ranking} in Finland` : ranking}
-                        </Badge>
-                    )}
                 </div>
             </div>
         </div>

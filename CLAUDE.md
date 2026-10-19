@@ -29,7 +29,7 @@ There is no test suite.
 
 ## Architecture
 
-**Data source.** There is one API route, `app/api/universities/route.ts`. It returns every document in the MongoDB collection `schoolAPI.fin_universities`, with CORS set to `*`. Each document is already a GeoJSON `Feature` (`{ _id, type, geometry: Point, properties: { name, city, type, fieldOptions, logo, overview, tuition, scholarship, website, ... } }`). The client uses these documents directly as Mapbox features, with no transformation. `properties.fieldOptions` can be an array or a JSON-encoded string, so always read it through `app/utils/stringToArray.ts`.
+**Data source.** There is one API route, `app/api/universities/route.ts`. It returns every document in the MongoDB collection `schoolAPI.fin_universities`, with CORS set to `*`. Each document is already a GeoJSON `Feature` (`{ _id, type, geometry: Point, properties: { name, city, type, fieldOptions, logo, overview, tuition, scholarship, website, ... } }`). The client uses these documents directly as Mapbox features, with no transformation. `properties.fieldOptions` can be an array or a JSON-encoded string, so always read it through `app/utils/stringToArray.ts`. `properties.ranking` is the uniRank 2026 national rank as a string (`""` for TAMK, National Defence University and Police University College, which uniRank doesn't list). Read it through `rankOf()`/`byRanking()` in `app/utils/ranking.ts`, and show it with `app/components/RankTag.tsx`.
 
 **Routing.** `next.config.ts` permanently redirects `/` to `/school-list`. `app/page.tsx` and `app/home/` are placeholders. The two real views are:
 

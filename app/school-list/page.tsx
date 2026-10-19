@@ -6,17 +6,21 @@ import Link from "next/link";
 import { ArrowUp, Map as MapIcon, RotateCcw, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { FilterCombobox } from "../components/FilterCombobox";
 import { Input } from "@/components/ui/input";
-import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import useDataStore from "../zustand/useDataStore";
 import { EMPTY_FILTERS, matchSchool, type SchoolFilters as Filters } from "../utils/matchSchool";
+import { byRanking } from "../utils/ranking";
 import SchoolCard, { SchoolCardSkeleton } from "./components/SchoolCard";
+import SchoolDetailDialog from "../components/SchoolDetails/SchoolDetailDialog";
+import SchoolDrawer from "../components/SchoolDetails/SchoolDrawer";
 import SubFooter from "./components/SubFooter";
 import QnA from "./components/QnA";
 import Breaker from "./components/breaker";
 
-const PAGE_SIZE = 10;
+// Divisible by 2 and 3 so every page fills whole grid rows
+const PAGE_SIZE = 12;
+const GRID = "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3";
 
 type Option = { label: string; value: string };
 
@@ -72,7 +76,7 @@ function UniversityList() {
 
     const deferredFilters = useDeferredValue(filters);
     const results = useMemo(
-        () => data.filter((item) => matchSchool(item, deferredFilters)),
+        () => data.filter((item) => matchSchool(item, deferredFilters)).sort(byRanking),
         [data, deferredFilters]
     );
     const visibleItems = results.slice(0, visibleCount);
@@ -94,7 +98,7 @@ function UniversityList() {
     const cityCount = new Set(data.map((d) => d.properties?.city)).size;
 
     return (
-        <main className="relative mx-auto min-h-screen max-w-3xl px-4">
+        <main className="relative mx-auto min-h-screen max-w-6xl px-4">
             <section className="pb-6 pt-4 text-center sm:pt-8">
                 <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Find your school in Finland</h1>
                 <p className="mx-auto mt-2 max-w-md text-muted-foreground">
@@ -104,7 +108,7 @@ function UniversityList() {
                 </p>
             </section>
 
-            <div className="sticky top-2 z-10 mb-4 flex flex-col gap-3 rounded-xl border bg-background/95 p-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80">
+            <div className="sticky top-2 z-20 mb-4 flex flex-col gap-3 rounded-xl border bg-background/95 p-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80">
                 <div className="flex gap-2">
                     <div className="relative flex-1">
                         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -213,8 +217,8 @@ function UniversityList() {
 
             <div className="pb-10">
                 {loading && (
-                    <div className="flex flex-col gap-3">
-                        {Array.from({ length: 4 }).map((_, i) => (
+                    <div className={GRID}>
+                        {Array.from({ length: 6 }).map((_, i) => (
                             <SchoolCardSkeleton key={i} />
                         ))}
                     </div>
@@ -243,15 +247,15 @@ function UniversityList() {
                 )}
 
                 {!loading && (
-                    <Accordion type="multiple" className="flex flex-col gap-3">
+                    <div className={GRID}>
                         {visibleItems.map((school) => (
                             <SchoolCard key={school._id} school={school} />
                         ))}
-                    </Accordion>
+                    </div>
                 )}
 
                 {!loading && visibleItems.length < results.length && (
-                    <div ref={ref} className="mt-3">
+                    <div ref={ref} className={cn(GRID, "mt-4")}>
                         <SchoolCardSkeleton />
                     </div>
                 )}
@@ -277,9 +281,14 @@ function UniversityList() {
                 </Button>
             </div>
 
-            <Breaker className="m-auto mb-10 w-full sm:w-[60%]" />
-            <QnA />
-            <SubFooter />
+            <div className="mx-auto max-w-3xl">
+                <Breaker className="m-auto mb-10 w-full sm:w-[60%]" />
+                <QnA />
+                <SubFooter />
+            </div>
+
+            <SchoolDetailDialog />
+            <SchoolDrawer />
         </main>
     );
 }

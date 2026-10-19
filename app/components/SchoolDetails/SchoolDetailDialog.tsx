@@ -7,6 +7,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import useStore from '../../zustand/usePointStore';
+import RankTag from '../RankTag';
 import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from './SchoolDetailContent';
 
 const SchoolDetailDialog = () => {
@@ -38,7 +39,7 @@ const SchoolDetailDialog = () => {
                 <DialogHeader className="border-b p-5 pr-12">
                     <SchoolDetailHeader
                         school={selectedPoint}
-                        title={<DialogTitle className="text-xl leading-snug">{selectedPoint.properties?.name}</DialogTitle>}
+                        title={<DialogTitle className="text-xl leading-snug">{selectedPoint.properties?.name}<RankTag school={selectedPoint} className="ml-2" /></DialogTitle>}
                     />
                     <DialogDescription className="sr-only">
                         Details about {selectedPoint.properties?.name}

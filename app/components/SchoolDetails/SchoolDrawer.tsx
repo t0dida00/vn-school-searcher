@@ -8,6 +8,7 @@ import {
     DrawerTitle,
 } from "@/components/ui/drawer";
 import useStore from '../../zustand/usePointStore';
+import RankTag from '../RankTag';
 import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from './SchoolDetailContent';
 
 const SchoolDrawer: React.FC = () => {
@@ -48,7 +49,7 @@ const SchoolDrawer: React.FC = () => {
                 <DrawerHeader className="border-b px-4 pb-4 pt-2">
                     <SchoolDetailHeader
                         school={selectedPoint}
-                        title={<DrawerTitle className="text-lg leading-snug">{selectedPoint.properties?.name}</DrawerTitle>}
+                        title={<DrawerTitle className="text-lg leading-snug">{selectedPoint.properties?.name}<RankTag school={selectedPoint} className="ml-2" /></DrawerTitle>}
                     />
                     <DrawerDescription className="sr-only">
                         Details about {selectedPoint.properties?.name}

@@ -1,14 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { ExternalLink, GraduationCap, MapPin, Phone, Wallet } from "lucide-react";
-import {
-    AccordionItem,
-    AccordionTrigger,
-    AccordionContent,
-} from "@/components/ui/accordion";
+import { ChevronRight, ExternalLink, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { stringToArray } from "../../utils/stringToArray";
+import usePointStore from "../../zustand/usePointStore";
+import RankTag from "../../components/RankTag";
 
 const MAX_VISIBLE_FIELDS = 3;
 
@@ -22,7 +19,8 @@ function SchoolLogo({ src, name }: { src?: string; name: string }) {
         .join("");
 
     return (
-        <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-white p-1 min-[360px]:size-16 min-[360px]:p-1.5 sm:size-20">
+        // Wide box: most school logos are wordmarks that shrink to nothing in a square
+        <div className="flex h-14 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-white p-1.5">
             {src && !failed ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -39,127 +37,102 @@ function SchoolLogo({ src, name }: { src?: string; name: string }) {
     );
 }
 
-function InfoBlock({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
-    return (
-        <div className="rounded-lg bg-muted/60 p-3">
-            <div className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                {icon}
-                {title}
-            </div>
-            <p className="text-sm leading-relaxed">{children}</p>
-        </div>
-    );
-}
-
 export default function SchoolCard({ school }: { school: any }) {
-    const { name, code, city, type, logo, overview, tuition, scholarship, website, phone, fieldOptions } =
-        school.properties || {};
+    const { name, code, city, type, logo, overview, website, fieldOptions } = school.properties || {};
     const fields = stringToArray(fieldOptions);
     const hiddenCount = fields.length - MAX_VISIBLE_FIELDS;
 
+    // Same detail dialog (desktop) / drawer (phone) as the map
+    const open = () => {
+        const { setSelectedPoint, setIsOpen } = usePointStore.getState();
+        setSelectedPoint(school);
+        setIsOpen(true);
+    };
+
     return (
-        <AccordionItem
-            value={school._id}
-            className="rounded-xl border bg-card shadow-xs transition-shadow last:border-b hover:shadow-md data-[state=open]:shadow-md"
-        >
-            <AccordionTrigger className="min-w-0 cursor-pointer items-center gap-3 p-3 hover:no-underline sm:gap-4 sm:p-4 [&>svg]:size-5">
+        <article className="group relative flex h-full flex-col gap-3 rounded-xl border bg-card p-4 shadow-xs transition-shadow hover:shadow-md has-[button:focus-visible]:ring-[3px] has-[button:focus-visible]:ring-ring/50">
+            <div className="flex items-start justify-between gap-3">
                 <SchoolLogo src={logo} name={name ?? ""} />
-                <div className="min-w-0 flex-1">
-                    <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-                        <span className="inline-flex items-center gap-1">
-                            <MapPin className="size-3.5" />
-                            {city}
-                        </span>
-                        {code && <span aria-hidden>·</span>}
-                        {code && <span className="font-mono">{code}</span>}
-                    </div>
-                    <span className="block text-base font-semibold leading-snug [overflow-wrap:anywhere] sm:text-lg">{name}</span>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                        <Badge variant={type === "University" ? "default" : "secondary"}>
-                            {type === "University of Applied Sciences" ? "UAS" : type}
+                <Badge variant={type === "University" ? "default" : "secondary"}>
+                    {type === "University of Applied Sciences" ? "UAS" : type}
+                </Badge>
+            </div>
+
+            <div className="min-w-0">
+                <h2 className="text-base font-semibold leading-snug [overflow-wrap:anywhere]">
+                    {/* Stretched over the whole card so the card itself is the tap target */}
+                    <button
+                        type="button"
+                        onClick={open}
+                        className="text-left outline-none after:absolute after:inset-0 after:rounded-xl after:content-['']"
+                    >
+                        {name}
+                    </button>
+                    <RankTag school={school} className="ml-1.5" />
+                </h2>
+                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                        <MapPin className="size-3.5" />
+                        {city}
+                    </span>
+                    {code && <span aria-hidden>·</span>}
+                    {code && <span className="font-mono">{code}</span>}
+                </div>
+            </div>
+
+            {overview && <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">{overview}</p>}
+
+            {fields.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                    {fields.slice(0, MAX_VISIBLE_FIELDS).map((field) => (
+                        <Badge key={field} variant="outline" className="max-w-full font-normal" title={field}>
+                            <span className="truncate">{field}</span>
                         </Badge>
-                        {fields.slice(0, MAX_VISIBLE_FIELDS).map((field) => (
-                            <Badge key={field} variant="outline" className="max-w-full font-normal" title={field}>
-                                <span className="truncate">{field}</span>
-                            </Badge>
-                        ))}
-                        {hiddenCount > 0 && (
-                            <Badge variant="outline" className="font-normal text-muted-foreground">
-                                +{hiddenCount}
-                            </Badge>
-                        )}
-                    </div>
-                </div>
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 px-3 pb-4 sm:px-4">
-                <div className="border-t pt-4" />
-                {overview && <p className="text-sm leading-relaxed text-foreground/90 sm:text-base">{overview}</p>}
-
-                {(tuition || scholarship) && (
-                    <div className="grid gap-2 sm:grid-cols-2">
-                        {tuition && (
-                            <InfoBlock icon={<Wallet className="size-3.5" />} title="Tuition">
-                                {tuition}
-                            </InfoBlock>
-                        )}
-                        {scholarship && (
-                            <InfoBlock icon={<GraduationCap className="size-3.5" />} title="Scholarship">
-                                {scholarship}
-                            </InfoBlock>
-                        )}
-                    </div>
-                )}
-
-                {hiddenCount > 0 && (
-                    <div>
-                        <div className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                            All fields of study
-                        </div>
-                        <div className="flex flex-wrap gap-1.5">
-                            {fields.map((field) => (
-                                <Badge key={field} variant="outline" className="max-w-full font-normal whitespace-normal">
-                                    {field}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                <div className="flex flex-wrap items-center gap-2">
-                    {website && (
-                        <Button asChild size="sm">
-                            <a href={website} target="_blank" rel="noopener noreferrer">
-                                Visit website
-                                <ExternalLink />
-                            </a>
-                        </Button>
-                    )}
-                    {phone && (
-                        <Button asChild size="sm" variant="outline">
-                            <a href={`tel:${phone.replace(/\s/g, "")}`}>
-                                <Phone />
-                                {phone}
-                            </a>
-                        </Button>
+                    ))}
+                    {hiddenCount > 0 && (
+                        <Badge variant="outline" className="font-normal text-muted-foreground">
+                            +{hiddenCount}
+                        </Badge>
                     )}
                 </div>
-            </AccordionContent>
-        </AccordionItem>
+            )}
+
+            <div className="mt-auto flex items-center justify-between gap-2 border-t pt-3">
+                <span className="inline-flex items-center gap-1 text-sm font-medium">
+                    View details
+                    <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+                {website && (
+                    // Above the stretched button so it stays its own link
+                    <Button asChild size="sm" variant="ghost" className="relative z-[1] -mr-2">
+                        <a href={website} target="_blank" rel="noopener noreferrer">
+                            Website
+                            <ExternalLink />
+                        </a>
+                    </Button>
+                )}
+            </div>
+        </article>
     );
 }
 
 export function SchoolCardSkeleton() {
     return (
-        <div className="flex items-center gap-4 rounded-xl border bg-card p-4" aria-hidden>
-            <div className="size-12 shrink-0 animate-pulse rounded-lg bg-muted min-[360px]:size-16 sm:size-20" />
-            <div className="flex-1 space-y-2">
-                <div className="h-3 w-24 animate-pulse rounded bg-muted" />
-                <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
-                <div className="flex gap-1.5">
-                    <div className="h-5 w-12 animate-pulse rounded bg-muted" />
-                    <div className="h-5 w-20 animate-pulse rounded bg-muted" />
-                    <div className="h-5 w-16 animate-pulse rounded bg-muted" />
-                </div>
+        <div className="flex flex-col gap-3 rounded-xl border bg-card p-4" aria-hidden>
+            <div className="flex justify-between">
+                <div className="h-14 w-24 animate-pulse rounded-lg bg-muted" />
+                <div className="h-5 w-12 animate-pulse rounded bg-muted" />
+            </div>
+            <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
+            <div className="h-3 w-24 animate-pulse rounded bg-muted" />
+            <div className="space-y-2">
+                <div className="h-3 animate-pulse rounded bg-muted" />
+                <div className="h-3 animate-pulse rounded bg-muted" />
+                <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
+            </div>
+            <div className="flex gap-1.5">
+                <div className="h-5 w-20 animate-pulse rounded bg-muted" />
+                <div className="h-5 w-16 animate-pulse rounded bg-muted" />
             </div>
         </div>
     );

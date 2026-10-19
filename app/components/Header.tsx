@@ -15,7 +15,7 @@ export default function Header({ fullWidth = false }: { fullWidth?: boolean }) {
 
     return (
         <header className="w-full border-b">
-            <div className={cn("mx-auto flex items-center justify-between px-4 py-2", fullWidth ? "max-w-none" : "max-w-3xl")}>
+            <div className={cn("mx-auto flex items-center justify-between px-4 py-2", fullWidth ? "max-w-none" : "max-w-6xl")}>
                 <Link href="/school-list" className="flex items-center">
                     <Image src="/logo.png" alt="FinUnies" width={64} height={64} className="size-14 object-contain sm:size-16 [@media(max-height:500px)]:size-10" priority />
                 </Link>
