@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Map as MapIcon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LostStudentArt from "./components/LostStudentArt";
+import { countryPath, DEFAULT_COUNTRY } from "./lib/countries";
 
 export const metadata = { title: "Page not found · FinUnies" };
 
@@ -33,13 +34,13 @@ export default function NotFound() {
                 </p>
                 <div className="mt-7 flex w-full flex-col gap-2 min-[360px]:w-auto min-[360px]:flex-row">
                     <Button asChild size="lg" className="bg-white text-black hover:bg-white/90">
-                        <Link href="/school-list">
+                        <Link href={countryPath(DEFAULT_COUNTRY, "/university-list")}>
                             <Search />
                             Browse schools
                         </Link>
                     </Button>
                     <Button asChild size="lg" variant="outline" className="border-white/30 bg-white/5 text-white hover:bg-white/15 hover:text-white">
-                        <Link href="/map">
+                        <Link href={countryPath(DEFAULT_COUNTRY, "/map")}>
                             <MapIcon />
                             Open the map
                         </Link>

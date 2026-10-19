@@ -1,7 +1,7 @@
-// app/school-list/layout.tsx
+// app/[country]/university-list/layout.tsx
 import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 export default function SchoolListLayout({ children }: { children: React.ReactNode }) {
     return (

@@ -1,7 +1,7 @@
 // app/map/layout.tsx
 import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 export default function MapLayout({ children }: { children: React.ReactNode }) {
     return (

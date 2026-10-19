@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { ChevronRight, ExternalLink, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { stringToArray } from "../../utils/stringToArray";
-import usePointStore from "../../zustand/usePointStore";
-import RankTag from "../../components/RankTag";
-import SaveButton from "../../components/SaveButton";
+import { stringToArray } from "../../../utils/stringToArray";
+import usePointStore from "../../../zustand/usePointStore";
+import RankTag from "../../../components/RankTag";
+import SaveButton from "../../../components/SaveButton";
 
 const MAX_VISIBLE_FIELDS = 3;
 

@@ -4,8 +4,10 @@ import Link from "next/link";
 import { CloudOff, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ErrorScreen from "./components/ErrorScreen";
+import { useCountryPath } from "./utils/useCountry";
 
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+    const path = useCountryPath();
     useEffect(() => {
         console.error(error);
     }, [error]);
@@ -26,7 +28,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
                 Try again
             </Button>
             <Button asChild variant="outline">
-                <Link href="/school-list">Back to schools</Link>
+                <Link href={path("/university-list")}>Back to schools</Link>
             </Button>
         </ErrorScreen>
     );

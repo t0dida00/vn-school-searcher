@@ -17,12 +17,14 @@ import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
 import MapSearch from "./MapSearch";
 import MapLoading, { resetLoaderClock } from "./MapLoading";
+import { useCountryPath } from "../utils/useCountry";
 
 // Reveal anyway if the first full render never settles (e.g. a tile keeps failing)
 const READY_FALLBACK_MS = 10000;
 
 export default function Map() {
     const mapContainerRef = useRef(null);
+    const path = useCountryPath();
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
     // Hidden until the Finland mask is drawn: before that Mapbox shows the plain world basemap
     const [ready, setMapReady] = useState(false);
@@ -107,9 +109,9 @@ export default function Map() {
             {ready && (
                 <>
                     <MapSearch map={map} />
-                    {/* Mirrors the "Map view" button on /school-list; bottom-right sits over empty sea/Russia */}
+                    {/* Mirrors the "Map view" button on /university-list; bottom-right sits over empty sea/Russia */}
                     <Button asChild className="absolute bottom-10 right-3 z-10 rounded-full shadow-lg">
-                        <Link href="/school-list">
+                        <Link href={path("/university-list")}>
                             <List />
                             List view
                         </Link>

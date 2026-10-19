@@ -3,48 +3,53 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Map as MapIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import RankTag from "../../components/RankTag";
-import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from "../../components/SchoolDetails/SchoolDetailContent";
-import { getSchool, getSchools } from "../../lib/schools";
+import RankTag from "../../../components/RankTag";
+import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from "../../../components/SchoolDetails/SchoolDetailContent";
+import { getSchool, getSchools } from "../../../lib/schools";
+import { COUNTRIES, countryPath, type CountryCode } from "../../../lib/countries";
 
-export const revalidate = 3600;
+// School data changes about twice a year; regenerate daily
+export const revalidate = 86400;
 
-type Props = { params: Promise<{ id: string }> };
+// country is validated by app/[country]/layout.tsx
+type Props = { params: Promise<{ country: CountryCode; id: string }> };
 
-export async function generateStaticParams() {
-    const schools = await getSchools();
+// Runs once per country from the parent layout's generateStaticParams
+export async function generateStaticParams({ params }: { params: { country: CountryCode } }) {
+    const schools = await getSchools(params.country);
     return schools.filter((s) => s.properties?.id).map((s) => ({ id: s.properties.id }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const school = await getSchool((await params).id);
+    const { country, id } = await params;
+    const school = await getSchool(country, id);
     if (!school) return { title: "School not found · FinUnies" };
     const { name, city, overview, logo } = school.properties;
-    const description = overview ? overview.slice(0, 160) : `${name} in ${city}, Finland.`;
+    const description = overview ? overview.slice(0, 160) : `${name} in ${city}, ${COUNTRIES[country].name}.`;
     return {
         title: `${name} · FinUnies`,
         description,
-        alternates: { canonical: `/school/${school.properties.id}` },
+        alternates: { canonical: countryPath(country, `/school/${school.properties.id}`) },
         openGraph: { title: name, description, images: logo ? [logo] : undefined },
     };
 }
 
 export default async function SchoolPage({ params }: Props) {
-    const { id } = await params;
-    const school = await getSchool(id);
+    const { country, id } = await params;
+    const school = await getSchool(country, id);
     if (!school) notFound();
 
     return (
         <main className="mx-auto max-w-3xl px-4 pb-12 pt-4 sm:pt-8">
             <div className="mb-4 flex items-center justify-between gap-2">
                 <Button asChild variant="ghost" size="sm" className="-ml-2.5">
-                    <Link href="/school-list">
+                    <Link href={countryPath(country, "/university-list")}>
                         <ArrowLeft />
                         All schools
                     </Link>
                 </Button>
                 <Button asChild variant="outline" size="sm">
-                    <Link href={`/map?school=${encodeURIComponent(id)}`}>
+                    <Link href={countryPath(country, `/map?school=${encodeURIComponent(id)}`)}>
                         <MapIcon />
                         View on map
                     </Link>

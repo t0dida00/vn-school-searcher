@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronRight, Map as MapIcon, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { schoolId } from "../../utils/schoolId";
-import styles from "../../components/styles/hero.module.scss";
+import { schoolId } from "../../../utils/schoolId";
+import styles from "../../../components/styles/hero.module.scss";
+import { useCountryPath } from "../../../utils/useCountry";
 
 // Fields and cities from the data, ending on the catch-all
 const WORDS = ["Universities.", "Engineering.", "Helsinki.", "Business.", "Tampere.", "Design.", "Oulu.", "Medicine.", "Turku.", "Everything."];
@@ -86,6 +87,7 @@ function MarqueeRow({ schools, reverse }: { schools: any[]; reverse?: boolean })
 }
 
 export default function Hero({ schools, cityCount }: { schools: any[]; cityCount: number }) {
+    const path = useCountryPath();
     const tiles = schools.filter((s) => s.properties?.logo);
 
     return (
@@ -114,7 +116,7 @@ export default function Hero({ schools, cityCount }: { schools: any[]; cityCount
                 </p>
 
                 <Link
-                    href="/map"
+                    href={path("/map")}
                     className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/30"
                 >
                     <MapIcon className="size-4" />

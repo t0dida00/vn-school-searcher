@@ -3,6 +3,7 @@
 // and stores a report in schoolAPI.link_checks so broken links can be fixed.
 import { NextResponse, type NextRequest } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
+import { COUNTRIES, COUNTRY_CODES, type CountryCode } from '../../../lib/countries';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -16,6 +17,7 @@ const BLOCKED_STATUSES = new Set([401, 403, 406, 429]);
 type LinkStatus = 'ok' | 'blocked' | 'broken' | 'missing';
 
 type LinkResult = {
+  country: CountryCode;
   id: string;
   name: string;
   field: 'website' | 'logo';
@@ -62,14 +64,19 @@ export async function GET(request: NextRequest) {
   try {
     const client = await clientPromise;
     const db = client.db('schoolAPI');
-    const schools = await db
-      .collection('fin_universities')
-      .find({}, { projection: { 'properties.id': 1, 'properties.name': 1, 'properties.website': 1, 'properties.logo': 1 } })
-      .toArray();
+    const projection = { 'properties.id': 1, 'properties.name': 1, 'properties.website': 1, 'properties.logo': 1 };
+    const schools = (
+      await Promise.all(
+        COUNTRY_CODES.map(async (country) =>
+          (await db.collection(COUNTRIES[country].collection).find({}, { projection }).toArray()).map((s) => ({ country, properties: s.properties })),
+        ),
+      )
+    ).flat();
 
     const results: LinkResult[] = await Promise.all(
-      schools.flatMap(({ properties: p = {} }) =>
+      schools.flatMap(({ country, properties: p = {} }) =>
         (['website', 'logo'] as const).map(async (field) => ({
+          country,
           id: p.id,
           name: p.name,
           field,

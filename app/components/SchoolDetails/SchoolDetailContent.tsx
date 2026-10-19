@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { stringToArray } from "@/app/utils/stringToArray";
 import { schoolId } from "@/app/utils/schoolId";
+import { useCountryPath } from "@/app/utils/useCountry";
 import SaveButton from "../SaveButton";
 
 // Tuition/scholarship text is mostly plain but occasionally markdown
@@ -164,10 +165,11 @@ export function SchoolDetailBody({ school }: { school: any }) {
 
 function ShareButton({ school }: { school: any }) {
     const [copied, setCopied] = useState(false);
+    const path = useCountryPath();
     const name = school?.properties?.name ?? "School";
 
     const share = async () => {
-        const url = `${window.location.origin}/school/${schoolId(school)}`;
+        const url = `${window.location.origin}${path(`/school/${schoolId(school)}`)}`;
         if (navigator.share) {
             // Rejects when the user cancels the share sheet; nothing to do then
             await navigator.share({ title: name, url }).catch(() => {});

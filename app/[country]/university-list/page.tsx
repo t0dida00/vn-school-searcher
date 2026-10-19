@@ -4,22 +4,23 @@ import { useInView } from "react-intersection-observer";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowUp, Heart, Map as MapIcon, RotateCcw, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
-import { FilterCombobox } from "../components/FilterCombobox";
+import { FilterCombobox } from "../../components/FilterCombobox";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import useDataStore from "../zustand/useDataStore";
-import { EMPTY_FILTERS, matchSchool, type SchoolFilters as Filters } from "../utils/matchSchool";
-import { byRanking } from "../utils/ranking";
-import { schoolId } from "../utils/schoolId";
-import { useSavedIds } from "../zustand/useSavedStore";
+import useDataStore from "../../zustand/useDataStore";
+import { EMPTY_FILTERS, matchSchool, type SchoolFilters as Filters } from "../../utils/matchSchool";
+import { byRanking } from "../../utils/ranking";
+import { schoolId } from "../../utils/schoolId";
+import { useSavedIds } from "../../zustand/useSavedStore";
 import SchoolCard, { SchoolCardSkeleton } from "./components/SchoolCard";
-import SchoolDetailDialog from "../components/SchoolDetails/SchoolDetailDialog";
-import SchoolDrawer from "../components/SchoolDetails/SchoolDrawer";
+import SchoolDetailDialog from "../../components/SchoolDetails/SchoolDetailDialog";
+import SchoolDrawer from "../../components/SchoolDetails/SchoolDrawer";
 import SubFooter from "./components/SubFooter";
 import QnA from "./components/QnA";
 import Breaker from "./components/breaker";
 import Hero from "./components/Hero";
+import { useCountry, useCountryPath } from "../../utils/useCountry";
 
 // Divisible by 2 and 3 so every page fills whole grid rows
 const PAGE_SIZE = 12;
@@ -30,6 +31,8 @@ type Option = { label: string; value: string };
 function UniversityList() {
     const searchParams = useSearchParams();
     const { data, fetchData, loading, error } = useDataStore();
+    const country = useCountry();
+    const path = useCountryPath();
 
     const [filters, setFilters] = useState<Filters>(() => ({
         query: searchParams.get("q") ?? "",
@@ -54,9 +57,10 @@ function UniversityList() {
         setSavedOnly(false);
     };
 
+    // Uses the cached schools when they're fresh and for this country; fetches otherwise
     useEffect(() => {
-        if (!data.length) fetchData();
-    }, []);
+        fetchData(country);
+    }, [country, fetchData]);
 
     useEffect(() => {
         fetch("/filter-options.json")
@@ -250,7 +254,7 @@ function UniversityList() {
                             <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-12 text-center">
                                 <p className="font-medium">Couldn&apos;t load schools</p>
                                 <p className="text-sm text-muted-foreground">Please check your connection and try again.</p>
-                                <Button variant="outline" size="sm" onClick={() => fetchData()}>
+                                <Button variant="outline" size="sm" onClick={() => fetchData(country, { force: true })}>
                                     <RotateCcw />
                                     Retry
                                 </Button>
@@ -298,7 +302,7 @@ function UniversityList() {
                         </Button>
                     )}
                     <Button asChild className="rounded-full shadow-lg">
-                        <Link href="/map">
+                        <Link href={path("/map")}>
                             <MapIcon />
                             Map view
                         </Link>
