@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import UniesMark from "./landing/UniesMark";
+import RobotCat from "./RobotCat";
 import { COUNTRIES, COUNTRY_CODES, countryPath } from "../lib/countries";
 import { CONTACT_EMAIL } from "../lib/contact";
 
@@ -25,7 +26,8 @@ function BottomBar({ withLinks }: { withLinks: boolean }) {
 
 // The site-wide footer, the same on the landing page and every country page: what Unies is, every country
 // (one list, so it grows with app/lib/countries.ts), help and policy pages, and where the data comes from.
-// `compact` keeps only the bottom row, for the full-screen map.
+// The robot cat mascot lives on the strip above the bottom row, whose top border is its ground.
+// `compact` keeps only the bottom row (no cat), for the full-screen map.
 export default function Footer({ compact = false }: { compact?: boolean }) {
     if (compact) {
         return (
@@ -36,7 +38,7 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
     }
     return (
         <footer className="border-t border-black/10 bg-[#EEF0F2] text-sm">
-            <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
+            <div className="mx-auto grid max-w-7xl gap-8 px-4 pb-4 pt-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
                 <div className="max-w-xs">
                     <Link href="/" aria-label="Unies home" className="inline-block rounded-sm text-[#191919] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#191919]">
                         <UniesMark />
@@ -65,6 +67,12 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
                         <li>Rankings from <a className={LINK} href="https://www.unirank.org/" target="_blank" rel="noopener noreferrer">uniRank</a></li>
                         <li>Map data © <a className={LINK} href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors</li>
                     </ul>
+                </div>
+            </div>
+            {/* The cat's stage: as tall as the cat, standing on the bottom row's border */}
+            <div className="relative mx-auto h-[96px] max-w-7xl px-4">
+                <div className="absolute inset-x-4 inset-y-0">
+                    <RobotCat />
                 </div>
             </div>
             <div className="border-t border-black/10">

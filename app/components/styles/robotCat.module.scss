@@ -1,0 +1,131 @@
+// The footer's robot cat (app/components/RobotCat.tsx): idle loops on the SVG parts, plus the walk, hop and
+// wave states its controller toggles. Every animation stops under reduced motion.
+
+.cat {
+    display: block;
+    overflow: visible;
+}
+
+// SVG parts animate around their own box
+.part {
+    transform-box: fill-box;
+}
+
+.tail {
+    transform-origin: 0% 100%;
+    animation: tail 2.6s ease-in-out infinite alternate;
+}
+
+.earL {
+    transform-origin: 50% 100%;
+    animation: ear 7s ease-in-out infinite;
+}
+
+.eyesBlink {
+    transform-origin: 50% 50%;
+    animation: blink 4.6s infinite;
+}
+
+// The eyes follow the pointer; --look-x/--look-y come from the controller
+.look {
+    transform: translate(var(--look-x, 0px), var(--look-y, 0px));
+    transition: transform 0.25s ease-out;
+}
+
+.head {
+    transform-origin: 50% 90%;
+    animation: tilt 9s ease-in-out infinite;
+}
+
+.legL,
+.legR,
+.armR {
+    transform-origin: 50% 0%;
+}
+
+.walking {
+    .body {
+        animation: bob 0.36s ease-in-out infinite alternate;
+    }
+    .legL {
+        animation: step 0.36s ease-in-out infinite alternate;
+    }
+    .legR {
+        animation: step 0.36s ease-in-out infinite alternate-reverse;
+    }
+    .head {
+        animation: none;
+    }
+}
+
+.happy {
+    .hop {
+        animation: hop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) 2;
+    }
+    .armR {
+        animation: wave 0.32s ease-in-out 5 alternate;
+    }
+}
+
+.heart {
+    position: absolute;
+    left: 50%;
+    top: -6px;
+    pointer-events: none;
+    animation: heart 1.4s ease-out forwards;
+}
+
+@keyframes tail {
+    from { transform: rotate(-10deg); }
+    to { transform: rotate(12deg); }
+}
+
+@keyframes ear {
+    0%, 78%, 86%, 100% { transform: rotate(0deg); }
+    81% { transform: rotate(-14deg); }
+    83% { transform: rotate(4deg); }
+}
+
+@keyframes blink {
+    0%, 90%, 96%, 100% { transform: scaleY(1); }
+    93% { transform: scaleY(0.1); }
+}
+
+@keyframes tilt {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    70%, 82% { transform: rotate(-6deg); }
+}
+
+@keyframes bob {
+    from { transform: translateY(0); }
+    to { transform: translateY(-2.5px); }
+}
+
+@keyframes step {
+    from { transform: translateY(0) rotate(-14deg); }
+    to { transform: translateY(-2px) rotate(14deg); }
+}
+
+@keyframes hop {
+    0%, 100% { transform: translateY(0); }
+    45% { transform: translateY(-14px); }
+}
+
+@keyframes wave {
+    from { transform: rotate(-30deg); }
+    to { transform: rotate(-120deg); }
+}
+
+@keyframes heart {
+    0% { transform: translate(-50%, 0) scale(0.4); opacity: 0; }
+    20% { transform: translate(-50%, -8px) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -46px) scale(0.9); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cat *,
+    .heart {
+        animation: none !important;
+        transition: none !important;
+    }
+}
