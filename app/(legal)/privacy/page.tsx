@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 // Keep this in step with the code: if analytics, cookies, forms or new third-party services are added,
-// this page has to say so
+// this page has to say so (the "Report a problem" form is described under "If you report a problem")
 export default function PrivacyPage() {
     return (
         <LegalPage
@@ -76,6 +76,17 @@ export default function PrivacyPage() {
             </section>
 
             <section>
+                <h2>If you report a problem</h2>
+                <p>
+                    Each school&apos;s details have a &quot;Report a problem&quot; form for wrong logos, locations or
+                    information. When you send it, we store the school, the reason you picked, your optional note and the
+                    date, so we can check and fix the data. We don&apos;t store your IP address, browser details or anything
+                    else about you with the report, so please don&apos;t put personal details in the note. We keep reports
+                    until the data has been checked.
+                </p>
+            </section>
+
+            <section>
                 <h2>If you email us</h2>
                 <p>
                     If you write to <ContactLink subject="Privacy question" />, we use your message and email address only to
@@ -89,7 +100,7 @@ export default function PrivacyPage() {
                 <p>
                     If you are in the EU or EEA, the GDPR gives you the right to ask what personal data we hold about you, to
                     have it corrected or deleted, and to complain to your data protection authority. As the site keeps no
-                    personal data apart from emails you send us, the quickest way to exercise these rights is to email{" "}
+                    personal data apart from emails you send us (and anything you choose to write in a report note), the quickest way to exercise these rights is to email{" "}
                     <ContactLink subject="Privacy request" />.
                 </p>
             </section>

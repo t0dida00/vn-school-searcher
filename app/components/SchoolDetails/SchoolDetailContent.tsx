@@ -12,6 +12,7 @@ import { campusesOf, campusSlug } from "@/app/utils/campuses";
 import { useCountryConfig, useCountryPath } from "@/app/utils/useCountry";
 import { getActiveMap, showOnMap } from "@/app/map/activeMap";
 import SaveButton from "../SaveButton";
+import ReportProblem from "./ReportProblem";
 
 // Tuition/scholarship text is mostly plain but occasionally markdown
 const Markdown = ({ children }: { children: string }) => (
@@ -256,6 +257,8 @@ export function SchoolDetailBody({ school, campusLinks = true }: { school: any; 
                     </div>
                 </Section>
             )}
+
+            <ReportProblem school={school} />
         </div>
     );
 }

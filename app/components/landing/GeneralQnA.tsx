@@ -154,8 +154,9 @@ const GROUPS: { title: string; items: { question: string; answer: React.ReactNod
                 question: "I found a mistake. How can I report it?",
                 answer: (
                     <>
-                        Email <EmailLink subject="Unies: data correction" /> with the school name, what is wrong and, if
-                        possible, a link to the official source, and we&apos;ll update it.
+                        Open the school and choose &quot;Report a problem&quot; at the bottom of its details: pick what&apos;s
+                        wrong, such as the logo, the location or the information, and add the correct value or a link to the
+                        source if you can. You can also email <EmailLink subject="Unies: data correction" />.
                     </>
                 ),
             },
