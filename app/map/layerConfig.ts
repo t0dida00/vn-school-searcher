@@ -1,54 +1,74 @@
 import type { Map } from "mapbox-gl";
+// Simplified Finland outline (incl. Åland) from geoBoundaries gbOpen FIN ADM0, OpenStreetMap data, ODbL 1.0
+import finland from "./finland.json";
 
-const FONT = ["DIN Offc Pro Medium", "Arial Unicode MS Bold"];
-const TEXT_SIZE = 12;
-const CLUSTER_CIRCLE_COLOR = "#51bbd6";
+const FONT = ["DIN Offc Pro Bold", "Arial Unicode MS Bold"];
+const TEXT_SIZE = 13;
+const CLUSTER_CIRCLE_COLOR = "#111827";
 const CLUSTER_CIRCLE_STROKE_COLOR = "#fff";
- const COUNTRY_CODE = process.env.NEXT_PUBLIC_MAP_HIGHLIGHT_COUNTRY;
+// Warm sand tones: light enough that the dark clusters and white logo badges stand out
+const OUTSIDE_COLOR = "#fbf8f4";
+const SILHOUETTE_COLOR = "#e9c9a6";
+const BORDER_COLOR = "#c49a72";
 
-export function addCountryHighlightLayer(map: Map) {
-  map.addSource("country-boundaries", {
-    type: "vector",
-    url: "mapbox://mapbox.country-boundaries-v1",
+// The world with Finland cut out as holes. Covering the basemap with it leaves Finland as the only
+// thing drawn, at every zoom level, without needing a custom Mapbox style.
+const WORLD_RING = [[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]];
+const outsideFinland: GeoJSON.Feature<GeoJSON.Polygon> = {
+  type: "Feature",
+  properties: {},
+  geometry: {
+    type: "Polygon",
+    coordinates: [WORLD_RING, ...finland.geometry.coordinates.map((polygon) => polygon[0])],
+  },
+};
+
+export function addFinlandLayers(map: Map) {
+  map.addSource("finland", { type: "geojson", data: finland as GeoJSON.Feature<GeoJSON.MultiPolygon> });
+  map.addSource("outside-finland", { type: "geojson", data: outsideFinland });
+
+  // Opaque mask above every basemap layer, labels included; the school layers are added after it
+  map.addLayer({
+    id: "outside-finland",
+    type: "fill",
+    source: "outside-finland",
+    paint: { "fill-color": OUTSIDE_COLOR, "fill-opacity": 1, "fill-antialias": false },
   });
 
-  const layers = map.getStyle().layers;
-  const labelLayerId = layers?.find(
-    (layer) => layer.type === "symbol" && layer.layout?.["text-field"]
-  )?.id;
-
-  map.addLayer(
-  {
-    id: "highlight",
+  // Grey silhouette at country scale, fading out so streets show once the user zooms in
+  map.addLayer({
+    id: "finland-silhouette",
     type: "fill",
-    source: "country-boundaries",
-    "source-layer": "country_boundaries",
+    source: "finland",
     paint: {
-      "fill-color": "#d2361e",
-      "fill-opacity": [
-        "step",
-        ["zoom"],
-        0.1,  // opacity for zoom < 20
-        7,
-        0      // opacity for zoom >= 20
-      ],
+      "fill-color": SILHOUETTE_COLOR,
+      // Fully opaque at country scale: any see-through shows tiles as they load, in patchy bands
+      "fill-opacity": ["interpolate", ["linear"], ["zoom"], 6, 1, 8, 0],
     },
-    filter: ["==", ["get", "iso_3166_1_alpha_3"], COUNTRY_CODE],
-  },
-  labelLayerId
-);
+  });
+
+  map.addLayer({
+    id: "finland-border",
+    type: "line",
+    source: "finland",
+    paint: {
+      "line-color": BORDER_COLOR,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 5, 0.5, 10, 1.5],
+    },
+  });
 }
 
 export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollection) {
-
   map.addSource("universities", {
     type: "geojson",
     data: geojsonData,
     cluster: true,
-    clusterMaxZoom: 6,
-    clusterRadius: 30,
+    // Logo markers are ~44px wide, so keep clustering until schools are far enough apart
+    clusterMaxZoom: 11,
+    clusterRadius: 48,
   });
 
+  // Individual schools are HTML logo markers (see markers.ts); only clusters are drawn as layers
   map.addLayer({
     id: "clusters",
     type: "circle",
@@ -56,12 +76,8 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
     filter: ["has", "point_count"],
     paint: {
       "circle-color": CLUSTER_CIRCLE_COLOR,
-      "circle-radius": [
-        "step",
-        ["get", "point_count"],
-      15, 20, 20, 30, 25
-      ],
-      "circle-stroke-width": 1,
+      "circle-radius": ["step", ["get", "point_count"], 16, 5, 20, 10, 24],
+      "circle-stroke-width": 3,
       "circle-stroke-color": CLUSTER_CIRCLE_STROKE_COLOR,
     },
   });
@@ -75,48 +91,10 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
       "text-field": "{point_count_abbreviated}",
       "text-font": FONT,
       "text-size": TEXT_SIZE,
-    },
-  });
-
-  map.addLayer({
-    id: "unclustered-point",
-    type: "circle",
-    source: "universities",
-    filter: ["!", ["has", "point_count"]],
-    paint: {
-      "circle-color": [
-        "match",
-        ["get", "type"],
-        "university", "#f28cb1",
-        "highschool", "#4264fb",
-        "#ccc",
-      ],
-      "circle-radius": [
-      "case",
-      ["boolean", ["feature-state", "selected"], false],
-      14, // bigger size when selected
-      8,  // normal size
-    ],
-      "circle-stroke-width": 1,
-    },
-  });
-
-  map.addLayer({
-    id: "unclustered-point-label",
-    type: "symbol",
-    source: "universities",
-    filter: ["!", ["has", "point_count"]],
-    layout: {
-      "text-field": ["get", "name"],
-      "text-font": FONT,
-      "text-size": TEXT_SIZE,
-      "text-offset": [0, 1.2],
-      "text-anchor": "top",
+      "text-allow-overlap": true,
     },
     paint: {
-      "text-color": "#ff0000",
-    //   "text-halo-color": TEXT_HALO_COLOR,
-    //   "text-halo-width": TEXT_HALO_WIDTH,
+      "text-color": "#fff",
     },
   });
 }

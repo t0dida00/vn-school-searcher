@@ -119,16 +119,43 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Tailwind v4 resets buttons to cursor: default; show a pointer on anything clickable */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="option"]:not([aria-disabled="true"]),
+  [role="radio"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="combobox"]:not(input),
+  [role="menuitem"],
+  a[href],
+  summary,
+  select:not(:disabled),
+  label[for],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    cursor: pointer;
+  }
+  :disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
 }
 
-.mapboxgl-ctrl-top-right {
-  @media screen and (max-width: 768px) {
-  bottom: calc(env(safe-area-inset-bottom) + 40px) !important;
-  top: auto !important;
-  /* bottom: 20px; */
-  right: auto !important;
-  left: 20px;
-    
+/* iOS Safari zooms the page when a field under 16px gets focus. Unlayered on purpose so it beats any
+   text-sm/text-xs utility (Tailwind's utilities live in a cascade layer). */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+textarea,
+select {
+  font-size: max(16px, 1em);
+}
+
+/* Phones: the search bar spans the top, so move the zoom buttons to the bottom-right, which is
+   empty sea/Russia next to Finland (bottom-left would cover the Turku coast), stacked above the
+   "List view" button in Map.tsx. */
+@media screen and (max-width: 575px) {
+  .mapboxgl-ctrl-top-right {
+    top: auto !important;
+    bottom: calc(env(safe-area-inset-bottom) + 84px);
   }
 }
 

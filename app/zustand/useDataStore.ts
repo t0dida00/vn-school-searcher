@@ -33,7 +33,7 @@ const useDataStore = create<State>((set) => ({
       set({ error: error.message || 'Unknown error', loading: false });
     }
   },
-  filteredData: [],
+  filteredData: null,
   setFilteredData: (data: any[] | null) => set({ filteredData: data }),
   setError: (error: string | null) => set({ error }),
  })

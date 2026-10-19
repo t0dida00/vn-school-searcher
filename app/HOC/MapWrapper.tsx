@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import useDataStore from "../zustand/useDataStore";
 import { useEffect } from "react";
-const Map = dynamic(() => import("../components/Map"), { ssr: false, loading: () => <div className="w-full min-h-screen flex justify-center items-center">Đang tải bản đồ...</div>, });
+const Map = dynamic(() => import("../components/Map"), { ssr: false, loading: () => <div className="w-full h-full flex justify-center items-center text-muted-foreground">Loading map…</div>, });
 
 interface MapClientWrapperProps {
     data: any[];

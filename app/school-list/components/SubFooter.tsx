@@ -1,26 +1,36 @@
-import { Mail } from 'lucide-react';
-import Link from 'next/link';
+import { Mail, MessageSquare } from 'lucide-react';
 import React from 'react';
+
+const CONTACT_EMAIL = "khoadinh.work@gmail.com";
 
 const SubFooter: React.FC = () => {
     return (
-        <div className="flex flex-col sm:flex-row items-start gap-2 mb-20">
-            <div className="flex-1"><div className='text-lg font-semibold mb-2'>About us</div>
-                <p>The FinUnies is designed to help students easily find information about universities in Finland.</p>
+        <div className="grid gap-6 mb-24 sm:grid-cols-3">
+            <div>
+                <div className='text-lg font-semibold mb-2'>About us</div>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                    FinUnies is designed to help students easily find information about universities in Finland.
+                </p>
             </div>
-            <div className="flex-1"><div className='text-lg font-semibold  mb-2'>Contact</div>
-                <div>
-                    <Mail className='cursor-pointer'></Mail>
-                </div>
+            <div>
+                <div className='text-lg font-semibold mb-2'>Contact</div>
+                <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground hover:underline underline-offset-4 break-all"
+                >
+                    <Mail className="size-4 shrink-0" />
+                    {CONTACT_EMAIL}
+                </a>
             </div>
-            <div className="flex-1"><div className='text-lg font-semibold mb-2'>
-                Links</div>
-                <div>
-                    <Link href="/map" target="_blank" rel="noopener noreferrer" className="hover:underline ">
-                        Feedback for the website
-                    </Link>
-                </div>
-
+            <div>
+                <div className='text-lg font-semibold mb-2'>Links</div>
+                <a
+                    href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("FinUnies feedback")}`}
+                    className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground hover:underline underline-offset-4"
+                >
+                    <MessageSquare className="size-4 shrink-0" />
+                    Feedback for the website
+                </a>
             </div>
         </div>
     );

@@ -2,55 +2,17 @@ import React, { useEffect, useState } from 'react';
 import {
     Dialog,
     DialogContent,
-    DialogFooter,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
 import useStore from '../../zustand/usePointStore';
-import SchoolLogo from '../Avatar';
-import CustomLink from '../CustomLink';
-import styles from './styles/schoolDetail.module.scss';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { PhoneCall, Mail, School, MapPinHouse, Building2 } from 'lucide-react';
-import { capitalizeFirst } from '../../utils/common';
-import { Badge } from "@/components/ui/badge";
-import { stringToArray } from '@/app/utils/stringToArray';
+import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from './SchoolDetailContent';
 
 const SchoolDetailDialog = () => {
-    const { isOpen, setIsOpen, selectedPoint } = useStore();
-    const { properties } = selectedPoint || {};
-    const {
-        id,
-        name,
-        code,
-        city,
-        address,
-        email,
-        fields,
-        logo,
-        majors,
-        phone,
-        ranking,
-        type,
-        type2,
-        website,
-        overview,
-        tuition,
-        scholarship,
-        fieldOptions
-    } = properties || {};
-    const formattedfieldOptions = stringToArray(fieldOptions);
-
+    const { isOpen, setIsOpen, selectedPoint, setSelectedPoint } = useStore();
     const [isMobile, setIsMobile] = useState(false);
-    // console.log(fieldOptions, typeof (fieldOptions));
-    // console.log(properties)
+
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 576);
         checkMobile();
@@ -58,101 +20,36 @@ const SchoolDetailDialog = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    if (isMobile) return null;
+    if (isMobile || !selectedPoint) return null;
+
+    const close = () => {
+        const closing = selectedPoint;
+        setIsOpen(false);
+        // Clear after the close animation so the content doesn't vanish mid-fade,
+        // unless another school was picked in the meantime
+        setTimeout(() => {
+            if (useStore.getState().selectedPoint === closing) setSelectedPoint(null);
+        }, 200);
+    };
 
     return (
-        <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)} key={id}>
-            <DialogContent className={styles.dialog_content}>
-                <DialogHeader>
-                    <DialogTitle style={{ fontSize: 24 }} title='Tên trường'>
-                        <a href={website} target="_blank" rel="noopener noreferrer" className={styles.link}>
-                            {name || 'N/A'} {code && `(${code})`}
-                            {ranking && (
-                                <Badge title='Ranking' style={{ fontSize: "16px" }} className="ml-4 bg-black text-white">
-                                    {ranking}
-                                </Badge>
-                            )}
-                        </a>
-                    </DialogTitle>
-
-                    <div className={styles.container}>
-                        <div className={styles.wrapper}>
-                            {logo && (<div className={styles.left_container}>
-                                <SchoolLogo src={logo} alt={name || code} href={website} />
-                            </div>)}
-
-                            {/* <div className={styles.middle_container}>
-                                <CustomLink url={webpage} shortUrl="Thông tin tuyển sinh" />
-                                {wiki && <CustomLink url={wiki} shortUrl="Đề án tuyển sinh" />}
-                                {wiki && <CustomLink url={wiki} shortUrl="Wikipedia" />}
-                            </div> */}
-                            <div className={styles.right_container}>
-                                {phone && <div><PhoneCall size={24} /> {phone}</div>}
-                                {email && <div><Mail size={24} /> {email}</div>}
-                                {type && <div><School size={24} /> {capitalizeFirst(type)}</div>}
-                                {type2 && <div><School size={24} /> {capitalizeFirst(type2)}</div>}
-                                {address && <div><MapPinHouse /> {address}</div>}
-                                {city && <div><Building2 /> {city}</div>}
-                                {website && <CustomLink url={website} shortUrl="Website" />}
-                            </div>
-                        </div>
-                    </div>
-
-                    <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
-                        {overview && (
-                            <AccordionItem value="item-1" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Overview</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <p>{overview}</p>
-                                </AccordionContent>
-                            </AccordionItem>
-                        )}
-                        {fields && (
-                            <AccordionItem value="item-2" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Chương trình đào tạo</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-2 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{fields}</ReactMarkdown>
-                                </AccordionContent>
-                            </AccordionItem>
-                        )}
-                        {majors && (
-                            <AccordionItem value="item-3" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Chuyên ngành đào tạo</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{majors}</ReactMarkdown>
-                                </AccordionContent>
-                            </AccordionItem>
-                        )}
-                        {tuition && (
-                            <AccordionItem value="item-4" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Tuitions</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{tuition}</ReactMarkdown>
-                                </AccordionContent>
-                            </AccordionItem>
-                        )}
-                        {scholarship && (
-                            <AccordionItem value="item-5" className={styles.accordion_item}>
-                                <AccordionTrigger className="text-xl cursor-pointer">Scholarships</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-lg leading-[24px]">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{scholarship}</ReactMarkdown>
-                                </AccordionContent>
-                            </AccordionItem>
-                        )}
-                    </Accordion>
+        <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
+            <DialogContent className="flex max-h-[85vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-xl">
+                <DialogHeader className="border-b p-5 pr-12">
+                    <SchoolDetailHeader
+                        school={selectedPoint}
+                        title={<DialogTitle className="text-xl leading-snug">{selectedPoint.properties?.name}</DialogTitle>}
+                    />
+                    <DialogDescription className="sr-only">
+                        Details about {selectedPoint.properties?.name}
+                    </DialogDescription>
                 </DialogHeader>
-
-                {/* Optional badges/footer */}
-                <DialogFooter className="pt-5 flex-wrap justify-start">
-                    {/* Example dynamic badges - replace with real data if needed */}
-                    {type && <Badge variant="secondary" className={styles.badge}>{capitalizeFirst(type)}</Badge>}
-                    {city && <Badge variant="secondary" className={styles.badge}>{city}</Badge>}
-                    {formattedfieldOptions && formattedfieldOptions.length > 0 ? formattedfieldOptions.map((field: string, index: number) => (
-                        <Badge key={index} variant="secondary" className={styles.badge}>
-                            {field}
-                        </Badge>
-                    )) : null}
-                </DialogFooter>
+                <div className="min-h-0 flex-1 overflow-y-auto p-5">
+                    <SchoolDetailBody key={selectedPoint.properties?.id} school={selectedPoint} />
+                </div>
+                <div className="border-t bg-muted/30 p-4">
+                    <SchoolDetailActions school={selectedPoint} />
+                </div>
             </DialogContent>
         </Dialog>
     );

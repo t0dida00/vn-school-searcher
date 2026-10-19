@@ -1,0 +1,105 @@
+// No `position` here: it would override .mapboxgl-marker's `position: absolute` and make
+// markers stack in document flow, so each new one renders lower than its coordinates.
+// The absolute positioning from Mapbox already anchors .label.
+.marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: none;
+
+        .badge {
+            box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111827;
+        }
+    }
+
+    &:hover,
+    &.highlighted,
+    &.selected {
+        z-index: 2;
+
+        .badge {
+            transform: scale(1.12);
+        }
+
+        .label {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+
+    &.selected .badge {
+        border-color: #111827;
+        width: 68px;
+        height: 46px;
+    }
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // Rounded "flag" shape: most school logos are wide wordmarks that shrink to nothing in a circle
+    width: 60px;
+    height: 40px;
+    overflow: hidden;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transform-origin: bottom center;
+    transition: transform 150ms ease, width 150ms ease, height 150ms ease;
+
+    img {
+        width: 88%;
+        height: 80%;
+        object-fit: contain;
+    }
+}
+
+.fallback {
+    font-size: 11px;
+    font-weight: 700;
+    color: #111827;
+}
+
+// Small pointer under the badge so the logo reads as a pin
+.tip {
+    width: 0;
+    height: 0;
+    margin-top: -1px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 7px solid #fff;
+    filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.15));
+}
+
+.selected .tip {
+    border-top-color: #111827;
+}
+
+.label {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    max-width: 300px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background: #111827;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 4px);
+    transition: opacity 150ms ease, transform 150ms ease;
+}

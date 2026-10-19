@@ -2,62 +2,53 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import Link from "next/link";
+import { List } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { INITIAL_VIEWPORT, MAP_STYLE, MAPBOX_ACCESS_TOKEN } from "../map/mapboxConfig";
-import { addCountryHighlightLayer, addUniversityLayers } from "../map/layerConfig";
-import { addMapEventListeners } from "../map/events";
+import { FINLAND_BOUNDS, INITIAL_VIEWPORT, MAP_STYLE, MAPBOX_ACCESS_TOKEN } from "../map/mapboxConfig";
+import { keepFinlandLocked, lockToFinland } from "../map/viewport";
+import { addFinlandLayers, addUniversityLayers } from "../map/layerConfig";
+import { addMapEventListeners, updateVisiblePoints } from "../map/events";
 import useDataStore from "../zustand/useDataStore";
-import SchoolList from "./SchoolList";
-import Search from "./Search";
-import styles from "./styles/map.module.scss";
-import MobileList from "./MobileList";
 import SchoolDrawer from "./SchoolDetails/SchoolDrawer";
 import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
-import { Notebook } from "lucide-react";
-import CustomTooltip from "./Tooltip";
-import { useRouter } from "next/navigation";
-import CustomFunnel from "./Funnel";
-import useStore from "../zustand/usePointStore";
-import SchoolLogo from "./Avatar";
-import { useZoomToPoint } from "../hooks/useZoomToPoint";
+import MapSearch from "./MapSearch";
 export default function Map() {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState<mapboxgl.Map | null>(null);
-    const [query, setQuery] = useState("");
     const { data, filteredData } = useDataStore();
-    const { points } = useStore();
-    const router = useRouter()
-    const [searchFocus, setSearchFocus] = useState(false);
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const zoomToPoint = useZoomToPoint(map);
     useEffect(() => {
         if (!map && mapContainerRef.current) {
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
             const newMap = new mapboxgl.Map({
                 container: mapContainerRef.current,
                 style: MAP_STYLE,
-                center: INITIAL_VIEWPORT.center,
-                zoom: INITIAL_VIEWPORT.zoom,
+                bounds: FINLAND_BOUNDS,
+                renderWorldCopies: false,
+                // Flat map: the Finland silhouette would bend on Mapbox's default globe at low zoom
+                projection: "mercator",
                 maxZoom: INITIAL_VIEWPORT.maxZoom,
                 minZoom: INITIAL_VIEWPORT.minZoom,
             });
 
             newMap.on("load", () => {
-                addCountryHighlightLayer(newMap);
+                // The container can change size between construction and load, so fit here, not via `bounds`
+                lockToFinland(newMap);
+                keepFinlandLocked(newMap);
+                addFinlandLayers(newMap);
+                // Read from the store, not the closure: data may have arrived after this effect ran
+                const { data: latest, filteredData: latestFiltered } = useDataStore.getState();
                 addUniversityLayers(newMap, {
                     type: "FeatureCollection",
-                    features: Array.isArray(data) ? data : [],
+                    features: latestFiltered ?? (Array.isArray(latest) ? latest : []),
                 } as GeoJSON.FeatureCollection);
                 addMapEventListeners(newMap);
             });
             newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
             setMap(newMap);
+            return () => newMap.remove();
         }
-        return () => {
-            if (map) {
-                map.remove();
-            }
-        };
     }, []);
     useEffect(() => {
         if (map && map.getSource("universities")) {
@@ -68,66 +59,23 @@ export default function Map() {
 
             // 👇 Just update the existing source's data
             (map.getSource("universities") as mapboxgl.GeoJSONSource).setData(geojson);
+            updateVisiblePoints(map);
         }
     }, [filteredData, data, map]);
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (window.innerWidth >= 576) return;
-            const target = event.target as Node;
-            const clickedOutsideWrapper =
-                wrapperRef.current && !wrapperRef.current.contains(target);
-            if (clickedOutsideWrapper) {
-                setSearchFocus(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
     return (
-        <div ref={mapContainerRef} style={{ width: "100%", height: "100dvh", position: "relative" }}>
-            <div className={styles.left_container}>
-                <div className={styles.search_container}>
-                    <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
-                    <SchoolDetailDialog />
-                    <SchoolList map={map} setQuery={setQuery} />
-                </div>
-
-
-
-            </div>
-            <div ref={wrapperRef} className={styles.mobile_left_container}>
-                <Search onFocus={() => setSearchFocus(true)} query={query} setQuery={setQuery} />
-                {searchFocus && <MobileList map={map} setQuery={setQuery} setSearchFocus={setSearchFocus} />}
-                <SchoolDrawer />
-                <div className="absolute flex flex-row overflow-auto gap-[10px] translate-y-3 left-0 w-full ">
-                    {!filteredData && points.map((point, index) => {
-                        const { properties } = point;
-                        const { logo, name } = properties || {};
-
-                        // if (!logo) return null; // Skip if no logo
-                        return (
-                            <div key={index} onClick={() => zoomToPoint(point)} >
-                                <SchoolLogo src={logo} alt={name || `School ${index + 1}`} customStyle={{ height: '45px', width: "45px" }} />
-
-                            </div>
-                        );
-                    })}
-
-
-                </div>
-
-            </div>
-            <button className="fixed bottom-24 right-4 bg-gray-800 hover:bg-gray-700 text-white p-1 rounded-full shadow-lg transition z-50 cursor-pointer" onClick={() => router.push("/school-list")} >
-                <CustomTooltip
-                    name={<Notebook size={30} className="w-6 h-6" />}
-                    title="Danh sách trường học"
-                />
-
-            </button>
-            <CustomFunnel />
-
+        <div className="relative size-full">
+            {/* Mapbox wants its container empty, so the overlays are siblings, not children */}
+            <div ref={mapContainerRef} className="size-full" />
+            <MapSearch map={map} />
+            {/* Mirrors the "Map view" button on /school-list; bottom-right sits over empty sea/Russia */}
+            <Button asChild className="absolute bottom-10 right-3 z-10 rounded-full shadow-lg">
+                <Link href="/school-list">
+                    <List />
+                    List view
+                </Link>
+            </Button>
+            <SchoolDetailDialog />
+            <SchoolDrawer />
         </div>
     );
 }

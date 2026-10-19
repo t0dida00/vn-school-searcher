@@ -60,11 +60,11 @@ export const FilterCombobox: React.FC<FilterComboboxProps> = ({
                     className={cn("flex-1 justify-between cursor-pointer !text-[16px] ", className)}
                     disabled={disabled}
                 >
-                    {selectedLabel}
+                    <span className="truncate">{selectedLabel}</span>
                     <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="max-w-full p-0" >
+            <PopoverContent className="w-[min(18rem,calc(100vw-1rem))] p-0" collisionPadding={8}>
                 <Command>
                     <CommandInput
                         placeholder={`Find ${placeholder.toLowerCase()}...`}

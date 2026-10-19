@@ -1,8 +1,8 @@
 import { Map, MapMouseEvent } from "mapbox-gl";
 import useStore from "../zustand/usePointStore";
+import { applyMarkerState, syncSchoolMarkers } from "./markers";
 
-export function addMapEventListeners(map: Map) {
- const handleVisiblePoints = () => {
+export function updateVisiblePoints(map: Map) {
   const setPoints = useStore.getState().setPoints;
      const source = map.getSource("universities") as mapboxgl.GeoJSONSource;
     if (!source || !(source as any)._data) {
@@ -14,10 +14,13 @@ export function addMapEventListeners(map: Map) {
       if (feature.geometry.type !== "Point") return false;
       const [lng, lat] = feature.geometry.coordinates;
       return bounds && bounds.contains([lng, lat]);
-    }).slice(0, 20);;
+    });
     setPoints(visiblePoints);
 
-  };
+  }
+
+export function addMapEventListeners(map: Map) {
+ const handleVisiblePoints = () => updateVisiblePoints(map);
    const tryRunWhenReady = () => {
     if (map.isStyleLoaded() && map.getSource("universities")) {
       handleVisiblePoints();
@@ -31,6 +34,10 @@ export function addMapEventListeners(map: Map) {
   // Run again when map stops moving or zooming
   map.on("moveend", handleVisiblePoints);
   map.on("zoomend", handleVisiblePoints);
+  // Keep logo markers in step with clustering; cheap no-op until the source has loaded
+  map.on("render", () => syncSchoolMarkers(map));
+  const unsubscribe = useStore.subscribe(() => applyMarkerState(map));
+  map.on("remove", unsubscribe);
   map.on("click", "clusters", (e: MapMouseEvent & { features?: any[] }) => {
     const features = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
     const clusterId = features[0].properties?.cluster_id;
@@ -43,27 +50,7 @@ export function addMapEventListeners(map: Map) {
     });
   });
 
-  map.on("click", "unclustered-point", (e: MapMouseEvent & { features?: any[] }) => {
-      const feature = e.features?.[0];
-      const setSelectedPoint = useStore.getState().setSelectedPoint;
-      const setIsOpen  = useStore.getState().setIsOpen;
-      if (!feature) return;
-  //     const isDesktop = window.innerWidth >= 576;
-  //      if (setSelectedPoint) setSelectedPoint(feature);
-  // if (isDesktop && setIsOpen) setIsOpen(true); // Only open dialog on desktop
-      if (setSelectedPoint && setIsOpen) {
-        setSelectedPoint(feature);
-          setIsOpen(true);
-      }
-      const coordinates = (feature.geometry as any).coordinates as [number, number];
-
-      map.flyTo({
-        center: coordinates,
-        zoom: 15, // Adjust zoom level as needed
-        essential: true,
-      });
-    });
-  ["clusters", "unclustered-point"].forEach(layer => {
+  ["clusters"].forEach(layer => {
     map.on("mouseenter", layer, () => {
       map.getCanvas().style.cursor = "pointer";
     });
