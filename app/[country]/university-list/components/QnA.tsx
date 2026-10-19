@@ -26,7 +26,7 @@ const EmailLink = ({ subject }: { subject: string }) => (
 type FaqItem = { question: string; answer: React.ReactNode };
 
 // Some answers only apply to Finland (UAS, Studyinfo, the map, tuition fees); `false` entries are dropped
-function faqGroups({ code, brand, adjective, hasMap, ranking }: Country): { title: string; items: (FaqItem | false)[] }[] {
+function faqGroups({ code, name, brand, adjective, hasMap, ranking }: Country): { title: string; items: (FaqItem | false)[] }[] {
     const fi = code === "fi";
     return [
         {
@@ -81,11 +81,11 @@ function faqGroups({ code, brand, adjective, hasMap, ranking }: Country): { titl
                     question: "Is the map accurate?",
                     answer: (
                         <>
-                            Not 100%. The base map comes from Mapbox and OpenStreetMap, and the outline of Finland is a
-                            simplified shape based on geoBoundaries and OpenStreetMap data. Borders, coastlines and place
-                            names may be inaccurate or out of date and don&apos;t represent any official or political
-                            position. Each school&apos;s pin shows an approximate location, usually the main campus, so
-                            check the exact address before you travel.
+                            Not 100%. The base map comes from Mapbox and OpenStreetMap, and the outline of {name} is a
+                            simplified shape based on geoBoundaries{fi && <> and OpenStreetMap</>} data. Borders, coastlines and
+                            place names may be inaccurate or out of date and don&apos;t represent any official or political
+                            position. Each pin shows the approximate location of a campus (schools with several campuses
+                            have a smaller pin for each extra one), so check the exact address before you travel.
                         </>
                     ),
                 },

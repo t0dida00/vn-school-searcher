@@ -7,6 +7,7 @@ import { stringToArray } from "../../../utils/stringToArray";
 import usePointStore from "../../../zustand/usePointStore";
 import RankTag from "../../../components/RankTag";
 import SaveButton from "../../../components/SaveButton";
+import { campusesOf } from "../../../utils/campuses";
 
 const MAX_VISIBLE_FIELDS = 3;
 
@@ -42,6 +43,7 @@ export default function SchoolCard({ school }: { school: any }) {
     const { name, code, city, type, logo, overview, website, fieldOptions } = school.properties || {};
     const fields = stringToArray(fieldOptions);
     const hiddenCount = fields.length - MAX_VISIBLE_FIELDS;
+    const campusCount = campusesOf(school).length;
 
     // Same detail dialog (desktop) / drawer (phone) as the map
     const open = () => {
@@ -79,6 +81,7 @@ export default function SchoolCard({ school }: { school: any }) {
                     <span className="inline-flex items-center gap-1">
                         <MapPin className="size-3.5" />
                         {city}
+                        {campusCount > 0 && <span>+{campusCount} {campusCount === 1 ? "campus" : "campuses"}</span>}
                     </span>
                     {code && <span aria-hidden>·</span>}
                     {code && <span className="font-mono">{code}</span>}

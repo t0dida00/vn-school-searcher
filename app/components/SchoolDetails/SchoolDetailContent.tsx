@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { stringToArray } from "@/app/utils/stringToArray";
 import { schoolId } from "@/app/utils/schoolId";
+import { campusesOf } from "@/app/utils/campuses";
 import { useCountryPath } from "@/app/utils/useCountry";
 import SaveButton from "../SaveButton";
 
@@ -54,12 +55,14 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 /** Title block: rendered inside the dialog/drawer title so it's announced as the heading */
 export function SchoolDetailHeader({ school, title }: { school: any; title: React.ReactNode }) {
-    const { name, code, city, type, logo } = school?.properties || {};
+    const { name, code, city, type, logo, campus } = school?.properties || {};
     return (
         <div className="flex items-center gap-4 text-left">
             <Logo src={logo} name={name} code={code} />
             <div className="min-w-0">
                 {title}
+                {/* Opened from one of the school's other campuses (see campusView) */}
+                {campus && <p className="mt-0.5 text-sm font-medium text-foreground/80">{campus}</p>}
                 <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                         <MapPin className="size-3.5" />
@@ -78,8 +81,9 @@ export function SchoolDetailHeader({ school, title }: { school: any; title: Reac
 }
 
 export function SchoolDetailBody({ school }: { school: any }) {
-    const { overview, tuition, scholarship, fieldOptions, phone, email, address } = school?.properties || {};
+    const { overview, tuition, scholarship, fieldOptions, phone, email, address, city, mainCity, campus: viewedCampus } = school?.properties || {};
     const fields = stringToArray(fieldOptions);
+    const campuses = campusesOf(school);
     const [expanded, setExpanded] = useState(false);
     // Only offer "Read more" when the clamp actually hides text at the current width
     const overviewRef = useRef<HTMLParagraphElement>(null);
@@ -132,6 +136,30 @@ export function SchoolDetailBody({ school }: { school: any }) {
                             </Badge>
                         ))}
                     </div>
+                </Section>
+            )}
+
+            {campuses.length > 0 && (
+                <Section title={`Campuses (${campuses.length + 1})`}>
+                    <ul className="flex flex-col divide-y rounded-xl border text-sm">
+                        <li className="flex items-start gap-3 px-3 py-2.5">
+                            <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                            <span>
+                                <span className="font-medium">{mainCity ?? city}</span>
+                                <span className="text-muted-foreground"> · main campus</span>
+                            </span>
+                        </li>
+                        {campuses.map((campus) => (
+                            <li key={campus.name} className="flex items-start gap-3 px-3 py-2.5">
+                                <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                                <span className="min-w-0">
+                                    <span className="font-medium">{campus.name}</span>
+                                    {campus.name === viewedCampus && <span className="text-muted-foreground"> · this campus</span>}
+                                    <span className="block text-muted-foreground">{campus.address || campus.city}</span>
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
                 </Section>
             )}
 

@@ -1,6 +1,9 @@
 import { Map, MapMouseEvent } from "mapbox-gl";
 import useStore from "../zustand/usePointStore";
+import useDataStore from "../zustand/useDataStore";
 import { applyMarkerState, syncSchoolMarkers } from "./markers";
+import { parentIdOf } from "../utils/campuses";
+import { schoolId } from "../utils/schoolId";
 
 export function updateVisiblePoints(map: Map) {
   const setPoints = useStore.getState().setPoints;
@@ -10,11 +13,19 @@ export function updateVisiblePoints(map: Map) {
     }
     const bounds = map.getBounds();
     const allFeatures = (source as any)._data.features as GeoJSON.Feature[];
-    const visiblePoints = allFeatures.filter((feature) => {
-      if (feature.geometry.type !== "Point") return false;
+    const { data } = useDataStore.getState();
+    // One entry per school, even with several of its campuses in view; campus pins map back to the school
+    const seen = new Set<string>();
+    const visiblePoints: GeoJSON.Feature[] = [];
+    for (const feature of allFeatures) {
+      if (feature.geometry.type !== "Point") continue;
       const [lng, lat] = feature.geometry.coordinates;
-      return bounds && bounds.contains([lng, lat]);
-    });
+      if (!bounds || !bounds.contains([lng, lat])) continue;
+      const parentId = parentIdOf(feature);
+      if (seen.has(parentId)) continue;
+      seen.add(parentId);
+      visiblePoints.push(data.find((d) => schoolId(d) === parentId) ?? feature);
+    }
     setPoints(visiblePoints);
 
   }

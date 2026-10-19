@@ -19,6 +19,7 @@ import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
 import MapSearch from "./MapSearch";
 import MapLoading, { resetLoaderClock } from "./MapLoading";
 import { useCountry, useCountryPath } from "../utils/useCountry";
+import { toMapFeatures } from "../utils/campuses";
 
 // Reveal anyway if the first full render never settles (e.g. a tile keeps failing)
 const READY_FALLBACK_MS = 10000;
@@ -70,7 +71,8 @@ export default function Map() {
                 const { data: latest, filteredData: latestFiltered } = useDataStore.getState();
                 addUniversityLayers(newMap, {
                     type: "FeatureCollection",
-                    features: latestFiltered ?? (Array.isArray(latest) ? latest : []),
+                    // Extra campuses become pins of their own
+                    features: toMapFeatures(latestFiltered ?? (Array.isArray(latest) ? latest : [])),
                 } as GeoJSON.FeatureCollection, countryMap.flag);
                 addMapEventListeners(newMap);
                 // Deep link from /school/[id] ("View on map")
@@ -95,7 +97,7 @@ export default function Map() {
         if (map && map.getSource("universities")) {
             const geojson: GeoJSON.FeatureCollection = {
                 type: "FeatureCollection",
-                features: filteredData ? filteredData : Array.isArray(data) ? data : [],
+                features: toMapFeatures(filteredData ? filteredData : Array.isArray(data) ? data : []),
             };
 
             // 👇 Just update the existing source's data

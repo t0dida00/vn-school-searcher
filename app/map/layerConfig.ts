@@ -60,7 +60,8 @@ export function addCountryLayers(map: Map, outline: GeoJSON.Feature<GeoJSON.Mult
   });
 }
 
-function flagImage(draw: CountryMap["flag"]["draw"]) {
+// Round crop of the flag, for cluster badges
+export function flagImage(draw: CountryMap["flag"]["draw"]) {
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = FLAG_SIZE;
   const ctx = canvas.getContext("2d")!;
@@ -71,51 +72,51 @@ function flagImage(draw: CountryMap["flag"]["draw"]) {
   return ctx.getImageData(0, 0, FLAG_SIZE, FLAG_SIZE);
 }
 
-export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollection, flag: CountryMap["flag"]) {
-  if (!map.hasImage(FLAG_IMAGE)) map.addImage(FLAG_IMAGE, flagImage(flag.draw), { pixelRatio: 2 });
+// Clusters drawn as round flags of the country with the count on top: the circle is the white ring and
+// the click target, the flag icon covers its fill. `suffix` keeps layer/image ids unique when one map
+// has several countries (the globe); the country maps use "" → "clusters", "cluster-flag", "cluster-count".
+// `globe` shrinks the badges when zoomed out (a country is about badge-sized there, so it stays visible
+// around it) and rings them in the flag's dark colour against the pale globe.
+export function addFlagClusterLayers(map: Map, source: string, flag: CountryMap["flag"], suffix = "", globe = false) {
+  const image = `${FLAG_IMAGE}${suffix}`;
+  // Badge radius 16/20/24px by school count (5+, 10+); the flag image is 16px in radius
+  const radius = (scale: number) => ["step", ["get", "point_count"], 16 * scale, 5, 20 * scale, 10, 24 * scale];
+  const iconSize = (scale: number) => ["step", ["get", "point_count"], scale, 5, 1.25 * scale, 10, 1.5 * scale];
+  const byZoom = (size: (scale: number) => unknown[]) =>
+    globe ? ["interpolate", ["linear"], ["zoom"], 1, size(0.6), 4, size(1)] : size(1);
+  if (!map.hasImage(image)) map.addImage(image, flagImage(flag.draw), { pixelRatio: 2 });
 
-  map.addSource("universities", {
-    type: "geojson",
-    data: geojsonData,
-    cluster: true,
-    // Logo markers are ~44px wide, so keep clustering until schools are far enough apart
-    clusterMaxZoom: 11,
-    clusterRadius: 48,
-  });
-
-  // Individual schools are HTML logo markers (see markers.ts); only clusters are drawn as layers.
-  // The circle is the white ring and the click target (events.ts); the flag icon covers its fill.
   map.addLayer({
-    id: "clusters",
+    id: `clusters${suffix}`,
     type: "circle",
-    source: "universities",
+    source,
     filter: ["has", "point_count"],
     paint: {
       "circle-color": "#fff",
-      "circle-radius": ["step", ["get", "point_count"], 16, 5, 20, 10, 24],
-      "circle-stroke-width": 3,
-      "circle-stroke-color": CLUSTER_CIRCLE_STROKE_COLOR,
+      "circle-radius": byZoom(radius) as any,
+      "circle-stroke-width": globe ? 2 : 3,
+      "circle-stroke-color": globe ? flag.halo : CLUSTER_CIRCLE_STROKE_COLOR,
     },
   });
 
   map.addLayer({
-    id: "cluster-flag",
+    id: `cluster-flag${suffix}`,
     type: "symbol",
-    source: "universities",
+    source,
     filter: ["has", "point_count"],
     layout: {
-      "icon-image": FLAG_IMAGE,
-      // Matches the circle radii above: 16/20/24px against the 16px-radius image
-      "icon-size": ["step", ["get", "point_count"], 1, 5, 1.25, 10, 1.5],
+      "icon-image": image,
+      // Matches the circle radii above
+      "icon-size": byZoom(iconSize) as any,
       "icon-allow-overlap": true,
       "icon-ignore-placement": true,
     },
   });
 
   map.addLayer({
-    id: "cluster-count",
+    id: `cluster-count${suffix}`,
     type: "symbol",
-    source: "universities",
+    source,
     filter: ["has", "point_count"],
     layout: {
       "text-field": "{point_count_abbreviated}",
@@ -130,4 +131,18 @@ export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollec
       "text-halo-width": 2,
     },
   });
+}
+
+export function addUniversityLayers(map: Map, geojsonData: GeoJSON.FeatureCollection, flag: CountryMap["flag"]) {
+  map.addSource("universities", {
+    type: "geojson",
+    data: geojsonData,
+    cluster: true,
+    // Logo markers are ~44px wide, so keep clustering until schools are far enough apart
+    clusterMaxZoom: 11,
+    clusterRadius: 48,
+  });
+
+  // Individual schools are HTML logo markers (see markers.ts); only clusters are drawn as layers
+  addFlagClusterLayers(map, "universities", flag);
 }

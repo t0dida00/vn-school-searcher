@@ -13,7 +13,7 @@ export type CountryMap = {
     flag: {
         // Paints a round crop of the flag into a size × size canvas (already clipped to the circle)
         draw: (ctx: CanvasRenderingContext2D, size: number) => void;
-        // Halo behind the cluster count, so it stays readable over the flag
+        // Halo behind the cluster count, so it stays readable over the flag; also the globe badges' ring
         halo: string;
     };
     loader: {

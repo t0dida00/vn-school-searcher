@@ -5,7 +5,7 @@ import type { CountryCode } from "../lib/countries";
 // School data changes about twice a year, so browsers keep their copy for a week.
 // After updating MongoDB, bump SCHOOL_DATA_VERSION to drop every visitor's cached copy on their next visit.
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
-export const SCHOOL_DATA_VERSION = 1;
+export const SCHOOL_DATA_VERSION = 2;
 
 // Define your state interface
 interface State {

@@ -103,3 +103,15 @@
     transform: translate(-50%, 4px);
     transition: opacity 150ms ease, transform 150ms ease;
 }
+
+// Extra campus of a school: the same logo pin, smaller, so the main campus stands out
+.campus .badge {
+    width: 46px;
+    height: 30px;
+    border-radius: 8px;
+}
+
+.campus.selected .badge {
+    width: 52px;
+    height: 35px;
+}
