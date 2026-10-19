@@ -2,13 +2,15 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Check, ExternalLink, GraduationCap, Mail, MapPin, Navigation, Phone, Share2, Wallet } from "lucide-react";
+import Link from "next/link";
+import { Check, ExternalLink, GraduationCap, LocateFixed, Mail, MapPin, Navigation, Phone, Share2, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { stringToArray } from "@/app/utils/stringToArray";
 import { schoolId } from "@/app/utils/schoolId";
-import { campusesOf } from "@/app/utils/campuses";
-import { useCountryPath } from "@/app/utils/useCountry";
+import { campusesOf, campusSlug } from "@/app/utils/campuses";
+import { useCountryConfig, useCountryPath } from "@/app/utils/useCountry";
+import { getActiveMap, showOnMap } from "@/app/map/activeMap";
 import SaveButton from "../SaveButton";
 
 // Tuition/scholarship text is mostly plain but occasionally markdown
@@ -53,6 +55,42 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     );
 }
 
+// One row of the Campuses list. On the map it flies there; elsewhere it opens the map on that campus
+// (/map?school=<id>&campus=<slug>); without a map for the country it's plain text.
+function CampusRow({ school, campus, coordinates, children }: { school: any; campus?: string; coordinates?: [number, number]; children: React.ReactNode }) {
+    const path = useCountryPath();
+    const { hasMap } = useCountryConfig();
+    const rowClass = "flex w-full items-start gap-3 px-3 py-2.5 text-left";
+    const label = `Show ${campus ?? "the main campus"} on the map`;
+    const content = (
+        <>
+            <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+            <span className="min-w-0 flex-1">{children}</span>
+            {hasMap && coordinates && <LocateFixed aria-hidden className="mt-0.5 size-4 shrink-0 text-muted-foreground group-hover:text-foreground" />}
+        </>
+    );
+    if (!hasMap || !coordinates) return <li className={rowClass}>{content}</li>;
+    const interactive = `${rowClass} group transition-colors hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none`;
+    return (
+        <li>
+            {getActiveMap() ? (
+                <button type="button" onClick={() => showOnMap(coordinates)} aria-label={label} title={label} className={interactive}>
+                    {content}
+                </button>
+            ) : (
+                <Link
+                    href={path(`/map?school=${encodeURIComponent(schoolId(school))}${campus ? `&campus=${campusSlug(campus)}` : ""}`)}
+                    aria-label={label}
+                    title={label}
+                    className={interactive}
+                >
+                    {content}
+                </Link>
+            )}
+        </li>
+    );
+}
+
 /** Title block: rendered inside the dialog/drawer title so it's announced as the heading */
 export function SchoolDetailHeader({ school, title }: { school: any; title: React.ReactNode }) {
     const { name, code, city, type, logo, campus } = school?.properties || {};
@@ -81,7 +119,7 @@ export function SchoolDetailHeader({ school, title }: { school: any; title: Reac
 }
 
 export function SchoolDetailBody({ school }: { school: any }) {
-    const { overview, tuition, scholarship, fieldOptions, phone, email, address, city, mainCity, campus: viewedCampus } = school?.properties || {};
+    const { overview, tuition, scholarship, fieldOptions, phone, email, address, city, mainCity, mainCoordinates, campus: viewedCampus } = school?.properties || {};
     const fields = stringToArray(fieldOptions);
     const campuses = campusesOf(school);
     const [expanded, setExpanded] = useState(false);
@@ -141,23 +179,18 @@ export function SchoolDetailBody({ school }: { school: any }) {
 
             {campuses.length > 0 && (
                 <Section title={`Campuses (${campuses.length + 1})`}>
-                    <ul className="flex flex-col divide-y rounded-xl border text-sm">
-                        <li className="flex items-start gap-3 px-3 py-2.5">
-                            <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-                            <span>
-                                <span className="font-medium">{mainCity ?? city}</span>
-                                <span className="text-muted-foreground"> · main campus</span>
-                            </span>
-                        </li>
+                    <ul className="flex flex-col divide-y overflow-hidden rounded-xl border text-sm">
+                        {/* Opened from a campus pin, geometry is that campus's; mainCoordinates keeps the main one */}
+                        <CampusRow school={school} coordinates={mainCoordinates ?? school?.geometry?.coordinates}>
+                            <span className="font-medium">{mainCity ?? city}</span>
+                            <span className="text-muted-foreground"> · main campus</span>
+                        </CampusRow>
                         {campuses.map((campus) => (
-                            <li key={campus.name} className="flex items-start gap-3 px-3 py-2.5">
-                                <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-                                <span className="min-w-0">
-                                    <span className="font-medium">{campus.name}</span>
-                                    {campus.name === viewedCampus && <span className="text-muted-foreground"> · this campus</span>}
-                                    <span className="block text-muted-foreground">{campus.address || campus.city}</span>
-                                </span>
-                            </li>
+                            <CampusRow key={campus.name} school={school} campus={campus.name} coordinates={campus.coordinates}>
+                                <span className="font-medium">{campus.name}</span>
+                                {campus.name === viewedCampus && <span className="text-muted-foreground"> · this campus</span>}
+                                <span className="block text-muted-foreground">{campus.address || campus.city}</span>
+                            </CampusRow>
                         ))}
                     </ul>
                 </Section>

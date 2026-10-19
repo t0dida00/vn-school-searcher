@@ -24,7 +24,8 @@ export function campusesOf(school: any): Campus[] {
     return Array.isArray(value) ? value.filter(isCampus) : [];
 }
 
-function slug(text: string) {
+// "Lahti Campus" → "lahti-campus": campus feature ids and the map's ?campus= deep link
+export function campusSlug(text: string) {
     return text
         .normalize("NFD")
         .replace(/[̀-ͯ]/g, "")
@@ -50,7 +51,7 @@ export function toMapFeatures(schools: any[]): any[] {
             properties: {
                 ...school.properties,
                 campuses: undefined,
-                id: `${id}${CAMPUS_SEPARATOR}${slug(campus.name)}`,
+                id: `${id}${CAMPUS_SEPARATOR}${campusSlug(campus.name)}`,
                 parentId: id,
                 campus: campus.name,
                 city: campus.city,
@@ -62,7 +63,7 @@ export function toMapFeatures(schools: any[]): any[] {
 
 // A school as seen from one of its campuses (opened from that campus's map pin): location, city and address
 // are the campus's, so the details and Directions point there. `campus` names it under the title and
-// `mainCity` keeps the main campus for the Campuses list. The id stays the school's, so saving, sharing
+// `mainCity`/`mainCoordinates` keep the main campus for the Campuses list. The id stays the school's, so saving, sharing
 // and the selected-pin state still refer to the school.
 export function campusView(school: any, campus: Campus) {
     return {
@@ -74,6 +75,7 @@ export function campusView(school: any, campus: Campus) {
             address: campus.address,
             campus: campus.name,
             mainCity: school.properties?.city,
+            mainCoordinates: school.properties?.mainCoordinates ?? school.geometry?.coordinates,
         },
     };
 }

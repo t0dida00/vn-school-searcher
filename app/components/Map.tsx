@@ -19,7 +19,8 @@ import SchoolDetailDialog from "./SchoolDetails/SchoolDetailDialog";
 import MapSearch from "./MapSearch";
 import MapLoading, { resetLoaderClock } from "./MapLoading";
 import { useCountry, useCountryPath } from "../utils/useCountry";
-import { toMapFeatures } from "../utils/campuses";
+import { campusSlug, campusesOf, campusView, toMapFeatures } from "../utils/campuses";
+import { setActiveMap } from "../map/activeMap";
 
 // Reveal anyway if the first full render never settles (e.g. a tile keeps failing)
 const READY_FALLBACK_MS = 10000;
@@ -75,19 +76,24 @@ export default function Map() {
                     features: toMapFeatures(latestFiltered ?? (Array.isArray(latest) ? latest : [])),
                 } as GeoJSON.FeatureCollection, countryMap.flag);
                 addMapEventListeners(newMap);
-                // Deep link from /school/[id] ("View on map")
-                const linked = new URLSearchParams(window.location.search).get("school");
+                // Deep link from /school/[id] ("View on map") or a campus in the details (&campus=<slug>)
+                const params = new URLSearchParams(window.location.search);
+                const linked = params.get("school");
                 const school = linked && Array.isArray(latest) && latest.find((d) => schoolId(d) === linked);
-                if (school) selectSchool(newMap, school);
+                const campus = school && campusesOf(school).find((c) => campusSlug(c.name) === params.get("campus"));
+                if (campus) selectSchool(newMap, campusView(school, campus), campus.coordinates);
+                else if (school) selectSchool(newMap, school);
                 // First idle after the custom layers exist = the custom map is fully rendered
                 newMap.once("idle", () => setMapReady(true));
             });
             const fallback = setTimeout(() => setMapReady(true), READY_FALLBACK_MS);
             newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
             setMap(newMap);
+            setActiveMap(newMap);
             return () => {
                 clearTimeout(fallback);
                 removed = true;
+                setActiveMap(null);
                 newMap.remove();
             };
         }

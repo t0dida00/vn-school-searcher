@@ -12,7 +12,7 @@ import RankTag from '../RankTag';
 import { SchoolDetailActions, SchoolDetailBody, SchoolDetailHeader } from './SchoolDetailContent';
 
 const SchoolDrawer: React.FC = () => {
-    const { selectedPoint, setSelectedPoint } = useStore();
+    const { selectedPoint, setSelectedPoint, isOpen } = useStore();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
@@ -30,6 +30,11 @@ const SchoolDrawer: React.FC = () => {
             setIsDrawerOpen(true);
         }
     }, [selectedPoint]);
+
+    // Closed from outside, e.g. a campus row flying the map to that campus
+    useEffect(() => {
+        if (!isOpen) setIsDrawerOpen(false);
+    }, [isOpen]);
 
     const handleDrawerClose = () => {
         const closing = selectedPoint;
