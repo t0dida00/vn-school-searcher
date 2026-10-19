@@ -139,8 +139,9 @@ const GROUPS: { title: string; items: { question: string; answer: React.ReactNod
                 question: "Do you collect my personal data?",
                 answer: (
                     <>
-                        No. There are no accounts, cookies or tracking tools. Your saved schools stay in your own browser and
-                        are never sent to us. Map tiles come from Mapbox and the site is hosted on Vercel; the{" "}
+                        No. There are no accounts and no cookies. We count visits with Vercel Web Analytics, which records
+                        pages and broad details like country and browser type but never who you are. Your saved schools stay in
+                        your own browser and are never sent to us. Map tiles come from Mapbox and the site is hosted on Vercel; the{" "}
                         <PageLink href="/privacy">privacy policy</PageLink> explains what they see.
                     </>
                 ),

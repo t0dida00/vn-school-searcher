@@ -26,9 +26,20 @@ export default function PrivacyPage() {
                 <h2>What we don&apos;t collect</h2>
                 <ul>
                     <li>We don&apos;t ask for your name, email address or any other personal details to use the site.</li>
-                    <li>We don&apos;t use analytics, advertising or tracking tools, and we don&apos;t set cookies.</li>
+                    <li>We don&apos;t use advertising or cross-site tracking tools, and we don&apos;t set cookies.</li>
                     <li>We don&apos;t sell or share personal data with anyone.</li>
                 </ul>
+            </section>
+
+            <section>
+                <h2>Visitor statistics</h2>
+                <p>
+                    We use <strong>Vercel Web Analytics</strong> to count visits, so we can see which pages and countries
+                    people use and improve the site. For each page view it records the page address, the site you came from,
+                    your country and your browser, operating system and device type. It doesn&apos;t use cookies and
+                    doesn&apos;t identify you: visitors are told apart only by an anonymous code that changes every day, and
+                    we only ever see totals (<a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener noreferrer">how Vercel Web Analytics handles data</a>).
+                </p>
             </section>
 
             <section>
@@ -57,8 +68,8 @@ export default function PrivacyPage() {
                 <p>Like any website, the site relies on a few outside services. When your browser connects to them, they receive technical information such as your IP address and browser type:</p>
                 <ul>
                     <li>
-                        <strong>Vercel</strong> hosts the site and keeps short-lived server logs to deliver pages and protect
-                        them from abuse (<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel privacy policy</a>).
+                        <strong>Vercel</strong> hosts the site, keeps short-lived server logs to deliver pages and protect
+                        them from abuse, and provides the visitor statistics above (<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel privacy policy</a>).
                     </li>
                     <li>
                         <strong>Mapbox</strong> provides the maps and the globe. Map pages load map tiles from Mapbox, which

@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { slab } from "./fonts";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${slab.variable} antialiased`}
       >
         {children}
+        {/* Vercel Web Analytics: cookieless page-view counts, only on Vercel deployments (described in /privacy) */}
+        <Analytics />
       </body>
     </html>
   );
