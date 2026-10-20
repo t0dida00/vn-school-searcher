@@ -27,17 +27,18 @@ function BottomBar({ withLinks }: { withLinks: boolean }) {
 // The site-wide footer, the same on the landing page and every country page: what Unies is, every country
 // (one list, so it grows with app/lib/countries.ts), help and policy pages, and where the data comes from.
 // The robot cat mascot lives on the strip above the bottom row, whose top border is its ground.
-// `compact` keeps only the bottom row (no cat), for the full-screen map.
+// `compact` keeps only the bottom row (no cat), for the full-screen map. Phones (below the app's 576px
+// breakpoint) get no footer at all.
 export default function Footer({ compact = false }: { compact?: boolean }) {
     if (compact) {
         return (
-            <footer className="border-t border-black/10 bg-[#EEF0F2]">
+            <footer className="hidden border-t border-black/10 bg-[#EEF0F2] min-[576px]:block">
                 <BottomBar withLinks />
             </footer>
         );
     }
     return (
-        <footer className="border-t border-black/10 bg-[#EEF0F2] text-sm">
+        <footer className="hidden border-t border-black/10 bg-[#EEF0F2] text-sm min-[576px]:block">
             <div className="mx-auto grid max-w-7xl gap-8 px-4 pb-4 pt-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
                 <div className="max-w-xs">
                     <Link href="/" aria-label="Unies home" className="inline-block rounded-sm text-[#191919] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#191919]">
